@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import SearchResult from "./SearchResult";
 import LoadingAnimation from "@utils/LoadingAnimation";
+import _ from "lodash";
 
 import styles from "./Searchbar.module.sass";
 
@@ -11,7 +12,7 @@ const Searchbar = ({ onResultSelected }) => {
   const [currentlyTyping, setCurrentlyTyping] = useState(false);
 
   const [result, setResult] = useState([]);
-  const [selectedId, setSelectedId] = useState(0);
+  const [selectedSong, setSelectedSong] = useState({});
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -28,7 +29,7 @@ const Searchbar = ({ onResultSelected }) => {
 
   const handleInputChange = (e) => {
     setCurrentlyTyping(true);
-    setSelectedId(0);
+    setSelectedSong({});
     setQuery(e.target.value);
   };
 
@@ -37,18 +38,18 @@ const Searchbar = ({ onResultSelected }) => {
 
     setCurrentlyTyping(false);
     axios
-      .get(`http://127.0.0.1:5000/api/search?query=${query}`)
+      .get(`https://genius-unofficial-api.vercel.app/api/search?query=${query}`)
       .then((res) => setResult(res.data));
   };
 
-  const handleResultSelected = (id) => {
-    setSelectedId(id);
+  const handleResultSelected = (song) => {
+    setSelectedSong(song);
 
-    onResultSelected(id);
+    onResultSelected(song);
   };
 
   return (
-    <form className="relative" onSubmit={(e) => e.preventDefault()}>
+    <form className="relative z-10" onSubmit={(e) => e.preventDefault()}>
       <label
         htmlFor="default-search"
         className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -84,7 +85,7 @@ const Searchbar = ({ onResultSelected }) => {
       </div>
 
       {/* Results container */}
-      {query && query != "" && selectedId == 0 && (
+      {query && query != "" && _.isEqual(selectedSong, {}) && (
         <div
           className="absolute mt-3 ml-3 border-2 min-w-[350px] w-[25%] flex flex-col gap-1 bg-white"
           style={{
@@ -105,7 +106,7 @@ const Searchbar = ({ onResultSelected }) => {
                   img={item.image}
                   songName={item.title}
                   artistName={item.artist}
-                  onClick={() => handleResultSelected(item.id)}
+                  onClick={() => handleResultSelected(item)}
                 />
               );
             })}

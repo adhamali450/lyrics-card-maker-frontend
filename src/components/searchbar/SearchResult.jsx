@@ -11,7 +11,7 @@ const SearchResult = ({ className, img, songName, artistName, onClick }) => {
     >
       <div className="flex gap-3 items-center">
         <img
-          className="w-[80px] aspect-square"
+          className="w-[80px] aspect-square object-scale-down"
           src={isImageLink(img) ? img : BrokenImg}
           alt="song-cover"
         />

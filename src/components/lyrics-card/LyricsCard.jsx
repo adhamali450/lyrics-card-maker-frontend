@@ -1,25 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./LyricsCard.module.sass";
 
 import logoLarge from "@assets/logo-large.png";
 import logoSmall from "@assets/logo-small.png";
 
+import iconAddImage from "@assets/add-image.png";
+import ImageInput from "../controls/ImageInput";
+
 const LyricsCard = ({ cardInfo }) => {
-  //   const { lyrics, songName, artistName } = cardInfo;
+  const { lyrics, title = "", artist = "" } = cardInfo;
+
+  const [logoVarient, setLogoVarient] = useState(logoLarge);
+
+  const handleLogoSize = () => {
+    setLogoVarient(logoVarient == logoLarge ? logoSmall : logoLarge);
+  };
+
   return (
     <div className={styles["card"]}>
-      <div className={styles["background"]}></div>
-      <div className={styles["shade"]}></div>
+      <div className={styles["background"]}>
+        <ImageInput className="w-full h-full" />
+      </div>
+
+      {/* <div className={styles["shade"]}></div> */}
       <div className={styles["pushdown"]}></div>
       <main className={styles["lyrics"]}></main>
 
-      <footer>
+      <footer className="flex">
         <div className={styles["info"]}>
-          <p className={styles["artist"]}>Bob Dylan</p>
-          <p className={styles["song"]}>She belongs to me</p>
+          {title && <p className={styles["artist"]}>{artist}</p>}
+          {artist && <p className={styles["song"]}>{title}</p>}
         </div>
 
-        <img className={styles["logo"]} src={logoLarge} />
+        <button className={styles["logo"]} onClick={handleLogoSize}>
+          <img className="w-full h-full" src={logoVarient} />
+        </button>
       </footer>
     </div>
   );

@@ -7,11 +7,17 @@
     position: relative
     width: 500px
     aspect-ratio: 1/1 // for same height and width
+    background-color: #dadada
 
-    display: flex
-    flex-direction: column
+    // display: flex
+    // flex-direction: column
+
+    display: grid
+    grid-template-rows: 1fr 15%
 
     font-family: 'Programme', sans-serif
+
+    // border: 1px solid red
 
     .background, .shade
         position: absolute
@@ -20,23 +26,31 @@
         height: 100%
 
     .background
-        position: absolute
-        inset: 0
-        width: 100%
-        height: 100%
+        grid-row: 1/2
+
         background-size: cover
         background-position: center
 
-        z-index: -2
+        z-index: 2
 
     .shade
+        grid-row: 1/2
+
         background: linear-gradient(0deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%)
 
         z-index: -1
 
     .pushdown
+        position: relative
         flex-grow: 1
+        z-index: -5
+
     .lyrics
+        grid-row: 1/2
+
+        border: 2px dashed green
+        align-self: flex-end
+
         display: flex
         flex-direction: column
         align-items: flex-start
@@ -53,8 +67,9 @@
             font-size: 1.5rem
 
     footer
+        grid-row: 2/3
+
         width: 100%
-        height: 15%
 
         padding: 0 2rem
 
@@ -68,7 +83,7 @@
         text-transform: uppercase
         .info
             display: flex
-
+            flex-wrap: wrap
             .artist
                 &::after
                     content: ","
@@ -79,4 +94,5 @@
                     content: "\""
 
         .logo
+            justify-self: flex-end
             height: 30%

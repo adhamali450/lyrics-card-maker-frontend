@@ -1,32 +1,38 @@
 import { useState, useEffect } from "react";
+
 import axios from "axios";
+import _ from "lodash";
 import Searchbar from "./components/searchbar/Searchbar";
 
 import { formatLyrics } from "./utils";
-import LyricsViewer from "@components/lyrics-viewer/LyricsViewer";
+
+import SongPreview from "@components/SongPreview";
+import LyricsViewer from "@components/LyricsViewer";
 import LyricsCard from "@components/lyrics-card/LyricsCard";
 
 function App() {
-  const [id, setId] = useState(0);
-
   const [song, setSong] = useState({});
+
+  const { id } = song;
 
   const [lyrics, setLyrics] = useState("");
 
   useEffect(() => {
-    if (id == 0) return;
+    if (_.isEqual(song, {})) return;
 
     setLyrics("");
 
-    axios.get(`http://127.0.0.1:5000/api/song/${id}`).then((res) => {
-      setLyrics(formatLyrics(res.data));
-    });
-  }, [id]);
+    axios
+      .get(`https://genius-unofficial-api.vercel.app/api/song/${id}`)
+      .then((res) => {
+        setLyrics(formatLyrics(res.data));
+      });
+  }, [song]);
 
-  const handleResultSelected = (new_id) => {
-    if (id == new_id) return;
+  const handleResultSelected = (newSong) => {
+    if (song == newSong) return;
 
-    setId(new_id);
+    setSong(newSong);
   };
 
   return (
@@ -34,11 +40,14 @@ function App() {
       <header className="col-span-2">
         <Searchbar onResultSelected={(id) => handleResultSelected(id)} />
       </header>
-      <aside className="row-start-2 col-start-2 border-green-500 border overflow-auto">
-        <LyricsViewer id={id} lyrics={lyrics} />
+
+      <aside className="row-start-2 col-start-2 border-green-500 border flex flex-col overflow-auto">
+        {!_.isEqual(song, {}) && <SongPreview song={song} />}
+
+        <LyricsViewer className="border grow" id={id} lyrics={lyrics} />
       </aside>
       <main className="row-start-2 col-start-1 border-blue-500 border">
-        {/* <LyricsCard /> */}
+        <LyricsCard cardInfo={song} />
       </main>
     </div>
   );
