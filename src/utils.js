@@ -1,4 +1,6 @@
-export const truncate = (str, length) => {
+import axios from "axios";
+
+export const truncate = (str, length = 35) => {
   if (str.length > length) return str.slice(0, length) + "...";
   else return str;
 };
@@ -75,4 +77,35 @@ export const lighterDarker = (color1, color2) => {
 
   // Compare the luminance values to determine which color is lighter
   return luminance1 > luminance2 ? [color1, color2] : [color2, color1];
+};
+
+export const getContrastColor = (color) => {
+  const r = parseInt(color.substr(1, 2), 16);
+  const g = parseInt(color.substr(3, 2), 16);
+  const b = parseInt(color.substr(5, 2), 16);
+
+  const l = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+  return l > 70 ? "#000000" : "#ffffff";
+};
+
+export const barToLines = (bar, lineMax = 36) => {
+  const words = bar.split(" ");
+  const chunks = [];
+  let currentChunk = "";
+
+  for (const word of words) {
+    if (currentChunk.length + word.length + 1 <= lineMax) {
+      currentChunk += (currentChunk === "" ? "" : " ") + word;
+    } else {
+      chunks.push(currentChunk);
+      currentChunk = word;
+    }
+  }
+
+  if (currentChunk !== "") {
+    chunks.push(currentChunk);
+  }
+
+  return chunks;
 };

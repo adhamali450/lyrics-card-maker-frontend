@@ -1,37 +1,30 @@
 import React from "react";
 
-const ImageInput = ({ className }) => {
+const ImageInput = ({ className, style, onFileSelected, onWheel }) => {
   const changeHandler = (event) => {
-    const files = event.target.files;
+    const file = event.target.files[0];
 
-    for (const file of files) {
-      // check if the selected file is an image
-      if (file.type.startsWith("image/")) {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
+    // Check if the selected file is an image
+    if (file.type.startsWith("image/")) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
 
-        reader.onload = (event) => {
-          const imgElement = document.createElement("img");
-          imgElement.src = event.target.result;
-          document.body.appendChild(imgElement);
-        };
-      }
+      reader.onload = (event) => {
+        onFileSelected(URL.createObjectURL(file));
+      };
     }
   };
   const dragEnterHandler = (e) => e.preventDefault();
   const dragOverHandler = (e) => e.preventDefault();
   const dropHandler = (event) => {
     event.preventDefault();
-    console.log(event);
 
     const files = event.dataTransfer.files;
     const imageUrl = event.dataTransfer.getData("URL");
 
     if (imageUrl) {
       // handle image dragged from a browser tab
-      const imgElement = document.createElement("img");
-      imgElement.src = imageUrl;
-      document.body.appendChild(imgElement);
+      onFileSelected(imageUrl);
     } else {
       // handle image(s) dragged from a file explorer or operating system window
       for (const file of files) {
@@ -41,9 +34,7 @@ const ImageInput = ({ className }) => {
           reader.readAsDataURL(file);
 
           reader.onload = (event) => {
-            const imgElement = document.createElement("img");
-            imgElement.src = event.target.result;
-            document.body.appendChild(imgElement);
+            onFileSelected(event.target.result);
           };
         }
       }
@@ -56,6 +47,8 @@ const ImageInput = ({ className }) => {
       className={`${
         className ? className : ""
       } realtive flex flex-col items-center justify-center cursor-pointer z-10`}
+      style={style}
+      onWheel={(e) => onWheel(e)}
     >
       <div className="flex flex-col items-center justify-center pt-5 pb-6">
         <svg
@@ -82,7 +75,6 @@ const ImageInput = ({ className }) => {
         </p>
       </div>
       <input
-        id="dropzone-file"
         type="file"
         dropzone="copy"
         className="absolute opacity-0 w-full h-full"

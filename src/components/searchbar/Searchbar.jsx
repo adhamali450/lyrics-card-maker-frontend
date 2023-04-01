@@ -1,18 +1,21 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import SearchResult from "./SearchResult";
 import LoadingAnimation from "@utils/LoadingAnimation";
 import _ from "lodash";
+import Popup from "@utils/Popup";
 
 import styles from "./Searchbar.module.sass";
 
-const Searchbar = ({ onResultSelected }) => {
+const Searchbar = ({ className, onResultSelected }) => {
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [currentlyTyping, setCurrentlyTyping] = useState(false);
 
   const [result, setResult] = useState([]);
   const [selectedSong, setSelectedSong] = useState({});
+
+  const inputRef = useRef(null);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -38,7 +41,11 @@ const Searchbar = ({ onResultSelected }) => {
 
     setCurrentlyTyping(false);
     axios
-      .get(`https://genius-unofficial-api.vercel.app/api/search?query=${query}`)
+      .get(`https://genius-unofficial-api.vercel.app/api/search`, {
+        params: {
+          query: query,
+        },
+      })
       .then((res) => setResult(res.data));
   };
 
@@ -49,7 +56,10 @@ const Searchbar = ({ onResultSelected }) => {
   };
 
   return (
-    <form className="relative z-10" onSubmit={(e) => e.preventDefault()}>
+    <form
+      className={`${className} relative z-10`}
+      onSubmit={(e) => e.preventDefault()}
+    >
       <label
         htmlFor="default-search"
         className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -76,41 +86,44 @@ const Searchbar = ({ onResultSelected }) => {
         </div>
         <input
           type="search"
-          className="block w-full p-4 pl-10 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 outline-none"
+          className="block w-full p-4 pl-10 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 outline-none shadow-md"
           placeholder="Search for any song"
           aria-label="Search"
           value={query}
           onChange={(e) => handleInputChange(e)}
+          ref={inputRef}
         />
       </div>
 
       {/* Results container */}
       {query && query != "" && _.isEqual(selectedSong, {}) && (
-        <div
-          className="absolute mt-3 ml-3 border-2 min-w-[350px] w-[25%] flex flex-col gap-1 bg-white"
-          style={{
-            height: "max-content",
-            alignItems: "stretch",
-          }}
-        >
-          {/* Loading animation */}
-          {(currentlyTyping || !result.length) && <LoadingAnimation />}
+        <Popup className="relative" triggerRef={inputRef} triggerType="keyup">
+          <div
+            className="absolute mt-3 ml-3 border-2 min-w-[350px] w-[25%] flex flex-col gap-1 bg-white"
+            style={{
+              height: "max-content",
+              alignItems: "stretch",
+            }}
+          >
+            {/* Loading animation */}
+            {(currentlyTyping || !result.length) && <LoadingAnimation />}
 
-          {/* Results */}
-          {!currentlyTyping &&
-            result.map((item, idx) => {
-              return (
-                <SearchResult
-                  key={idx}
-                  className="bg-gray-50 hover:bg-gray-300 active:bg-gray-400"
-                  img={item.image}
-                  songName={item.title}
-                  artistName={item.artist}
-                  onClick={() => handleResultSelected(item)}
-                />
-              );
-            })}
-        </div>
+            {/* Results */}
+            {!currentlyTyping &&
+              result.map((item, idx) => {
+                return (
+                  <SearchResult
+                    key={idx}
+                    className="bg-gray-50 hover:bg-gray-300 active:bg-gray-400"
+                    img={item.image}
+                    songName={item.title}
+                    artistName={item.artist}
+                    onClick={() => handleResultSelected(item)}
+                  />
+                );
+              })}
+          </div>
+        </Popup>
       )}
     </form>
   );

@@ -7,7 +7,6 @@
     position: relative
     width: 500px
     aspect-ratio: 1/1 // for same height and width
-    background-color: #dadada
 
     // display: flex
     // flex-direction: column
@@ -16,8 +15,8 @@
     grid-template-rows: 1fr 15%
 
     font-family: 'Programme', sans-serif
-
-    // border: 1px solid red
+    :lang(ar)
+        font-family: 'Inter', sans-serif
 
     .background, .shade
         position: absolute
@@ -28,17 +27,23 @@
     .background
         grid-row: 1/2
 
+        background-color: #dadada
+
         background-size: cover
         background-position: center
 
         z-index: 2
+
+        overflow: hidden
 
     .shade
         grid-row: 1/2
 
         background: linear-gradient(0deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%)
 
-        z-index: -1
+        z-index: 3
+
+        pointer-events: none
 
     .pushdown
         position: relative
@@ -48,7 +53,6 @@
     .lyrics
         grid-row: 1/2
 
-        border: 2px dashed green
         align-self: flex-end
 
         display: flex
@@ -66,15 +70,27 @@
 
             font-size: 1.5rem
 
+    main
+        z-index: 4
+        position: relative
+        // &::before
+        //     position: absolute
+        //     top: 0
+        //     transform: translate(-30%, -100%)
+        //     content: "،،"
+        //     line-height: 0
+        //     color: white
+        //     opacity: 0.6
+        //     font-size: 5rem
+        //     font-weight: bolder
+        //     letter-spacing: -2px
+
     footer
         grid-row: 2/3
 
         width: 100%
 
         padding: 0 2rem
-
-        background-color: #F7F16C
-        border-top: 2px solid #000000
 
         display: flex
         justify-content: space-between

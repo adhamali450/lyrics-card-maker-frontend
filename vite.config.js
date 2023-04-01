@@ -12,6 +12,10 @@ export default defineConfig({
       "@components": fileURLToPath(
         new URL("./src/components", import.meta.url)
       ),
+      "@contexts": fileURLToPath(new URL("./src/contexts", import.meta.url)),
+      "@controls": fileURLToPath(
+        new URL("./src/components/controls", import.meta.url)
+      ),
       "@utils": fileURLToPath(
         new URL("./src/components/utils", import.meta.url)
       ),

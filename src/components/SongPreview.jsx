@@ -1,10 +1,13 @@
-import { useColor, usePalette } from "color-thief-react";
-import { isArabic, shadeColor, lighterDarker } from "../utils";
+import { Fragment } from "react";
+import axios from "axios";
+
+import LoadingAnimation from "@components/utils/LoadingAnimation";
+import iconBrokenImage from "@assets/broken-image.png";
+
+import { isArabic, shadeColor, truncate, isImageLink } from "@/utils";
 
 const getPreviewGradient = (dominantColor, direction) => {
   if (!dominantColor) return;
-
-  console.log(dominantColor);
 
   const lighterColor = shadeColor(dominantColor, 0.3);
   const darkerColor = shadeColor(dominantColor, -0.3);
@@ -15,33 +18,43 @@ const getPreviewGradient = (dominantColor, direction) => {
   return grd;
 };
 
-const SongPreview = ({ song }) => {
+const SongPreview = ({ song, colors }) => {
   const { title, artist, image } = song;
-
-  const { data } = usePalette(image, 2, "hex", {
-    crossOrigin: "anonymous",
-    quality: 10,
-  });
-
-  const colors = data && lighterDarker(data[0], data[1]);
 
   return (
     <section
-      className="flex items-center gap-3 shadow-md"
+      className="relative flex items-center gap-3 shadow-md w-full h-[120px]"
       style={{
         direction: isArabic(title) ? "rtl" : "ltr",
         background: getPreviewGradient(
-          colors && colors[1],
+          colors && colors["text_color"],
           isArabic(title) ? "rtl" : "ltr"
         ),
-        color: colors && colors[0],
+        color: colors && colors["background_color"],
       }}
     >
-      <img className="w-[120px]" src={image} alt="song-cover" />
-      <div className="flex flex-col gap-1">
-        <h1 className="font-medium">{title}</h1>
-        <h2 className="text-sm font-semibold">{artist}</h2>
-      </div>
+      {colors && (
+        <Fragment>
+          <img
+            className="w-[120px] h-full object-cover"
+            src={isImageLink(image) ? image : iconBrokenImage}
+            alt="song-cover"
+          />
+
+          <img
+            className="absolute w-full h-full object-cover opacity-5 pointer-events-none"
+            src={isImageLink(image) ? image : iconBrokenImage}
+            alt=""
+          />
+
+          <div className="flex flex-col gap-1 py-5">
+            <h1 className="font-medium">{truncate(title)}</h1>
+            <h2 className="text-sm font-semibold">{truncate(artist)}</h2>
+          </div>
+        </Fragment>
+      )}
+
+      {!colors && <LoadingAnimation />}
     </section>
   );
 };
