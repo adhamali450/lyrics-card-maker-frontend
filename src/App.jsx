@@ -5,7 +5,7 @@ import axios from "axios";
 import _ from "lodash";
 import Searchbar from "./components/searchbar/Searchbar";
 
-import { formatLyrics, isArabic, getContrastColor } from "./utils";
+import { formatLyrics, getLang, getContrastColor } from "./utils";
 
 import SongPreview from "@components/SongPreview";
 import LyricsViewer from "@components/LyricsViewer";
@@ -59,7 +59,7 @@ function App() {
     axios
       .get(`https://genius-unofficial-api.vercel.app/api/song/lyrics/${id}`)
       .then((res) => {
-        const lang = isArabic(res.data) ? "ar" : "en";
+        const lang = getLang(res.data);
         setLyricsData({
           lang: lang,
           lyrics: formatLyrics(res.data)

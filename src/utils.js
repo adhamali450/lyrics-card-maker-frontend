@@ -27,7 +27,7 @@ export const isImageLink = (url) => url.match(/\.(jpeg|jpg|gif|png)$/) != null;
 export const rangedRandom = (min, max) =>
   Math.floor(Math.random() * (max - min + 1)) + min;
 
-export const isArabic = (str) => {
+export const getLang = (str) => {
   let arabic = /[\u0600-\u06FF]/;
 
   // [Approach 1]: Take 5 random characters from the string
@@ -41,7 +41,8 @@ export const isArabic = (str) => {
   // );
 
   // [Approach 2]: If any character is arabic, then the whole string is arabic
-  return str.split("").some((c) => arabic.test(c));
+
+  return str.split("").some((c) => arabic.test(c)) ? "ar" : "en";
 };
 
 export const shadeColor = (color, percent) => {

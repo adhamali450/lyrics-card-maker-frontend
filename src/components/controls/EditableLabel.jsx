@@ -1,16 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import LyricsBar from "@components/LyricsBar";
+import { getLang } from "@/utils";
 
-const EditableLabel = ({
-  text,
-  onTextChanged,
-  lang,
-  className = "",
-  style = {},
-}) => {
+const EditableLabel = ({ text, onTextChanged, className = "", style = {} }) => {
   const inputRef = useRef([]);
   const containerRef = useRef([]);
-  const spanRef = useRef([]);
+
+  const [lang, setLang] = useState(getLang(text));
 
   const [isEditing, setIsEditing] = useState(false);
 
@@ -19,6 +15,7 @@ const EditableLabel = ({
   //TODO: Is this necessary?
   useEffect(() => {
     setInputText(text);
+    setLang(getLang(text + " "));
   }, [text]);
 
   const handleDoubleClick = () => {
@@ -26,6 +23,7 @@ const EditableLabel = ({
   };
 
   const handleInputChange = (event) => {
+    setLang(getLang(event.target.value));
     setInputText(event.target.value);
   };
 
@@ -66,7 +64,7 @@ const EditableLabel = ({
           onKeyDown={(e) => handleInputKeydown(e)}
         />
       ) : (
-        <span>
+        <span lang={lang}>
           <LyricsBar
             className="first-of-type:rounded-none last-of-type:rounded-none"
             line={[inputText]}
