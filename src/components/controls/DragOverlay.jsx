@@ -15,6 +15,9 @@ const DragOverlay = ({
     visible && (
       <div
         className="absolute w-full h-full inset-0"
+        style={{
+          fontFamily: "Inter",
+        }}
         onDragEnter={(e) => {
           e.preventDefault();
           onDragEnterLeave(e);

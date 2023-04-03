@@ -86,7 +86,7 @@ const Searchbar = ({ className, onResultSelected }) => {
         </div>
         <input
           type="search"
-          className="block w-full p-4 pl-10 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 outline-none shadow-md"
+          className="block w-full p-4 pl-10 text-gray-900 border-2 border--200 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 outline-none shadow-md"
           placeholder="Search for any song"
           aria-label="Search"
           value={query}

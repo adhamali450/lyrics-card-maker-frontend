@@ -35,7 +35,7 @@ const OptionsPanel = ({ onOptionChanged }) => {
 
   return (
     <section>
-      <div className="h-12 px-6 flex items-center gap-5 mb-4 bg-[#f3f3f3]">
+      <div className="h-12 px-6 flex items-center gap-5  rounded-lg mb-4 bg-[#f3f3f3]">
         <p>Customize</p>
 
         <PushdownGroup

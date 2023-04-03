@@ -5,13 +5,13 @@ import axios from "axios";
 import _ from "lodash";
 import Searchbar from "./components/searchbar/Searchbar";
 
-import { formatLyrics, getLang, getContrastColor } from "./utils";
+import { formatLyrics, isArabic, getContrastColor } from "./utils";
 
 import SongPreview from "@components/SongPreview";
 import LyricsViewer from "@components/LyricsViewer";
 import LyricsCard from "@components/lyrics-card/LyricsCard";
 
-import logo from "@assets/logo.svg";
+import logo from "@assets/logo1.jpg";
 import OptionsPanel from "./components/OptionsPanel";
 
 const defaultLyricsData = {
@@ -59,7 +59,7 @@ function App() {
     axios
       .get(`https://genius-unofficial-api.vercel.app/api/song/lyrics/${id}`)
       .then((res) => {
-        const lang = getLang(res.data);
+        const lang = isArabic(res.data) ? "ar" : "en";
         setLyricsData({
           lang: lang,
           lyrics: formatLyrics(res.data)
@@ -108,27 +108,29 @@ function App() {
   };
 
   return (
-    <div className="App max-w-[1920px] max-h-[1080px] mx-auto p-5 grid grid-rows-[auto_1fr] grid-cols-[1fr_36ch] gap-5 h-[100vh]">
+    <div className="App max-w-[1920px] max-h-[1080px] mx-auto p-5 grid grid-rows-[auto_1fr] grid-cols-[1fr_36ch] gap-5 h-[100vh] ">
       <header className="col-span-2 flex gap-8 items-center">
-        <img className="h-[70%]" src={logo} alt="Genius cards generator" />
+        {/* <img className="h-[90%]" src={logo} alt="Genius cards generator" /> */}
+        <h1 className="font-sans font-semibold ">Card <br /> generator</h1> 
+        
         <Searchbar
           className="grow"
           onResultSelected={(id) => handleResultSelected(id)}
         />
       </header>
 
-      <aside className="row-start-2 col-start-2 border-green-500 border flex flex-col overflow-auto">
+      <aside className="row-start-2 col-start-2   flex flex-col overflow-auto">
         {!_.isEqual(song, {}) && <SongPreview song={song} colors={colors} />}
 
         <LyricsViewer
-          className="border grow "
+          className="border-0 grow"
           id={id}
           colors={colors}
           lyricsData={lyricsData}
           onSelectionChanged={handleSelectionChanged}
         />
       </aside>
-      <main className="row-start-2 col-start-1 border-blue-500 border">
+      <main className="row-start-2 col-start-1">
         <CardStyleContext.Provider value={{ cardStyling, setCardStyling }}>
           <OptionsPanel />
           <LyricsCard cardInfo={song} lyricsData={lyricsData} />

@@ -37,7 +37,7 @@ const LyricsViewer = ({
     <div className={className}>
       {/* State: idle */}
       {!id && (
-        <div className="w-full h-full flex flex-col items-center justify-center gap-3">
+        <div className="w-full h-full flex flex-col items-center justify-center gap-3 border-0">
           <img src={iconLyrics} alt="icon-lyrics" />
           <p>Lyrics appear here</p>
         </div>
@@ -45,7 +45,7 @@ const LyricsViewer = ({
 
       {/* State: loading */}
       {id && !truthy(lyrics) && (
-        <div className="w-full h-full flex flex-col items-center justify-center bg-white">
+        <div className="w-full h-full flex flex-col items-center justify-center bg-white border-0">
           <LoadingAnimation />
         </div>
       )}
@@ -53,7 +53,7 @@ const LyricsViewer = ({
       {/* State: Lyrics container */}
       {truthy(lyrics) && (
         <div
-          className={`w-full h-full flex flex-col gap-[6px] p-3`}
+          className={`w-full h-full flex flex-col gap-[6px] p-3 `}
           style={{
             textAlign: lang == "ar" ? "rtl" : "ltr",
             direction: lang == "ar" ? "rtl" : "ltr",

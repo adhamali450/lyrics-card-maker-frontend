@@ -4,7 +4,7 @@ import axios from "axios";
 import LoadingAnimation from "@components/utils/LoadingAnimation";
 import iconBrokenImage from "@assets/broken-image.png";
 
-import { getLang, shadeColor, truncate, isImageLink } from "@/utils";
+import { isArabic, shadeColor, truncate, isImageLink } from "@/utils";
 
 const getPreviewGradient = (dominantColor, direction) => {
   if (!dominantColor) return;
@@ -23,12 +23,12 @@ const SongPreview = ({ song, colors }) => {
 
   return (
     <section
-      className="relative flex items-center gap-3 shadow-md w-full h-[120px]"
+      className="relative flex items-center gap-3  rounded-lg shadow-md w-full h-[120px]"
       style={{
-        direction: getLang(title) == "ar" ? "rtl" : "ltr",
+        direction: isArabic(title) ? "rtl" : "ltr",
         background: getPreviewGradient(
           colors && colors["text_color"],
-          getLang(title) == "ar" ? "rtl" : "ltr"
+          isArabic(title) ? "rtl" : "ltr"
         ),
         color: colors && colors["background_color"],
       }}

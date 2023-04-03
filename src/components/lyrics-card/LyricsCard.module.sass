@@ -1,5 +1,3 @@
-@import ../../assets/fonts/_style
-
 *
     margin: 0
     padding: 0
@@ -8,17 +6,18 @@
 .card
     position: relative
     width: 500px
+    margin:0 auto
     aspect-ratio: 1/1 // for same height and width
+
+    // display: flex
+    // flex-direction: column
 
     display: grid
     grid-template-rows: 1fr 15%
 
     font-family: 'Programme', sans-serif
-
-    *
-        &:lang(ar)
-            font-family: Inter, sans-serif
-            font-weight: 500
+    :lang(ar)
+        font-family: 'Inter', sans-serif
 
     .background, .shade
         position: absolute
@@ -75,6 +74,17 @@
     main
         z-index: 4
         position: relative
+        // &::before
+        //     position: absolute
+        //     top: 0
+        //     transform: translate(-30%, -100%)
+        //     content: "،،"
+        //     line-height: 0
+        //     color: white
+        //     opacity: 0.6
+        //     font-size: 5rem
+        //     font-weight: bolder
+        //     letter-spacing: -2px
 
     footer
         grid-row: 2/3

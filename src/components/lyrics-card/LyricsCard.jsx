@@ -22,6 +22,7 @@ import iconTrash from "@assets/icon-trash.svg";
 import iconUpload from "@assets/icon-upload.png";
 
 import DragOverlay from "@controls/DragOverlay";
+import ImageInput from "@controls/ImageInput";
 import FileInput from "@controls/FileInput";
 import iconQuote from "@assets/quote.png";
 import plainBackground from "@assets/plain-background.svg";
@@ -83,6 +84,7 @@ const DummyLyrics = ({ lang, cardStyling }) => {
               fontStyle: cardStyling["italic"] ? "italic" : "normal",
             }}
             text={l[0]}
+            lang={lang}
             onTextChanged={(e) => console.log(e)}
           />
         );
@@ -196,7 +198,7 @@ const LyricsCard = ({ cardInfo, lyricsData }) => {
   };
 
   return (
-    <div className={styles["card"]} lang={lang}>
+    <div className={styles["card"]}>
       <div
         className={`${styles["background"]}`}
         onMouseEnter={(e) => {
@@ -210,10 +212,10 @@ const LyricsCard = ({ cardInfo, lyricsData }) => {
         {/* Background container */}
         {backgroundImage ? (
           <Draggable position={controlledPosition} onDrag={onControlledDrag}>
-            <div className="absolute w-full h-full inset-0">
+            <div className="absolute w-full h-full inset-0 ">
               <div
                 onWheel={wheelHandler}
-                className="w-full h-full"
+                className="w-full h-full "
                 style={{
                   transform: `scale(${backgroundImageScale})`,
                   // transformOrigin: "top left",
@@ -233,7 +235,7 @@ const LyricsCard = ({ cardInfo, lyricsData }) => {
           </Draggable>
         ) : (
           <div
-            className="w-full h-full grid place-items-center"
+            className="w-full h-full grid place-items-center "
             style={{
               backgroundImage: `url(${plainBackground})`,
               backgroundSize: "20px",
@@ -265,7 +267,9 @@ const LyricsCard = ({ cardInfo, lyricsData }) => {
           alt=""
         />
 
-        {!lyrics.some((l) => l[1]) && <DummyLyrics cardStyling={cardStyling} />}
+        {!lyrics.some((l) => l[1]) && (
+          <DummyLyrics cardStyling={cardStyling} lang={lang} />
+        )}
 
         {lyrics.map((l, i) => {
           if (!l[1]) return;
@@ -278,6 +282,7 @@ const LyricsCard = ({ cardInfo, lyricsData }) => {
               }}
               key={i}
               text={l[0]}
+              lang={lang}
               onTextChanged={(e) => {}}
             />
           );
