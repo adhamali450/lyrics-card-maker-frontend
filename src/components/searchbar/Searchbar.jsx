@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState, useRef } from "react";
+import React, { Fragment, useEffect, useState, useRef } from "react";
 import SearchResult from "./SearchResult";
 import LoadingAnimation from "@utils/LoadingAnimation";
 import _ from "lodash";
@@ -46,7 +46,9 @@ const Searchbar = ({ className, onResultSelected }) => {
           query: query,
         },
       })
-      .then((res) => setResult(res.data));
+      .then((res) => {
+        setResult(res.data);
+      });
   };
 
   const handleResultSelected = (song) => {
@@ -109,19 +111,29 @@ const Searchbar = ({ className, onResultSelected }) => {
             {(currentlyTyping || !result.length) && <LoadingAnimation />}
 
             {/* Results */}
-            {!currentlyTyping &&
-              result.map((item, idx) => {
-                return (
-                  <SearchResult
-                    key={idx}
-                    className="bg-gray-50 hover:bg-gray-300 active:bg-gray-400"
-                    img={item.image}
-                    songName={item.title}
-                    artistName={item.artist}
-                    onClick={() => handleResultSelected(item)}
-                  />
-                );
-              })}
+            {!currentlyTyping && (
+              <Fragment>
+                {_.isEqual(result, []) ? (
+                  <div>No results</div>
+                ) : (
+                  result.map((item, idx) => {
+                    return (
+                      <SearchResult
+                        key={idx}
+                        className="bg-gray-50 hover:bg-gray-300 active:bg-gray-400"
+                        img={item.image}
+                        songName={item.title}
+                        artistName={item.artist}
+                        onClick={() => handleResultSelected(item)}
+                      />
+                    );
+                  })
+                )}
+
+                {/* {result.length == 0 &&
+                  } */}
+              </Fragment>
+            )}
           </div>
         </Popup>
       )}
