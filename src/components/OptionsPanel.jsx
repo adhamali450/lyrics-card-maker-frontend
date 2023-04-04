@@ -9,7 +9,7 @@ import {
   iconsStyling,
 } from "@assets/options-panel";
 
-const OptionsPanel = ({ onOptionChanged }) => {
+const OptionsPanel = ({ className, onOptionChanged }) => {
   const { cardStyling, setCardStyling } = useContext(CardStyleContext);
 
   const formattingValues = ["bold", "italic"];
@@ -35,10 +35,12 @@ const OptionsPanel = ({ onOptionChanged }) => {
 
   return (
     <section>
-      <div className="h-12 px-6 flex items-center gap-5  rounded-lg mb-4 bg-[#f3f3f3]">
-        <p>Customize</p>
+      <div className={`${className}  flex items-center`}>
+        <p className="uppercase text-[#272838] font-bold tracking-tight">
+          Style
+        </p>
 
-        <PushdownGroup
+        {/* <PushdownGroup
           values={formattingValues}
           children={[iconsFormatting.bold, iconsFormatting.italic]}
           multiple
@@ -46,7 +48,7 @@ const OptionsPanel = ({ onOptionChanged }) => {
           selectedItemChanged={(value) =>
             updateStyleFromArray(formattingValues, value)
           }
-        />
+        /> */}
 
         <ColorPicker
           initialColor="#ffffff"
@@ -62,6 +64,7 @@ const OptionsPanel = ({ onOptionChanged }) => {
             iconsAlignent.center,
             iconsAlignent.right,
           ]}
+          initialIndex={cardStyling.alignment == "left" ? 0 : 2}
           selectedItemChanged={(value) => updateStyle("alignment", value)}
         />
 

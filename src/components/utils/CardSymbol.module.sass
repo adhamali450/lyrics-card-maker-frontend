@@ -1,0 +1,31 @@
+.card
+    transition: transform 0.2s ease-out
+    rect, path
+        transition: fill 0.2s ease-out
+
+.active
+    @extend .card
+    transform: scale(1.05)
+    .main
+        .background
+            fill: #FFFFFF
+        .foreground
+            fill: #3C618D
+    .footer
+        .background
+            fill: #F7F16C
+        .foreground
+            fill: #363F2C
+
+.inactive
+    @extend .card
+    .main
+        .background
+            fill: #DCDCDC
+        .foreground
+            fill: #A6A6A6
+    .footer
+        .background
+            fill: #A6A6A6
+        .foreground
+            fill: #D9D9D9

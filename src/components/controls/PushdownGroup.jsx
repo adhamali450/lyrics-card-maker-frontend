@@ -1,5 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PushdownButton from "@controls/PushdownButton";
+
+const getInitialSelectionMap = (children, initialIndex, multiple) => {
+  return Array(children.length)
+    .fill(0)
+    .map((_, i) => {
+      return multiple ? initialIndex.includes(i) : initialIndex == i;
+    });
+};
 
 const PushdownGroup = ({
   className = "",
@@ -9,13 +17,18 @@ const PushdownGroup = ({
   initialIndex = 0,
   multiple = false,
 }) => {
-  if (multiple) if (!Array.isArray(initialIndex)) initialIndex = [initialIndex];
+  if (multiple)
+    if (!Array.isArray(initialIndex)) initialIndex = [initialIndex];
+    else if (Array.isArray(initialIndex)) initialIndex = initialIndex[0];
 
   const [selectionMap, setSelectionMap] = useState(
-    Array(children.length)
-      .fill(0)
-      .map((_, i) => (multiple ? initialIndex.includes(i) : initialIndex == i))
+    getInitialSelectionMap(children, initialIndex, multiple)
   );
+
+  //TODO: Is this the clean way?
+  useEffect(() => {
+    setSelectionMap(getInitialSelectionMap(children, initialIndex, multiple));
+  }, []);
 
   const clickHandler = (index) => {
     // If the last to deselect, do nothing (Multiple don't apply)
@@ -32,6 +45,7 @@ const PushdownGroup = ({
     });
 
     setSelectionMap(updated);
+
     const selectedValues = updated
       .map((s, i) => s && values[i])
       .filter((s) => s);

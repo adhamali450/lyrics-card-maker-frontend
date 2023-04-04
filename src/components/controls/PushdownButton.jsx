@@ -8,8 +8,8 @@ const PushdownButton = ({ className = "", icon, state, onClick }) => {
   return (
     <button
       type="button"
-      className={`${className} p-1 rounded-[4px] border border-transparent transition-all w-8 hover:bg-[#cccccc] ${
-        state && "bg-[#adadad] border -[#686868] shadow-sm shadow-[#686868]"
+      className={`${className} p-1 rounded-[4px] transition-all w-8 hover:bg-[#cccccc] ${
+        state && "bg-[#cccccc] shadow-sm shadow-[#686868]"
       }`}
       onClick={() => clickHandler()}
     >

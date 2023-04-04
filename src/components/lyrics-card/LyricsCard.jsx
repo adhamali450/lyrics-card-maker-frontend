@@ -22,14 +22,13 @@ import iconTrash from "@assets/icon-trash.svg";
 import iconUpload from "@assets/icon-upload.png";
 
 import DragOverlay from "@controls/DragOverlay";
-import ImageInput from "@controls/ImageInput";
 import FileInput from "@controls/FileInput";
 import iconQuote from "@assets/quote.png";
 import plainBackground from "@assets/plain-background.svg";
 
 const getImagePalette = (url, callback) => {
   // First, use color-thief to get the dominant color
-  // If failed, use the API
+  // If failed, use the backend API
 
   getPalette(url, 2, "hex", "anonymous")
     .then((colors) => {
@@ -201,11 +200,11 @@ const LyricsCard = ({ cardInfo, lyricsData }) => {
     <div className={styles["card"]}>
       <div
         className={`${styles["background"]}`}
-        onMouseEnter={(e) => {
+        onMouseEnter={() => {
           if (isFileDragged) setShowDragOverlay(true);
           else setShowDragOverlay(false);
         }}
-        onMouseLeave={(e) => {
+        onMouseLeave={() => {
           setShowDragOverlay(true);
         }}
       >
@@ -258,8 +257,17 @@ const LyricsCard = ({ cardInfo, lyricsData }) => {
       {backgroundImage && <div className={styles["shade"]}></div>}
 
       <main
-        className={`${styles["lyrics"]} pointer-events-none`}
-        dir={lang == "ar" ? "rtl" : "ltr"}
+        className={`${styles["lyrics"]} pointer-events-none flex flex-col`}
+        // dir={
+        //   ["left", "center"].includes(cardStyling["alignment"]) ? "ltr" : "rtl"
+        // }
+        style={{
+          alignItems: {
+            left: "flex-start",
+            center: "center",
+            right: "flex-end",
+          }[cardStyling["alignment"]],
+        }}
       >
         <img
           className="absolute top-[-15%] opacity-40"

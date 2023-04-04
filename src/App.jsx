@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import CardStyleContext from "@contexts/CardStyleContext";
 
 import axios from "axios";
@@ -10,8 +10,9 @@ import { formatLyrics, isArabic, getContrastColor } from "./utils";
 import SongPreview from "@components/SongPreview";
 import LyricsViewer from "@components/LyricsViewer";
 import LyricsCard from "@components/lyrics-card/LyricsCard";
+import CardSymbol from "@utils/CardSymbol";
 
-import logo from "@assets/logo1.jpg";
+import logo from "@assets/logo.svg";
 import OptionsPanel from "./components/OptionsPanel";
 
 const defaultLyricsData = {
@@ -23,6 +24,7 @@ const defaultLyricsData = {
 function App() {
   const [song, setSong] = useState({});
   const [colors, setColors] = useState(null);
+  const [cardAspectRatio, setCardAspectRatio] = useState("1:1");
   const [cardStyling, setCardStyling] = useState({
     bold: false,
     italic: false,
@@ -68,7 +70,13 @@ function App() {
           selectionCompleted: false,
         });
 
-        //TODO: Text alignment based on language
+        // Set the default alignment based on the language
+        setCardStyling((prev) => {
+          return {
+            ...prev,
+            alignment: lang == "ar" ? "right" : "left",
+          };
+        });
       });
 
     //colors
@@ -108,33 +116,63 @@ function App() {
   };
 
   return (
-    <div className="App max-w-[1920px] max-h-[1080px] mx-auto p-5 grid grid-rows-[auto_1fr] grid-cols-[1fr_36ch] gap-5 h-[100vh] ">
-      <header className="col-span-2 flex gap-8 items-center">
-        {/* <img className="h-[90%]" src={logo} alt="Genius cards generator" /> */}
-        <h1 className="font-sans font-semibold ">Card <br /> generator</h1> 
-        
-        <Searchbar
-          className="grow"
-          onResultSelected={(id) => handleResultSelected(id)}
+    <div className="App container max-w-[1920px] max-h-[1080px] mx-auto flex h-[100vh]">
+      <aside className="grid grid-rows-[5rem_1fr] p-5 gap-7 h-full bg-[#272838]">
+        <img
+          className="h-[70%] self-center"
+          src={logo}
+          alt="Genius cards generator"
         />
-      </header>
-
-      <aside className="row-start-2 col-start-2   flex flex-col overflow-auto">
-        {!_.isEqual(song, {}) && <SongPreview song={song} colors={colors} />}
-
-        <LyricsViewer
-          className="border-0 grow"
-          id={id}
-          colors={colors}
-          lyricsData={lyricsData}
-          onSelectionChanged={handleSelectionChanged}
-        />
+        <section className="flex items-center flex-col gap-2">
+          {[
+            ["1:1", "Facebook"],
+            ["3:4", "Instagram"],
+            ["4:3", "Twitter"],
+          ].map(([ratio, title], index, len) => (
+            <button
+              className="px-2 aspect-square rounded-lg w-[100px]"
+              key={index + "-button"}
+              style={{}}
+              onClick={() => setCardAspectRatio(ratio)}
+            >
+              <CardSymbol
+                style={{
+                  opacity: cardAspectRatio == ratio ? 1 : 0.5,
+                }}
+                aspectRatio={ratio}
+                state={cardAspectRatio == ratio ? "active" : "inactive"}
+              />
+              <span className="text-sm text-[#e0eafb]">{title}</span>
+            </button>
+          ))}
+        </section>
       </aside>
-      <main className="row-start-2 col-start-1">
-        <CardStyleContext.Provider value={{ cardStyling, setCardStyling }}>
-          <OptionsPanel />
-          <LyricsCard cardInfo={song} lyricsData={lyricsData} />
-        </CardStyleContext.Provider>
+
+      <main className="grow grid grid-rows-[5rem_1fr] grid-cols-[1fr_36ch] p-5 gap-5">
+        <header className="col-span-2 flex gap-8 items-center">
+          <Searchbar
+            className="grow"
+            onResultSelected={(id) => handleResultSelected(id)}
+          />
+        </header>
+
+        <aside className="row-start-2 col-start-2 flex flex-col overflow-auto">
+          {!_.isEqual(song, {}) && <SongPreview song={song} colors={colors} />}
+
+          <LyricsViewer
+            className="border border-gray-400 rounded-md grow"
+            id={id}
+            colors={colors}
+            lyricsData={lyricsData}
+            onSelectionChanged={handleSelectionChanged}
+          />
+        </aside>
+        <section className="row-start-2">
+          <CardStyleContext.Provider value={{ cardStyling, setCardStyling }}>
+            <OptionsPanel className="h-12 px-6 gap-5 rounded-md mb-4 border border-gray-400 bg-[#eeeeee]" />
+            <LyricsCard cardInfo={song} lyricsData={lyricsData} />
+          </CardStyleContext.Provider>
+        </section>
       </main>
     </div>
   );

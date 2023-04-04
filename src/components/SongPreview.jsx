@@ -23,7 +23,7 @@ const SongPreview = ({ song, colors }) => {
 
   return (
     <section
-      className="relative flex items-center gap-3  rounded-lg shadow-md w-full h-[120px]"
+      className="relative flex items-center gap-3  shadow-md w-full h-[120px]"
       style={{
         direction: isArabic(title) ? "rtl" : "ltr",
         background: getPreviewGradient(
