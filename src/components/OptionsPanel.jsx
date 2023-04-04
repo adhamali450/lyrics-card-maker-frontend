@@ -40,7 +40,7 @@ const OptionsPanel = ({ className, onOptionChanged }) => {
           Style
         </p>
 
-        {/* <PushdownGroup
+        <PushdownGroup
           values={formattingValues}
           children={[iconsFormatting.bold, iconsFormatting.italic]}
           multiple
@@ -48,7 +48,7 @@ const OptionsPanel = ({ className, onOptionChanged }) => {
           selectedItemChanged={(value) =>
             updateStyleFromArray(formattingValues, value)
           }
-        /> */}
+        />
 
         <ColorPicker
           initialColor="#ffffff"

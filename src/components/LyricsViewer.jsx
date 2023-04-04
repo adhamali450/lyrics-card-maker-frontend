@@ -20,19 +20,6 @@ const LyricsViewer = ({
     onSelectionChanged(index);
   };
 
-  const getBarColor = (index, type) => {
-    if (!["background_color", "text_color"].includes(type)) return "#000";
-
-    // Selected
-    if (lyrics[index][1]) {
-      if (colors) return colors[type];
-      return type == "background_color" ? "#808080" : "#000";
-    }
-
-    // Unselected
-    return type == "background_color" ? "#e9e9e9" : "#000";
-  };
-
   return (
     <div className={className}>
       {/* State: idle */}
