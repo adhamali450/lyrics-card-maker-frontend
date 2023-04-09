@@ -1,10 +1,10 @@
 import React from "react";
 import styles from "./LoadingAnimation.module.sass";
 
-const LoadingAnimation = () => {
+const LoadingAnimation = ({ className }) => {
   return (
     <div
-      className={`justify-self-center self-center ${styles["lds-ellipsis"]}`}
+      className={`${className} justify-self-center self-center ${styles["lds-ellipsis"]}`}
     >
       <div></div>
       <div></div>

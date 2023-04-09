@@ -3,16 +3,12 @@ import LyricsBar from "@components/LyricsBar";
 
 import { getLang } from "@/utils";
 
-const EditableLabel = ({
-  text,
-  onTextChanged,
-  // lang,
-  className = "",
-  style = {},
-}) => {
+const EditableLabel = ({ text, onTextChanged, className = "", style = {} }) => {
   const inputRef = useRef([]);
   const containerRef = useRef([]);
   const spanRef = useRef([]);
+
+  const [tabCount, setTabCount] = useState(0);
 
   const [isEditing, setIsEditing] = useState(false);
 
@@ -31,8 +27,26 @@ const EditableLabel = ({
     setLang(getLang(text + " "));
   }, [text]);
 
-  const handleDoubleClick = () => {
+  const handleDoubleClick = (e = null) => {
+    if (e) e.preventDefault();
+
     setIsEditing(true);
+  };
+
+  const handleTouchEnd = (e) => {
+    if (e.touches.length > 1) {
+      // If the user taps with two fingers, it's not a double-tap
+      return;
+    }
+    if (tabCount === 1) {
+      // If the user has already tapped once, reset the count
+      setTabCount(0);
+      // Handle the double-tap event
+      handleDoubleClick(e);
+    } else {
+      // If this is the first tap, increment the count
+      setTabCount(1);
+    }
   };
 
   const handleInputChange = (event) => {
@@ -61,6 +75,7 @@ const EditableLabel = ({
   return (
     <div
       onDoubleClick={handleDoubleClick}
+      onTouchEnd={handleTouchEnd}
       className={`${className} inline-block`}
       ref={containerRef}
     >

@@ -1,19 +1,26 @@
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment, useRef } from "react";
 import CardStyleContext from "@contexts/CardStyleContext";
 
 import axios from "axios";
 import _ from "lodash";
 import Searchbar from "./components/searchbar/Searchbar";
 
-import { formatLyrics, getLang, getContrastColor } from "./utils";
+import {
+  formatLyrics,
+  getLang,
+  getContrastColor,
+  bestContrast,
+  getContrast,
+} from "./utils";
 
 import SongPreview from "@components/SongPreview";
 import LyricsViewer from "@components/LyricsViewer";
 import LyricsCard from "@components/lyrics-card/LyricsCard";
 import CardSymbol from "@utils/CardSymbol";
 
-import logo from "@assets/logo.svg";
+import PageLogo from "@utils/PageLogo";
 import OptionsPanel from "./components/OptionsPanel";
+import LyricsModal from "./components/LyricsModal";
 
 const defaultLyricsData = {
   lang: "",
@@ -40,8 +47,11 @@ function App() {
     setCardStyling((prev) => {
       return {
         ...prev,
-        bannerForeground: getContrastColor(prev.bannerBackground),
-        textColor: getContrastColor(prev.highlightColor),
+        bannerForeground: bestContrast(prev.bannerBackground, [
+          "#000000",
+          "#ffffff",
+        ]),
+        textColor: bestContrast(prev.highlightColor, ["#000000", "#ffffff"]),
       };
     });
   }, [cardStyling.bannerBackground, cardStyling.highlightColor]);
@@ -85,7 +95,16 @@ function App() {
         params: { url: image },
       })
       .then((res) => {
-        setColors(res.data);
+        let { background_color, text_color } = res.data;
+
+        if (getContrast(background_color, text_color, true) <= 2) {
+          text_color = bestContrast(background_color, ["#000000", "#ffffff"]);
+        }
+
+        setColors({
+          background_color: background_color,
+          text_color: text_color,
+        });
       })
       .catch((err) => {
         console.error(err);
@@ -116,13 +135,16 @@ function App() {
   };
 
   return (
-    <div className="App container max-w-[1920px] max-h-[1080px] mx-auto flex h-[100vh]">
-      <aside className="grid grid-rows-[5rem_1fr] p-5 gap-7 h-full bg-[#272838]">
-        <img
-          className="h-[70%] self-center"
-          src={logo}
-          alt="Genius cards generator"
-        />
+    <div className="App relative container max-w-[1920px] max-h-[1080px] mx-auto flex h-[100vh]">
+      <LyricsModal
+        song={song}
+        colors={colors}
+        lyricsData={lyricsData}
+        onLyricsSelectionChanged={handleSelectionChanged}
+      />
+
+      <aside className="hidden lg:grid grid-rows-[5rem_1fr] p-5 gap-7 h-full bg-[#272838]">
+        <PageLogo className="h-[70%] self-center" />
         <section className="flex items-center flex-col gap-2">
           {[
             ["1:1", "Facebook"],
@@ -148,25 +170,36 @@ function App() {
         </section>
       </aside>
 
-      <main className="grow grid grid-rows-[5rem_1fr] grid-cols-[1fr_36ch] p-5 gap-5">
+      <main className="grow grid grid-rows-[5rem_1fr] grid-cols-[1fr] lg:grid-cols-[1fr_36ch] p-5 gap-5">
         <header className="col-span-2 flex gap-8 items-center">
+          <PageLogo
+            className="block lg:hidden h-[70%] self-center"
+            geniusColor="#272838"
+          />
           <Searchbar
             className="grow"
             onResultSelected={(id) => handleResultSelected(id)}
           />
         </header>
 
-        <aside className="row-start-2 col-start-2 flex flex-col border border-gray-400 rounded-md overflow-auto">
-          {!_.isEqual(song, {}) && <SongPreview song={song} colors={colors} />}
+        <aside className="row-start-2 col-start-2 hidden  lg:grid grid-rows-[120px_1fr] border border-gray-400 rounded-md overflow-auto">
+          {!_.isEqual(song, {}) && (
+            <SongPreview className="row-start-1" song={song} colors={colors} />
+          )}
 
           <LyricsViewer
             className="grow"
+            style={{
+              gridRow: !_.isEqual(song, {}) ? "2/3" : "1/3",
+            }}
             id={id}
             colors={colors}
             lyricsData={lyricsData}
+            lineMax={36}
             onSelectionChanged={handleSelectionChanged}
           />
         </aside>
+
         <section className="row-start-2">
           <CardStyleContext.Provider value={{ cardStyling, setCardStyling }}>
             <OptionsPanel className="h-12 px-6 gap-5 rounded-md mb-4 border border-gray-400 bg-[#eeeeee]" />

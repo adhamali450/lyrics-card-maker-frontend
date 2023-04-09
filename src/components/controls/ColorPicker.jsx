@@ -25,14 +25,14 @@ const ColorPicker = ({
   };
 
   return (
-    <div className={`${className} relative max-h-full `}>
+    <div className={`${className} relative`}>
       <button
         type="button"
         ref={btnRef}
-        className={`relative p-1 rounded-[4px] border border-transparent transition-all overflow-hidden hover:bg-[#cccccc]`}
+        className={`max-h-full h-8 relative p-1 rounded-[4px] border border-transparent transition-all overflow-hidden hover:bg-[#cccccc]`}
         title={title}
       >
-        <img src={icon} alt={title} />
+        <img className="max-h-full aspect-square" src={icon} alt={title} />
         <div
           className="absolute bottom-0 left-0 w-full h-[6px] "
           style={{

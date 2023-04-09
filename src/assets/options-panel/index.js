@@ -1,12 +1,12 @@
-import iconAlignLeft from "./align-left.png";
-import iconAlignCenter from "./align-center.png";
-import iconAlignRight from "./align-right.png";
+import iconAlignLeft from "./align-left.svg";
+import iconAlignCenter from "./align-center.svg";
+import iconAlignRight from "./align-right.svg";
 
-import iconBold from "./bold.png";
-import iconItalic from "./italic.png";
+import iconBold from "./bold.svg";
+import iconItalic from "./italic.svg";
 
-import iconFill from "./fill.png";
-import iconTextHighlight from "./text-highlight.png";
+import iconFill from "./fill.svg";
+import iconTextHighlight from "./text-highlight.svg";
 
 export const iconsAlignent = {
   left: iconAlignLeft,

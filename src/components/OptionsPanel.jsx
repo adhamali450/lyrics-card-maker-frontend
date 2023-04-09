@@ -35,7 +35,7 @@ const OptionsPanel = ({ className, onOptionChanged }) => {
 
   return (
     <section>
-      <div className={`${className}  flex items-center`}>
+      <div className={`${className} flex items-center`}>
         <p className="uppercase text-[#272838] font-bold tracking-tight">
           Style
         </p>

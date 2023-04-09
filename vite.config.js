@@ -16,6 +16,9 @@ export default defineConfig({
       "@controls": fileURLToPath(
         new URL("./src/components/controls", import.meta.url)
       ),
+      "@skeletons": fileURLToPath(
+        new URL("./src/components/utils/skeletons", import.meta.url)
+      ),
       "@utils": fileURLToPath(
         new URL("./src/components/utils", import.meta.url)
       ),

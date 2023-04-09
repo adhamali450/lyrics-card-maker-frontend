@@ -16,7 +16,7 @@ import styles from "./LyricsCard.module.sass";
 import { getPalette } from "color-thief-react";
 import axios from "axios";
 
-import Logo from "@utils/Logo";
+import CardLogo from "@utils/CardLogo";
 
 import iconTrash from "@assets/icon-trash.svg";
 import iconUpload from "@assets/icon-upload.png";
@@ -84,7 +84,6 @@ const DummyLyrics = ({ lang, cardStyling }) => {
             }}
             text={l[0]}
             lang={lang}
-            onTextChanged={(e) => console.log(e)}
           />
         );
       })}
@@ -258,9 +257,6 @@ const LyricsCard = ({ cardInfo, lyricsData }) => {
 
       <main
         className={`${styles["lyrics"]} pointer-events-none flex flex-col`}
-        // dir={
-        //   ["left", "center"].includes(cardStyling["alignment"]) ? "ltr" : "rtl"
-        // }
         style={{
           alignItems: {
             left: "flex-start",
@@ -334,7 +330,10 @@ const LyricsCard = ({ cardInfo, lyricsData }) => {
         </div>
 
         <button className={styles["logo"]} onClick={handleLogoSize}>
-          <Logo varient={logoVarient} color={cardStyling["bannerForeground"]} />
+          <CardLogo
+            varient={logoVarient}
+            color={cardStyling["bannerForeground"]}
+          />
         </button>
       </footer>
     </div>

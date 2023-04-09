@@ -4,7 +4,7 @@ import LyricsBar from "@components/LyricsBar";
 import iconLyrics from "@assets/icon-lyrics.svg";
 
 const truthy = (arr) => {
-  return arr.length > 0;
+  return arr?.length > 0;
 };
 
 const LyricsViewer = ({
@@ -13,15 +13,17 @@ const LyricsViewer = ({
   lyricsData,
   colors,
   onSelectionChanged,
+  lineMax = 36,
+  style = {},
 }) => {
-  const { lang, lyrics, selectionCompleted } = lyricsData;
+  let { lang, lyrics, selectionCompleted } = lyricsData;
 
   const handleLineClick = (index) => {
     onSelectionChanged(index);
   };
 
   return (
-    <div className={className}>
+    <div className={className} style={style}>
       {/* State: idle */}
       {!id && (
         <div className="w-full h-full flex flex-col items-center justify-center gap-3">
@@ -40,7 +42,7 @@ const LyricsViewer = ({
       {/* State: Lyrics container */}
       {truthy(lyrics) && (
         <div
-          className={`w-full h-full flex flex-col gap-[6px] p-3 `}
+          className={`w-full flex flex-col gap-[6px] p-3 `}
           style={{
             textAlign: lang == "ar" ? "rtl" : "ltr",
             direction: lang == "ar" ? "rtl" : "ltr",
@@ -61,13 +63,14 @@ const LyricsViewer = ({
               >
                 <LyricsBar
                   line={line}
+                  lineMax={lineMax}
                   style={{
                     backgroundColor:
-                      lyrics[i][1] && colors ? colors["text_color"] : "#e9e9e9",
-                    color:
                       lyrics[i][1] && colors
                         ? colors["background_color"]
-                        : "#000",
+                        : "#e9e9e9",
+                    color:
+                      lyrics[i][1] && colors ? colors["text_color"] : "#000",
                   }}
                 />
               </button>

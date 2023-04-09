@@ -7,7 +7,7 @@ const LyricsBar = ({
   style = {},
   rounded = true,
   padding = true,
-  lineMax = 36,
+  lineMax,
 }) => {
   const roundedStyles =
     "first-of-type:rounded-t-[3px] first-of-type:rounded-br-[3px] last-of-type:rounded-b-[3px]";

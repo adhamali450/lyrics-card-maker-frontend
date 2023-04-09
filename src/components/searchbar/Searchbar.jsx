@@ -12,7 +12,7 @@ const Searchbar = ({ className, onResultSelected }) => {
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [currentlyTyping, setCurrentlyTyping] = useState(false);
 
-  const [result, setResult] = useState([]);
+  const [result, setResult] = useState(undefined);
   const [selectedSong, setSelectedSong] = useState({});
 
   const inputRef = useRef(null);
@@ -20,7 +20,7 @@ const Searchbar = ({ className, onResultSelected }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedQuery(query);
-      setResult([]);
+      setResult(undefined);
     }, 1500);
 
     return () => clearTimeout(timer);
@@ -98,7 +98,7 @@ const Searchbar = ({ className, onResultSelected }) => {
       </div>
 
       {/* Results container */}
-      {query && query != "" && _.isEqual(selectedSong, {}) && (
+      {query && _.isEqual(selectedSong, {}) && (
         <Popup className="relative" triggerRef={inputRef} triggerType="keyup">
           <div
             className="absolute mt-3 ml-3 border-2 min-w-[350px] w-[25%] flex flex-col gap-1 bg-white"
@@ -108,15 +108,19 @@ const Searchbar = ({ className, onResultSelected }) => {
             }}
           >
             {/* Loading animation */}
-            {(currentlyTyping || !result.length) && <LoadingAnimation />}
+            {(currentlyTyping || _.isEqual(result, undefined)) && (
+              <LoadingAnimation />
+            )}
 
-            {/* Results */}
+            {/* Search Results */}
             {!currentlyTyping && (
               <Fragment>
                 {_.isEqual(result, []) ? (
-                  <div>No results</div>
+                  <div className="grid place-content-center py-4">
+                    No results
+                  </div>
                 ) : (
-                  result.map((item, idx) => {
+                  result?.map((item, idx) => {
                     return (
                       <SearchResult
                         key={idx}
@@ -129,9 +133,6 @@ const Searchbar = ({ className, onResultSelected }) => {
                     );
                   })
                 )}
-
-                {/* {result.length == 0 &&
-                  } */}
               </Fragment>
             )}
           </div>

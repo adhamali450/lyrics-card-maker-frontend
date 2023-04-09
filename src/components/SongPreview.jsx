@@ -1,9 +1,16 @@
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 
-import LoadingAnimation from "@components/utils/LoadingAnimation";
 import iconBrokenImage from "@assets/broken-image.png";
+import SongPreviewSkeleton from "@skeletons/SongPreviewSkeleton";
 
-import { getLang, shadeColor, truncate, isImageLink } from "@/utils";
+import {
+  getLang,
+  shadeColor,
+  truncate,
+  isImageLink,
+  getContrast,
+  bestContrast,
+} from "@/utils";
 
 const getPreviewGradient = (dominantColor, direction) => {
   if (!dominantColor) return;
@@ -17,31 +24,38 @@ const getPreviewGradient = (dominantColor, direction) => {
   return grd;
 };
 
-const SongPreview = ({ song, colors }) => {
+const SongPreview = ({ className = "h-[120px]", song, colors }) => {
   const { title, artist, image } = song;
+
+  useEffect(() => {
+    if (colors) {
+      getContrast(colors["background_color"], colors["text_color"]);
+    }
+  }, [colors]);
 
   return (
     <section
-      className="relative flex items-center gap-3  shadow-md w-full h-[120px]"
+      className={`${className} relative flex items-center w-full gap-3 shadow-md `}
       style={{
         direction: getLang(title) == "ar" ? "rtl" : "ltr",
+        textAlign: getLang(title) == "ar" ? "right" : "left",
         background: getPreviewGradient(
-          colors && colors["text_color"],
+          colors && colors["background_color"],
           getLang(title) == "ar" ? "rtl" : "ltr"
         ),
-        color: colors && colors["background_color"],
+        color: colors && colors["text_color"],
       }}
     >
       {colors && (
         <Fragment>
           <img
-            className="w-[120px] h-full object-cover"
+            className="h-full aspect-square object-cover"
             src={isImageLink(image) ? image : iconBrokenImage}
             alt="song-cover"
           />
 
           <img
-            className="absolute w-full h-full object-cover opacity-5 pointer-events-none"
+            className="absolute w-full h-full object-cover opacity-[0.07] pointer-events-none"
             src={isImageLink(image) ? image : iconBrokenImage}
             alt=""
           />
@@ -52,8 +66,7 @@ const SongPreview = ({ song, colors }) => {
           </div>
         </Fragment>
       )}
-
-      {!colors && <LoadingAnimation />}
+      {!colors && <SongPreviewSkeleton className="px-3 pt-3 pb-4 h-full" />}
     </section>
   );
 };

@@ -1,6 +1,6 @@
 import React from "react";
 
-const Logo = ({ varient = "large", color = "#000000" }) => {
+const CardLogo = ({ varient = "large", color = "#000000" }) => {
   return varient == "large" ? (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -25,4 +25,4 @@ const Logo = ({ varient = "large", color = "#000000" }) => {
   );
 };
 
-export default Logo;
+export default CardLogo;
