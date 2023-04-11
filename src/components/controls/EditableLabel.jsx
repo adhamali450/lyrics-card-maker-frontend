@@ -3,7 +3,13 @@ import LyricsBar from "@components/LyricsBar";
 
 import { getLang } from "@/utils";
 
-const EditableLabel = ({ text, onTextChanged, className = "", style = {} }) => {
+const EditableLabel = ({
+  text,
+  onTextChanged,
+  className = "",
+  style = {},
+  lineMax,
+}) => {
   const inputRef = useRef([]);
   const containerRef = useRef([]);
   const spanRef = useRef([]);
@@ -96,7 +102,7 @@ const EditableLabel = ({ text, onTextChanged, className = "", style = {} }) => {
           <LyricsBar
             className="first-of-type:rounded-none last-of-type:rounded-none"
             line={[inputText]}
-            lineMax={45}
+            lineMax={lineMax}
             style={style}
             rounded={false}
             padding={false}

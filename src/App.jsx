@@ -79,15 +79,8 @@ function App() {
             .map((l) => [l, 0]),
           selectionCompleted: false,
         });
-
-        // Set the default alignment based on the language
-        setCardStyling((prev) => {
-          return {
-            ...prev,
-            alignment: lang == "ar" ? "right" : "left",
-          };
-        });
-      });
+      })
+      .then(() => {});
 
     //colors
     axios
@@ -171,9 +164,9 @@ function App() {
       </aside>
 
       <main className="grow grid grid-rows-[5rem_1fr] grid-cols-[1fr] lg:grid-cols-[1fr_36ch] p-5 gap-5">
-        <header className="col-span-2 flex gap-8 items-center">
+        <header className="lg:col-span-2 flex gap-4 sm:gap-8 items-center">
           <PageLogo
-            className="block lg:hidden h-[70%] self-center"
+            className="block lg:hidden h-[60%] sm:h-[70%] self-center"
             geniusColor="#272838"
           />
           <Searchbar
@@ -182,7 +175,18 @@ function App() {
           />
         </header>
 
-        <aside className="row-start-2 col-start-2 hidden  lg:grid grid-rows-[120px_1fr] border border-gray-400 rounded-md overflow-auto">
+        <section className="row-start-2">
+          <CardStyleContext.Provider value={{ cardStyling, setCardStyling }}>
+            <OptionsPanel className="h-12 px-6 gap-5 rounded-md mb-4 border border-gray-400 bg-[#eeeeee]" />
+            <LyricsCard
+              cardInfo={song}
+              lyricsData={lyricsData}
+              aspectRatio={cardAspectRatio}
+            />
+          </CardStyleContext.Provider>
+        </section>
+
+        <aside className="row-start-2 col-start-2 hidden lg:grid grid-rows-[120px_1fr] border border-gray-400 rounded-md overflow-auto">
           {!_.isEqual(song, {}) && (
             <SongPreview className="row-start-1" song={song} colors={colors} />
           )}
@@ -199,13 +203,6 @@ function App() {
             onSelectionChanged={handleSelectionChanged}
           />
         </aside>
-
-        <section className="row-start-2">
-          <CardStyleContext.Provider value={{ cardStyling, setCardStyling }}>
-            <OptionsPanel className="h-12 px-6 gap-5 rounded-md mb-4 border border-gray-400 bg-[#eeeeee]" />
-            <LyricsCard cardInfo={song} lyricsData={lyricsData} />
-          </CardStyleContext.Provider>
-        </section>
       </main>
     </div>
   );

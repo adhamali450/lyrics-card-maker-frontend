@@ -17,7 +17,8 @@
     "react-dom": "^18.2.0",
     "react-draggable": "^4.4.5",
     "react-loading-skeleton": "^3.2.0",
-    "react-modal-sheet": "^1.10.2"
+    "react-modal-sheet": "^1.10.2",
+    "react-zoom-pan-pinch": "^3.0.6"
   },
   "devDependencies": {
     "@types/react": "^18.0.27",

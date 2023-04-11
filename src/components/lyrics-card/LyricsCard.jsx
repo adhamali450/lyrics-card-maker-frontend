@@ -6,6 +6,7 @@ import React, {
   Fragment,
 } from "react";
 import CardStyleContext from "@contexts/CardStyleContext";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import Draggable from "react-draggable";
 import EditableLabel from "@controls/EditableLabel";
 
@@ -35,6 +36,7 @@ const getImagePalette = (url, callback) => {
       callback(colors[0]);
     })
     .catch(() => {
+      // Fallback to backend API
       axios
         .get("https://genius-unofficial-api.vercel.app/api/song/colors", {
           params: { url: url },
@@ -48,7 +50,7 @@ const getImagePalette = (url, callback) => {
     });
 };
 
-const ImgStateFromUrl = (url, callback) => {
+const imgStateFromUrl = (url, callback) => {
   const img = new Image();
   img.src = url;
   img.onload = () => {
@@ -91,7 +93,15 @@ const DummyLyrics = ({ lang, cardStyling }) => {
   );
 };
 
-const LyricsCard = ({ cardInfo, lyricsData }) => {
+const getLineMax = (aspectRatio) => {
+  return {
+    "1:1": 50,
+    "3:4": 35,
+    "4:3": 70,
+  }[aspectRatio];
+};
+
+const LyricsCard = ({ cardInfo, lyricsData, aspectRatio = "1:1" }) => {
   let { title = "", artist = "" } = cardInfo;
   title = truncate(title, 20);
   artist = truncate(artist);
@@ -136,12 +146,16 @@ const LyricsCard = ({ cardInfo, lyricsData }) => {
     });
   }, [backgroundImage]);
 
+  useEffect(() => {
+    setLogoVarient(aspectRatio == "3:4" ? "small" : "large");
+  }, [aspectRatio]);
+
   const handleLogoSize = () =>
     setLogoVarient(logoVarient == "large" ? "samll" : "large");
 
   // File upload
   const fileSelectedHandler = (url) =>
-    ImgStateFromUrl(url, (st) => setBackgroundImage(st));
+    imgStateFromUrl(url, (st) => setBackgroundImage(st));
 
   // Zooming to scale
   const wheelHandler = (e) => {
@@ -184,7 +198,7 @@ const LyricsCard = ({ cardInfo, lyricsData }) => {
       }
     }
 
-    ImgStateFromUrl(url, (st) => setBackgroundImage(st));
+    imgStateFromUrl(url, (st) => setBackgroundImage(st));
 
     setIsFileDragged(false);
   };
@@ -196,7 +210,13 @@ const LyricsCard = ({ cardInfo, lyricsData }) => {
   };
 
   return (
-    <div className={styles["card"]}>
+    <div
+      className={`${styles["card"]} h-[500px]`}
+      style={{
+        aspectRatio: aspectRatio.replace(":", "/"),
+        transition: "all 0.15s ease-out",
+      }}
+    >
       <div
         className={`${styles["background"]}`}
         onMouseEnter={() => {
@@ -210,26 +230,30 @@ const LyricsCard = ({ cardInfo, lyricsData }) => {
         {/* Background container */}
         {backgroundImage ? (
           <Draggable position={controlledPosition} onDrag={onControlledDrag}>
-            <div className="absolute w-full h-full inset-0 ">
-              <div
-                onWheel={wheelHandler}
-                className="w-full h-full "
-                style={{
-                  transform: `scale(${backgroundImageScale})`,
-                  // transformOrigin: "top left",
-                  backgroundSize: "cover",
-                  backgroundImage: `url(${backgroundImage["url"]})`,
-                  width:
-                    backgroundImage["aspect-ratio"] > 1
-                      ? backgroundImage["aspect-ratio"] * 100 + "%"
-                      : "100%",
-                  height:
-                    backgroundImage["aspect-ratio"] > 1
-                      ? "100%"
-                      : backgroundImage["aspect-ratio"] ** -1 * 100 + "%",
-                }}
-              ></div>
-            </div>
+            <TransformWrapper>
+              <TransformComponent>
+                <div className="absolute w-full h-full inset-0 ">
+                  <div
+                    onWheel={wheelHandler}
+                    className="w-full h-full"
+                    style={{
+                      backgroundPosition: "top center",
+                      transform: `scale(${backgroundImageScale})`,
+                      backgroundSize: "cover",
+                      backgroundImage: `url(${backgroundImage["url"]})`,
+                      width:
+                        backgroundImage["aspect-ratio"] > 1
+                          ? backgroundImage["aspect-ratio"] * 100 + "%"
+                          : "100%",
+                      height:
+                        backgroundImage["aspect-ratio"] > 1
+                          ? "100%"
+                          : backgroundImage["aspect-ratio"] ** -1 * 100 + "%",
+                    }}
+                  ></div>
+                </div>
+              </TransformComponent>
+            </TransformWrapper>
           </Draggable>
         ) : (
           <div
@@ -288,6 +312,7 @@ const LyricsCard = ({ cardInfo, lyricsData }) => {
               text={l[0]}
               lang={lang}
               onTextChanged={(e) => {}}
+              lineMax={getLineMax(aspectRatio)}
             />
           );
         })}

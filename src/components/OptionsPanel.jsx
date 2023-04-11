@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import CardStyleContext from "@contexts/CardStyleContext";
 import PushdownGroup from "@controls/PushdownGroup";
+import PopupButton from "@controls/PopupButton";
 import ColorPicker from "@components/controls/ColorPicker";
 
 import {
@@ -74,6 +75,13 @@ const OptionsPanel = ({ className, onOptionChanged }) => {
           title="Card banner color"
           onChangeCompleted={(c) => updateStyle("bannerBackground", c)}
         />
+
+        <PopupButton
+          className="block lg:hidden ml-auto"
+          icon={iconsStyling.size}
+        >
+          <h1>Hello world</h1>
+        </PopupButton>
       </div>
     </section>
   );
