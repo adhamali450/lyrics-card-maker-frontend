@@ -211,7 +211,7 @@ const LyricsCard = ({ cardInfo, lyricsData, aspectRatio = "1:1" }) => {
 
   return (
     <div
-      className={`${styles["card"]} h-[500px]`}
+      className={`${styles["card"]}  w-full h-auto msm:w-auto msm:h-[500px]`}
       style={{
         aspectRatio: aspectRatio.replace(":", "/"),
         transition: "all 0.15s ease-out",
