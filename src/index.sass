@@ -4,12 +4,14 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap')
 
+
+
 :root
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif
 
 *
   box-sizing: border-box
-  margin: 0
+  margin: 0 
   padding: 0
 
 body
@@ -56,3 +58,25 @@ button
   font-size: 0.95rem
   font-size: clamp(0.95rem, 0.6592rem + 1.152vw, 1.4rem)
   line-height: 1.7
+
+ul
+  display: block
+  width:5rem
+  text-align: center
+  font-weight: 500
+  font-size: 1.3rem
+
+ul li 
+     border-radius:7px
+     
+
+
+
+span
+    &:focus
+      color: white
+
+span
+  display: flex
+  flex-direction: column
+  gap:.5rem

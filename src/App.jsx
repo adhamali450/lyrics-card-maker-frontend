@@ -150,7 +150,8 @@ function App() {
               style={{}}
               onClick={() => setCardAspectRatio(ratio)}
             >
-              <CardSymbol
+              <CardSymbol 
+    
                 style={{
                   opacity: cardAspectRatio == ratio ? 1 : 0.5,
                 }}
@@ -178,7 +179,7 @@ function App() {
         <section className="row-start-2">
           <CardStyleContext.Provider value={{ cardStyling, setCardStyling }}>
             <OptionsPanel className="h-12 px-6 gap-5 rounded-md mb-4 border border-gray-400 bg-[#eeeeee]" />
-            <LyricsCard
+            <LyricsCard 
               cardInfo={song}
               lyricsData={lyricsData}
               aspectRatio={cardAspectRatio}
