@@ -17,7 +17,6 @@ import Searchbar from "@components/searchbar/Searchbar";
 import SongPreview from "@components/SongPreview";
 import LyricsViewer from "@components/LyricsViewer";
 import LyricsCard from "@components/lyrics-card/LyricsCard";
-import CardSymbol from "@utils/CardSymbol";
 import SizeMenu from "@utils/SizeMenu";
 import PageLogo from "@utils/PageLogo";
 import OptionsPanel from "./components/OptionsPanel";
