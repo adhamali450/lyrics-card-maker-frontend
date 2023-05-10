@@ -2,6 +2,9 @@ import React, { useState, useEffect, useContext } from "react";
 import CardStyleContext from "@contexts/CardStyleContext";
 import PushdownGroup from "@controls/PushdownGroup";
 import ColorPicker from "@components/controls/ColorPicker";
+import facebook from "@assets/facebook (3).png";
+import twitter from "@assets/twitter (1).png";
+import instagram from "@assets/instagram (2).png";
 
 import {
   iconsAlignent,
