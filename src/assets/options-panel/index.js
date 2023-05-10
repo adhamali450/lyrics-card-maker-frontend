@@ -7,7 +7,6 @@ import iconItalic from "./italic.svg";
 
 import iconFill from "./fill.svg";
 import iconTextHighlight from "./text-highlight.svg";
-import iconSize from "./size.svg";
 
 export const iconsAlignent = {
   left: iconAlignLeft,
@@ -23,5 +22,4 @@ export const iconsFormatting = {
 export const iconsStyling = {
   fill: iconFill,
   highlight: iconTextHighlight,
-  size: iconSize,
 };

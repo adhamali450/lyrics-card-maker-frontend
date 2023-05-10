@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import ModalSheet from "react-modal-sheet";
 import SongPreview from "@components/SongPreview";
 import LyricsViewer from "@components/LyricsViewer";
@@ -13,6 +13,20 @@ const LyricsModal = ({
   const { id } = song;
 
   const [isOpen, setIsOpen] = useState(false);
+
+  // Close modal on back button
+  useEffect(() => {
+    const closeOnBackButton = () => {
+      setIsOpen(false);
+    };
+
+    window.history.pushState(null, null, null);
+    window.addEventListener("popstate", closeOnBackButton);
+
+    return () => {
+      window.removeEventListener("popstate", closeOnBackButton);
+    };
+  }, []);
 
   const handleClose = () => {
     setIsOpen(false);
@@ -45,9 +59,9 @@ const LyricsModal = ({
           <ModalSheet.Header pinned className="overflow-hidden xs:rounded-t-md">
             <SongPreview className="h-[120px]" song={song} colors={colors} />
           </ModalSheet.Header>
-          <ModalSheet.Content>
+          <ModalSheet.Content className="overflow-hidden">
             <LyricsViewer
-              className="h-full "
+              className="overflow-auto"
               id={id}
               colors={colors}
               lyricsData={lyricsData}

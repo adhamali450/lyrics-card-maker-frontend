@@ -4,11 +4,11 @@ import Popup from "@utils/Popup";
 const PopupButton = ({ className = "", children, icon, title }) => {
   const btnRef = useRef(null);
   return (
-    <div className={`${className} relative h-8`}>
+    <div className={`${className} relative`}>
       <button
         type="button"
         ref={btnRef}
-        className={` w-8 p-1 relative rounded-[4px] border border-transparent transition-all overflow-hidden hover:bg-[#cccccc]`}
+        className={`w-full h-full p-1 relative rounded-[4px] border border-transparent transition-all overflow-hidden hover:bg-[#cccccc]`}
         title={title}
       >
         <img className="w-full h-full aspect-square" src={icon} alt={title} />

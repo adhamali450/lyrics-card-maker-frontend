@@ -14,8 +14,15 @@ const LyricsBar = ({
   const paddingStyles = "px-2 first-of-type:pt-[2px] pb-[2px]";
 
   const lines = barToLines(line[0], lineMax);
+
+  const alignment = style.textAlign;
   return (
-    <Fragment>
+    <span
+      className="inline-block"
+      style={{
+        textAlign: alignment ? alignment : "left",
+      }}
+    >
       {lines.map((chunk, j) => {
         return (
           <Fragment key={j}>
@@ -35,7 +42,7 @@ const LyricsBar = ({
           </Fragment>
         );
       })}
-    </Fragment>
+    </span>
   );
 };
 export default LyricsBar;

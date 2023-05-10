@@ -5,8 +5,6 @@ import LoadingAnimation from "@utils/LoadingAnimation";
 import _ from "lodash";
 import Popup from "@utils/Popup";
 
-import styles from "./Searchbar.module.sass";
-
 const Searchbar = ({ className, onResultSelected }) => {
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
@@ -59,7 +57,7 @@ const Searchbar = ({ className, onResultSelected }) => {
 
   return (
     <form
-      className={`${className} relative z-10`}
+      className={`${className} sm:relative z-10`}
       onSubmit={(e) => e.preventDefault()}
     >
       <label
@@ -88,7 +86,7 @@ const Searchbar = ({ className, onResultSelected }) => {
         </div>
         <input
           type="search"
-          className="block w-full p-3 pl-10 sm:p-4 sm:pl-10 text-gray-900 border-2 border--200 rounded-md sm:rounded-lg bg-gray-50 focus:ring-[#c0c0c0] focus:border-[#c0c0c0] outline-none shadow-md"
+          className="block w-full p-3 pl-10 sm:p-4 sm:pl-10 text-gray-900 border-2 border--200 rounded-lg bg-gray-50 focus:ring-[#c0c0c0] focus:border-[#c0c0c0] outline-none shadow-md"
           placeholder="Search for any song"
           aria-label="Search"
           value={query}
@@ -99,9 +97,13 @@ const Searchbar = ({ className, onResultSelected }) => {
 
       {/* Results container */}
       {query && _.isEqual(selectedSong, {}) && (
-        <Popup className="relative" triggerRef={inputRef} triggerType="keyup">
+        <Popup
+          className="-translate-x-1/2 left-1/2 sm:translate-x-0 sm:left-0 mt-3 sm:ml-3 min-w-[90%] sm:min-w-[350px]"
+          triggerRef={inputRef}
+          triggerType="keyup"
+        >
           <div
-            className="absolute mt-3 ml-3 border-2 min-w-[350px] w-[25%] flex flex-col gap-1 bg-white"
+            className="border-2 flex flex-col gap-1 bg-white"
             style={{
               height: "max-content",
               alignItems: "stretch",

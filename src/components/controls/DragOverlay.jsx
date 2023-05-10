@@ -36,24 +36,37 @@ const DragOverlay = ({
       >
         {!target && (
           <div
-            className="flex flex-col items-center justify-start m-10 py-[40px] rounded-lg border-2 border-dashed"
+            className="flex flex-col items-center justify-start m-2 xs:m-10 p-[10px] xs:p-[40px] rounded-lg border-2 border-dashed"
             style={{
-              transition: "all 0.15s ease-in-out",
+              transition: "all 0.15s ease-out",
               borderColor: isFileDragged ? "#0c89f0" : "#aaaaaa",
-              backgroundColor: isFileDragged ? "#e2f1ff" : "transparent",
+              backgroundColor: isFileDragged
+                ? "rgba(226, 241, 255, 0.3)"
+                : "transparent",
               pointerEvents: isFileDragged ? "none" : "auto",
             }}
           >
-            <img className="w-[70px]" src={iconUploadToCloud} alt="upload" />
-            <h2 className="mt-1 text-lg font-medium text">
-              Drag and drop a photo
-            </h2>
-            <div className="mt-5 flex justify-center items-center gap-3">
-              <span className="text-sm">or</span>
+            <div className="flex flex-row xs:flex-col items-center justify-center xs:justify-start gap-3 xs:gap-0">
+              <img
+                className="w-[45px] xs:w-[70px]"
+                src={iconUploadToCloud}
+                alt="upload"
+              />
+              <h2 className="mt-1 text-base xs:text-lg font-medium text">
+                <span className="hidden xs:inline-block">
+                  Drag and drop a photo
+                </span>
+                <span className="inline-block xs:hidden">
+                  Upload a Photo from device
+                </span>
+              </h2>
+            </div>
+            <div className="mt-2 xs:mt-5 flex justify-center items-center gap-3">
+              <small className="hidden xs:inline-block text-sm">or</small>
 
               <FileInput
-                className="shadow-sm shadow-[#bdc1c5] border-[1.5px] border-[#969ca2] bg-gray-300"
-                text="Upload a photo"
+                className="shadow-sm shadow-[#bdc1c5] border-[1.5px] rounded-[4px] px-3 py-[2px] border-[#969ca2] bg-gray-300"
+                text="Browse"
                 onFileSelected={onTargetSelected}
               />
             </div>

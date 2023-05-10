@@ -1,10 +1,5 @@
 @import '../../assets/fonts/stylesheet.css'
 
-*
-    margin: 0
-    padding: 0
-    box-sizing: border-box
-
 .card
     position: relative
 
@@ -22,6 +17,12 @@
         width: 100%
         height: 100%
 
+    .plain-background
+        width: 100%
+        height: 100%
+        background-size: 20px
+        background-position: top-left
+
     .background
         grid-row: 1/2
 
@@ -37,7 +38,7 @@
     .shade
         grid-row: 1/2
 
-        background: linear-gradient(0deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%)
+        background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%)
 
         z-index: 3
 
@@ -58,7 +59,7 @@
         align-items: flex-start
 
         gap: 5px
-        padding: 2rem
+        padding: 1rem
 
         .bar
             background-color: white
@@ -71,17 +72,6 @@
     main
         z-index: 4
         position: relative
-        // &::before
-        //     position: absolute
-        //     top: 0
-        //     transform: translate(-30%, -100%)
-        //     content: "،،"
-        //     line-height: 0
-        //     color: white
-        //     opacity: 0.6
-        //     font-size: 5rem
-        //     font-weight: bolder
-        //     letter-spacing: -2px
 
     footer
         grid-row: 2/3

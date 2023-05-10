@@ -1,3 +1,6 @@
+import routes from "@/js/api/routes";
+import { getPalette } from "color-thief-react";
+
 export const truncate = (str, length = 35) => {
   if (str.length > length) return str.slice(0, length) + "...";
   else return str;
@@ -124,4 +127,52 @@ export const barToLines = (bar, lineMax = 36) => {
   }
 
   return chunks;
+};
+
+export const getPreviewGradient = (dominantColor, direction) => {
+  if (!dominantColor) return;
+
+  const lighterColor = shadeColor(dominantColor, 0.3);
+  const darkerColor = shadeColor(dominantColor, -0.3);
+
+  const grdDir = direction == "rtl" ? "left" : "right";
+  const grd = `linear-gradient(to ${grdDir}, ${darkerColor}, ${lighterColor})`;
+
+  return grd;
+};
+
+const download = (href, filename) => {
+  const element = document.createElement("a");
+  element.href = href;
+  element.setAttribute("download", filename);
+  element.style.display = "none";
+  document.body.appendChild(element);
+  element.click();
+  document.body.removeChild(element);
+};
+
+export const downloadBlob = (blob, filename) => {
+  const url = window.URL.createObjectURL(new Blob([blob]));
+  download(url, filename);
+};
+
+export const getImagePalette = (url, callback) => {
+  // First, use color-thief to get the dominant color
+  // If failed, use the backend API
+
+  getPalette(url, 2, "hex", "anonymous")
+    .then((colors) => {
+      callback(colors[0]);
+    })
+    .catch(() => {
+      // Fallback to backend API
+      routes
+        .getColors(url)
+        .then((res) => {
+          callback(res.data["background_color"]);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    });
 };

@@ -42,7 +42,7 @@ const LyricsViewer = ({
       {/* State: Lyrics container */}
       {truthy(lyrics) && (
         <div
-          className={`w-full flex flex-col gap-[6px] p-3 `}
+          className={`w-full flex flex-col gap-[6px] p-3`}
           style={{
             textAlign: lang == "ar" ? "rtl" : "ltr",
             direction: lang == "ar" ? "rtl" : "ltr",
@@ -62,6 +62,7 @@ const LyricsViewer = ({
                 }}
               >
                 <LyricsBar
+                  className="fl-lyrics-viewer-bars"
                   line={line}
                   lineMax={lineMax}
                   style={{

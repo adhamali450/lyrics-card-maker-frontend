@@ -29,12 +29,12 @@ const ColorPicker = ({
       <button
         type="button"
         ref={btnRef}
-        className={`max-h-full h-8 relative p-1 rounded-[4px] border border-transparent transition-all overflow-hidden hover:bg-[#cccccc]`}
+        className={`max-w-full max-h-full relative p-[2px] rounded-[4px] border border-transparent transition-all overflow-hidden hover:bg-[#cccccc]`}
         title={title}
       >
-        <img className="max-h-full aspect-square" src={icon} alt={title} />
+        <img className="w-full h-full" src={icon} alt={title} />
         <div
-          className="absolute bottom-0 left-0 w-full h-[6px] "
+          className="absolute bottom-0 left-0 w-full h-[4px] xs:h-[6px]"
           style={{
             backgroundColor: color,
           }}

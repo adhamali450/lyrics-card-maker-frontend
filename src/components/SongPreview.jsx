@@ -1,37 +1,12 @@
-import { Fragment, useEffect } from "react";
+import { Fragment } from "react";
 
 import iconBrokenImage from "@assets/broken-image.png";
 import SongPreviewSkeleton from "@skeletons/SongPreviewSkeleton";
 
-import {
-  getLang,
-  shadeColor,
-  truncate,
-  isImageLink,
-  getContrast,
-  bestContrast,
-} from "@/utils";
-
-const getPreviewGradient = (dominantColor, direction) => {
-  if (!dominantColor) return;
-
-  const lighterColor = shadeColor(dominantColor, 0.3);
-  const darkerColor = shadeColor(dominantColor, -0.3);
-
-  const grdDir = direction == "rtl" ? "left" : "right";
-  const grd = `linear-gradient(to ${grdDir}, ${darkerColor}, ${lighterColor})`;
-
-  return grd;
-};
+import { getLang, truncate, isImageLink, getPreviewGradient } from "@/utils";
 
 const SongPreview = ({ className = "h-[120px]", song, colors }) => {
   const { title, artist, image } = song;
-
-  useEffect(() => {
-    if (colors) {
-      getContrast(colors["background_color"], colors["text_color"]);
-    }
-  }, [colors]);
 
   return (
     <section

@@ -52,7 +52,25 @@ button
     user-select: none !important
     outline: none !important
 
+.fl-lyrics-viewer-bars
+  font-size: 0.8125rem
+  font-size: clamp(0.8125rem, 0.7125rem + 0.4vw, 1rem)
+
 .fl-b
-  font-size: 0.95rem
-  font-size: clamp(0.95rem, 0.6592rem + 1.152vw, 1.4rem)
-  line-height: 1.7
+  font-size: 0.875rem
+  font-size: clamp
+.fl-card-lyrics
+  font-size: 0.875rem
+  font-size: clamp(0.875rem, 0.349rem + 2.105vw, 1.125rem)
+
+.fl-card-footer
+  font-size: 0.75rem
+  font-size: clamp(0.75rem, 0.224rem + 2.105vw, 1rem)
+
+@layer base
+  img
+    @apply inline-block
+
+.downloading
+  .hide-when-download
+    display: none

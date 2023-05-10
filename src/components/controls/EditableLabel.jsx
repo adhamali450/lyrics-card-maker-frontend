@@ -12,7 +12,6 @@ const EditableLabel = ({
 }) => {
   const inputRef = useRef([]);
   const containerRef = useRef([]);
-  const spanRef = useRef([]);
 
   const [tabCount, setTabCount] = useState(0);
 

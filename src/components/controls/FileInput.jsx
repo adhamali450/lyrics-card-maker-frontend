@@ -17,7 +17,7 @@ const FileInput = ({
     <Fragment>
       <label
         htmlFor="file-input"
-        className={`${className} cursor-pointer rounded-[4px] px-3 py-[2px]`}
+        className={`${className} inline-block cursor-pointer`}
       >
         {children || text}
       </label>

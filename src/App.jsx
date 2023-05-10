@@ -1,26 +1,28 @@
-import { useState, useEffect, Fragment, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import CardStyleContext from "@contexts/CardStyleContext";
 
-import axios from "axios";
+import routes from "@/js/api/routes";
 import _ from "lodash";
-import Searchbar from "./components/searchbar/Searchbar";
+import DomToImage from "dom-to-image";
 
 import {
   formatLyrics,
   getLang,
-  getContrastColor,
   bestContrast,
   getContrast,
+  downloadBlob,
 } from "./utils";
 
+import Searchbar from "@components/searchbar/Searchbar";
 import SongPreview from "@components/SongPreview";
 import LyricsViewer from "@components/LyricsViewer";
 import LyricsCard from "@components/lyrics-card/LyricsCard";
 import CardSymbol from "@utils/CardSymbol";
-
+import SizeMenu from "@utils/SizeMenu";
 import PageLogo from "@utils/PageLogo";
 import OptionsPanel from "./components/OptionsPanel";
 import LyricsModal from "./components/LyricsModal";
+import Button from "@controls/Button";
 
 const defaultLyricsData = {
   lang: "",
@@ -41,6 +43,9 @@ function App() {
     bannerBackground: "#f7f16c",
     bannerForeground: "#000000",
   });
+  const [downloading, setDownloading] = useState(false);
+
+  const cardRef = useRef(null);
 
   // Setting a proper foreground color for the background color
   useEffect(() => {
@@ -68,39 +73,33 @@ function App() {
     setColors(null);
 
     // lyrics
-    axios
-      .get(`https://genius-unofficial-api.vercel.app/api/song/lyrics/${id}`)
-      .then((res) => {
-        const lang = getLang(res.data);
-        setLyricsData({
-          lang: lang,
-          lyrics: formatLyrics(res.data)
-            .split("\n")
-            .map((l) => [l, 0]),
-          selectionCompleted: false,
-        });
-      })
-      .then(() => {});
+    routes.getLyrics(id).then((res) => {
+      const lang = getLang(res.data);
+      setLyricsData({
+        lang: lang,
+        lyrics: formatLyrics(res.data)
+          .split("\n")
+          .map((l) => [l, 0]),
+        selectionCompleted: false,
+      });
+    });
 
     //colors
-    axios
-      .get("https://genius-unofficial-api.vercel.app/api/song/colors", {
-        params: { url: image },
-      })
+    routes
+      .getColors(image)
       .then((res) => {
         let { background_color, text_color } = res.data;
 
-        if (getContrast(background_color, text_color, true) <= 2) {
+        if (getContrast(background_color, text_color, true) <= 2)
           text_color = bestContrast(background_color, ["#000000", "#ffffff"]);
-        }
 
         setColors({
           background_color: background_color,
           text_color: text_color,
         });
       })
-      .catch((err) => {
-        console.error(err);
+      .catch(() => {
+        console.error("Couldn't extract colors from image");
       });
   }, [song]);
 
@@ -127,8 +126,31 @@ function App() {
     });
   };
 
+  const downloadHandler = () => {
+    if (cardRef.current == null) return;
+
+    setDownloading(true);
+
+    const scale = 3;
+    DomToImage.toBlob(cardRef.current, {
+      width: cardRef.current.offsetWidth * scale,
+      height: cardRef.current.offsetHeight * scale,
+      style: {
+        transform: "scale(3)",
+        transformOrigin: "top left",
+      },
+    }).then((blob) => {
+      downloadBlob(blob, "lyrics-card.png");
+      setDownloading(false);
+    });
+  };
+
   return (
-    <div className="App relative container max-w-[1920px] max-h-[1080px] mx-auto flex h-[100vh]">
+    <div
+      className={`${
+        downloading && "downloading "
+      } relative container max-w-[1920px] max-h-[1080px] mx-auto flex h-[100vh]`}
+    >
       <LyricsModal
         song={song}
         colors={colors}
@@ -138,33 +160,15 @@ function App() {
 
       <aside className="hidden lg:grid grid-rows-[5rem_1fr] p-5 gap-7 h-full bg-[#272838]">
         <PageLogo className="h-[70%] self-center" />
-        <section className="flex items-center flex-col gap-2">
-          {[
-            ["1:1", "Facebook"],
-            ["3:4", "Instagram"],
-            ["4:3", "Twitter"],
-          ].map(([ratio, title], index, len) => (
-            <button
-              className="px-2 aspect-square rounded-lg w-[100px]"
-              key={index + "-button"}
-              style={{}}
-              onClick={() => setCardAspectRatio(ratio)}
-            >
-              <CardSymbol
-                style={{
-                  opacity: cardAspectRatio == ratio ? 1 : 0.5,
-                }}
-                aspectRatio={ratio}
-                state={cardAspectRatio == ratio ? "active" : "inactive"}
-              />
-              <span className="text-sm text-[#e0eafb]">{title}</span>
-            </button>
-          ))}
-        </section>
+        <SizeMenu
+          className="flex items-center flex-col gap-4"
+          cardClassName="aspect-square rounded-lg w-[85px] px-2"
+          onSizeChanged={setCardAspectRatio}
+        />
       </aside>
 
       <main className="grow grid grid-rows-[5rem_1fr] grid-cols-[1fr] lg:grid-cols-[1fr_36ch] p-5 gap-5">
-        <header className="lg:col-span-2 flex gap-4 sm:gap-8 items-center">
+        <header className="relative lg:col-span-2 flex gap-4 sm:gap-8 items-center">
           <PageLogo
             className="block lg:hidden h-[60%] sm:h-[70%] self-center"
             geniusColor="#272838"
@@ -175,15 +179,29 @@ function App() {
           />
         </header>
 
-        <section className="row-start-2">
+        <section className="row-start-2 relative">
           <CardStyleContext.Provider value={{ cardStyling, setCardStyling }}>
-            <OptionsPanel className="h-12 px-6 gap-5 rounded-md mb-4 border border-gray-400 bg-[#eeeeee]" />
+            <OptionsPanel className="rounded-md mb-4 border border-gray-400 bg-[#eeeeee]" />
+            <SizeMenu
+              className="lg:hidden flex items-center justify-center xs:justify-start gap-4 mb-4 px-2"
+              cardClassName="aspect-square rounded-xl w-[65px]"
+              showLabel={false}
+              onSizeChanged={setCardAspectRatio}
+            />
             <LyricsCard
+              ref={cardRef}
               cardInfo={song}
               lyricsData={lyricsData}
               aspectRatio={cardAspectRatio}
             />
           </CardStyleContext.Provider>
+
+          <Button
+            text="Download card"
+            onClick={downloadHandler}
+            disabled={false}
+            loading={downloading}
+          />
         </section>
 
         <aside className="row-start-2 col-start-2 hidden lg:grid grid-rows-[120px_1fr] border border-gray-400 rounded-md overflow-auto">
