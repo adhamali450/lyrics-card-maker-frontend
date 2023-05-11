@@ -3,11 +3,12 @@ const Button = ({
   loading = false,
   disabled = false,
   text,
+  icon,
 }) => {
   return (
     <button
       type="button"
-      className="flex justify-center items-center gap-2 mt-3 md:mt-0 mb-[80px] md:mb-0 md:absolute md:bottom-0 md:right-0 w-full md:w-auto bg-[#272838] text-[#e0eafb] px-4 py-3 rounded-md disabled:opacity-40 disabled:cursor-not-allowed"
+      className="flex justify-center items-center gap-2 mt-3 md:mt-0 mb-[80px] md:mb-0 md:absolute md:bottom-0 md:right-0 w-full md:w-auto bg-[#272838] hover:bg-[#393a4b] text-[#e0eafb] px-4 py-3 rounded-md disabled:opacity-40 disabled:cursor-not-allowed"
       onClick={onClick}
       disabled={disabled}
     >
@@ -15,7 +16,7 @@ const Button = ({
         <svg
           aria-hidden="true"
           role="status"
-          className="inline w-4 h-4 text-white animate-spin"
+          className="inline w-5 h-5 text-white animate-spin"
           viewBox="0 0 100 101"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -29,7 +30,7 @@ const Button = ({
             fill="#ff822d"
           />
         </svg>
-      )) || <span className="inline-block w-4">⚡</span>}
+      )) || <img className="inline-block w-5" src={icon} alt="" />}
       {text || "Specifiy a text"}
     </button>
   );

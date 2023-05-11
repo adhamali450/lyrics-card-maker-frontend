@@ -5,6 +5,8 @@ import routes from "@/js/api/routes";
 import _ from "lodash";
 import DomToImage from "dom-to-image";
 
+import iconDownload from "@assets/icon-download.svg";
+
 import {
   formatLyrics,
   getLang,
@@ -27,6 +29,7 @@ const defaultLyricsData = {
   lang: "",
   lyrics: [],
   selectionCompleted: false,
+  status: 0,
 };
 
 function App() {
@@ -72,16 +75,25 @@ function App() {
     setColors(null);
 
     // lyrics
-    routes.getLyrics(id).then((res) => {
-      const lang = getLang(res.data);
-      setLyricsData({
-        lang: lang,
-        lyrics: formatLyrics(res.data)
-          .split("\n")
-          .map((l) => [l, 0]),
-        selectionCompleted: false,
+    routes
+      .getLyrics(id)
+      .then((res) => {
+        const lang = getLang(res.data);
+        setLyricsData({
+          lang: lang,
+          lyrics: formatLyrics(res.data)
+            .split("\n")
+            .map((l) => [l, 0]),
+          selectionCompleted: false,
+          status: 1,
+        });
+      })
+      .catch(() => {
+        setLyricsData({
+          ...defaultLyricsData,
+          status: -1,
+        });
       });
-    });
 
     //colors
     routes
@@ -197,6 +209,7 @@ function App() {
 
           <Button
             text="Download card"
+            icon={iconDownload}
             onClick={downloadHandler}
             disabled={false}
             loading={downloading}

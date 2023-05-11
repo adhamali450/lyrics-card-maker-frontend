@@ -25,6 +25,7 @@ const FileInput = ({
         id="file-input"
         className="hidden"
         type="file"
+        accept="image/*"
         onChange={fileSelectedHandler}
       />
     </Fragment>

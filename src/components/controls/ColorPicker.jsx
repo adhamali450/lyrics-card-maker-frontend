@@ -13,6 +13,22 @@ const ColorPicker = ({
   const [color, setColor] = useState(initialColor);
 
   const btnRef = useRef(null);
+  const containerRef = useRef(null);
+
+  const handleTouchMove = (e) => e.preventDefault();
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    containerRef.current.addEventListener("touchmove", handleTouchMove, {
+      passive: true,
+    });
+
+    return () => {
+      containerRef.current.removeEventListener("touchmove", handleTouchMove, {
+        passive: true,
+      });
+    };
+  }, [containerRef]);
 
   const colorChangeHandler = (c) => {
     if (onChange) onChange(c.hex);
@@ -25,7 +41,7 @@ const ColorPicker = ({
   };
 
   return (
-    <div className={`${className} relative`}>
+    <div className={`${className} static sm:relative`} ref={containerRef}>
       <button
         type="button"
         ref={btnRef}
@@ -42,7 +58,7 @@ const ColorPicker = ({
       </button>
 
       <Popup
-        className="absolute -translate-x-1/2 left-1/2 top-[150%] z-50"
+        className="absolute -translate-x-1/2 left-1/2 top-[80px] sm:top-[150%] z-50"
         triggerRef={btnRef}
       >
         <SketchPicker

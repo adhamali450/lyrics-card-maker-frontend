@@ -37,6 +37,7 @@ const LyricsBar = ({
             <br
               style={{
                 display: `${j < lines.length - 1 ? "block" : "none"}`,
+                textAlign: "inherit",
               }}
             />
           </Fragment>

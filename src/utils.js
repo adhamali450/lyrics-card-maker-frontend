@@ -28,7 +28,7 @@ export const rangedRandom = (min, max) =>
   Math.floor(Math.random() * (max - min + 1)) + min;
 
 export const getLang = (str) => {
-  let arabic = /[\u0600-\u06FF]/;
+  const arabic = /[\u0600-\u06FF]/;
 
   return str.split("").some((c) => arabic.test(c)) ? "ar" : "en";
 };
@@ -149,6 +149,19 @@ const download = (href, filename) => {
   document.body.appendChild(element);
   element.click();
   document.body.removeChild(element);
+};
+
+export const getUpscaledImage = (url, callback) => {
+  // Try to get the maximum resolution from Genius (It's not always 300x300)
+  for (let res of ["1000x1000", "500x500", "300x300"]) {
+    let success = false;
+
+    routes.getCORSImage(url.replace("300x300", res)).then((res) => {
+      callback(res.data);
+    });
+
+    if (success) break;
+  }
 };
 
 export const downloadBlob = (blob, filename) => {

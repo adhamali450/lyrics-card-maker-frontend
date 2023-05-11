@@ -1,9 +1,12 @@
-import axios from "axios";
 import React, { Fragment, useEffect, useState, useRef } from "react";
+import routes from "@/js/api/routes";
+import _ from "lodash";
+
 import SearchResult from "./SearchResult";
 import LoadingAnimation from "@utils/LoadingAnimation";
-import _ from "lodash";
 import Popup from "@utils/Popup";
+
+import { getUpscaledImage } from "@/utils";
 
 const Searchbar = ({ className, onResultSelected }) => {
   const [query, setQuery] = useState("");
@@ -38,20 +41,13 @@ const Searchbar = ({ className, onResultSelected }) => {
     if (!query || query == "") return;
 
     setCurrentlyTyping(false);
-    axios
-      .get(`https://genius-unofficial-api.vercel.app/api/search`, {
-        params: {
-          query: query,
-        },
-      })
-      .then((res) => {
-        setResult(res.data);
-      });
+    routes.search(query).then((res) => {
+      setResult(res.data);
+    });
   };
 
   const handleResultSelected = (song) => {
     setSelectedSong(song);
-
     onResultSelected(song);
   };
 
@@ -86,7 +82,7 @@ const Searchbar = ({ className, onResultSelected }) => {
         </div>
         <input
           type="search"
-          className="block w-full p-3 pl-10 sm:p-4 sm:pl-10 text-gray-900 border-2 border--200 rounded-lg bg-gray-50 focus:ring-[#c0c0c0] focus:border-[#c0c0c0] outline-none shadow-md"
+          className="block w-full p-3 pl-10 sm:p-4 sm:pl-10 text-gray-900 border-2 border--200 rounded-lg bg-gray-50 focus:ring-[#c0c0c0] focus:border-[#dadada] outline-none shadow-md"
           placeholder="Search for any song"
           aria-label="Search"
           value={query}

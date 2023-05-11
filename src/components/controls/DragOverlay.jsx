@@ -36,7 +36,7 @@ const DragOverlay = ({
       >
         {!target && (
           <div
-            className="flex flex-col items-center justify-start m-2 xs:m-10 p-[10px] xs:p-[40px] rounded-lg border-2 border-dashed"
+            className="hide-when-download flex flex-col items-center justify-start m-2 xs:m-10 p-[10px] xs:p-[40px] rounded-lg border-2 border-dashed"
             style={{
               transition: "all 0.15s ease-out",
               borderColor: isFileDragged ? "#0c89f0" : "#aaaaaa",
@@ -48,7 +48,7 @@ const DragOverlay = ({
           >
             <div className="flex flex-row xs:flex-col items-center justify-center xs:justify-start gap-3 xs:gap-0">
               <img
-                className="w-[45px] xs:w-[70px]"
+                className="w-[45px] xs:w-[70px] h-[45px] xs:h-[70px]"
                 src={iconUploadToCloud}
                 alt="upload"
               />
@@ -66,7 +66,7 @@ const DragOverlay = ({
 
               <FileInput
                 className="shadow-sm shadow-[#bdc1c5] border-[1.5px] rounded-[4px] px-3 py-[2px] border-[#969ca2] bg-gray-300"
-                text="Browse"
+                text="Choose photo"
                 onFileSelected={onTargetSelected}
               />
             </div>

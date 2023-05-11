@@ -8,14 +8,17 @@ import React, {
 
 import CardStyleContext from "@contexts/CardStyleContext";
 
-import { Space } from "react-zoomable-ui";
 import Draggable from "react-draggable";
 import Zoomable from "@utils/Zoomable";
-import QuickPinchZoom, { make3dTransformValue } from "react-quick-pinch-zoom";
 
 import EditableLabel from "@controls/EditableLabel";
 
-import { getContrastColor, truncate, getImagePalette } from "@/utils";
+import {
+  getContrastColor,
+  truncate,
+  getImagePalette,
+  getUpscaledImage,
+} from "@/utils";
 
 import styles from "./LyricsCard.module.sass";
 
@@ -105,51 +108,28 @@ const LyricsCard = forwardRef(
 
     let { lang, lyrics } = lyricsData;
 
-    // Load the cover image as the background image (on mobile)
+    // Load the cover image as the background image
     useEffect(() => {
-      if (window.innerWidth <= 768) {
-        if (cardInfo.image) {
-          // Try to get the maximum resolution from Genius (It's not always 300x300)
-          for (let res of ["1000x1000", "500x500", "300x300"]) {
-            let success = false;
-
-            routes
-              .getCORSImage(cardInfo.image.replace("300x300", res))
-              .then((res) => {
-                imgStateFromUrl(
-                  res.data,
-                  (st) => {
-                    setBackgroundImage(st);
-                    success = true;
-                  },
-                  (e) => {}
-                );
-              });
-
-            if (success) break;
-          }
-        } else {
-          setBackgroundImage(null);
-        }
+      if (cardInfo.image) {
+        getUpscaledImage(cardInfo.image, (url) =>
+          imgStateFromUrl(
+            url,
+            (st) => {
+              setBackgroundImage(st);
+            },
+            (e) => {}
+          )
+        );
+      } else {
+        setBackgroundImage(null);
       }
     }, [cardInfo]);
 
     useEffect(() => {
-      if (!backgroundImage) {
-        setCardStyling((prev) => {
-          return {
-            ...prev,
-            bannerBackground: "#f7f16c",
-            bannerForeground: "#000000",
-          };
-        });
-        return;
-      }
+      if (!backgroundImage) return;
 
       // Reset zoom and translations
       setControlledPosition({ x: 0, y: 0 });
-      //TODO: Handle this but inside the componenet instead
-      // setBackgroundImageScale(1);
 
       // Sampling colors from background image
       getImagePalette(backgroundImage["url"], (color) => {
@@ -171,8 +151,20 @@ const LyricsCard = forwardRef(
       setLogoVarient(logoVarient == "large" ? "samll" : "large");
 
     // File upload
-    const fileSelectedHandler = (url) =>
+    const fileSelectedHandler = (url) => {
       imgStateFromUrl(url, (st) => setBackgroundImage(st));
+    };
+
+    const resetCardHandler = () => {
+      setBackgroundImage(null);
+      setCardStyling((prev) => {
+        return {
+          ...prev,
+          bannerBackground: "#f7f16c",
+          bannerForeground: "#000000",
+        };
+      });
+    };
 
     // Drag overlay
     const dragEnterLeaveHandlers = (e) => setIsFileDragged((prev) => !prev);
@@ -237,7 +229,7 @@ const LyricsCard = forwardRef(
         >
           {/* Background container */}
           {backgroundImage ? (
-            <Zoomable>
+            <Zoomable initialScale="1">
               <Draggable
                 position={controlledPosition}
                 onDrag={onControlledDrag}
@@ -341,7 +333,7 @@ const LyricsCard = forwardRef(
 
             <button
               className="h-[40px] sm:h-[50px] aspect-square grid place-items-center bg-gray-800 p-2 rounded-full opacity-80"
-              onClick={() => setBackgroundImage(null)}
+              onClick={resetCardHandler}
             >
               <img
                 className="w-full h-full"

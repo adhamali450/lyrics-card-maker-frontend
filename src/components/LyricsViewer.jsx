@@ -16,7 +16,7 @@ const LyricsViewer = ({
   lineMax = 36,
   style = {},
 }) => {
-  let { lang, lyrics, selectionCompleted } = lyricsData;
+  let { lang, lyrics, selectionCompleted, status } = lyricsData;
 
   const handleLineClick = (index) => {
     onSelectionChanged(index);
@@ -27,24 +27,31 @@ const LyricsViewer = ({
       {/* State: idle */}
       {!id && (
         <div className="w-full h-full flex flex-col items-center justify-center gap-3">
-          <img src={iconLyrics} alt="icon-lyrics" />
+          <img className="w-12 h-12" src={iconLyrics} alt="icon-lyrics" />
           <p>Lyrics appear here</p>
         </div>
       )}
 
       {/* State: loading */}
-      {id && !truthy(lyrics) && (
+      {id && status == 0 && (
         <div className="w-full h-full flex flex-col items-center justify-center bg-white">
           <LoadingAnimation />
         </div>
       )}
 
-      {/* State: Lyrics container */}
-      {truthy(lyrics) && (
+      {/* State: Error fetching lyrics */}
+      {status == -1 && (
+        <div className="w-full h-full flex flex-col items-center justify-center bg-white text-red-800">
+          Couldn't get lyrics. Please try again.
+        </div>
+      )}
+
+      {/* State: Lyrics fetched */}
+      {truthy(lyrics) && status == 1 && (
         <div
           className={`w-full flex flex-col gap-[6px] p-3`}
           style={{
-            textAlign: lang == "ar" ? "rtl" : "ltr",
+            textAlign: lang == "ar" ? "right" : "left",
             direction: lang == "ar" ? "rtl" : "ltr",
           }}
         >
@@ -72,6 +79,7 @@ const LyricsViewer = ({
                         : "#e9e9e9",
                     color:
                       lyrics[i][1] && colors ? colors["text_color"] : "#000",
+                    textAlign: "inherit",
                   }}
                 />
               </button>

@@ -10,7 +10,7 @@ const SongPreview = ({ className = "h-[120px]", song, colors }) => {
 
   return (
     <section
-      className={`${className} relative flex items-center w-full gap-3 shadow-md `}
+      className={`${className} relative flex items-center w-full gap-1 shadow-md `}
       style={{
         direction: getLang(title) == "ar" ? "rtl" : "ltr",
         textAlign: getLang(title) == "ar" ? "right" : "left",
@@ -35,7 +35,7 @@ const SongPreview = ({ className = "h-[120px]", song, colors }) => {
             alt=""
           />
 
-          <div className="flex flex-col gap-1 py-5">
+          <div className="flex flex-col gap-1 py-5 px-2">
             <h1 className="font-medium">{truncate(title)}</h1>
             <h2 className="text-sm font-semibold">{truncate(artist)}</h2>
           </div>

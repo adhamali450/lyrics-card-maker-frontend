@@ -1,9 +1,21 @@
-import React, { useState, useRef } from "react";
+import { toInteger } from "lodash";
+import React, { useState, useRef, useEffect } from "react";
 
-function Zoomable({ minScale = 0.5, maxScale = 3, children }) {
+function Zoomable({
+  initialScale = 1,
+  minScale = 0.5,
+  maxScale = 3,
+  children,
+}) {
   const containerRef = useRef(null);
   const [initialDistance, setInitialDistance] = useState(null);
-  const [scale, setScale] = useState(1);
+  const [scale, setScale] = useState(toInteger(initialScale));
+
+  //TODO: Background scale
+  // useEffect(() => {
+  //   console.log(children);
+  //   setScale(initialScale);
+  // }, [children]);
 
   const handleWheel = (event) => {
     const delta = event.deltaY * -1;
