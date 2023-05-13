@@ -184,8 +184,8 @@ export const getImagePalette = (url, callback) => {
         .then((res) => {
           callback(res.data["background_color"]);
         })
-        .catch((e) => {
-          console.log(e);
+        .catch(() => {
+          console.error("Couldn't get image palette");
         });
     });
 };

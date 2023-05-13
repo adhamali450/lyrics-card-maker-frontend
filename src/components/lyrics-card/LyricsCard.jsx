@@ -49,7 +49,7 @@ const imgStateFromUrl = (url, type, callback, onError = () => {}) => {
 
 const DummyLyrics = ({ lang, cardStyling }) => {
   const dummyLyrics = [
-    ["Click to edit", true],
+    ["Double click to edit", true],
     ["Press enter to insert new lines", true],
     ["Or just paste some text", true],
   ];
@@ -85,11 +85,22 @@ const getLineMax = (aspectRatio) => {
   }[aspectRatio];
 };
 
+const truncateFooterLabel = (label, aspectRatio) => {
+  return truncate(
+    label,
+    {
+      "1:1": 25,
+      "3:4": 20,
+      "4:3": 40,
+    }[aspectRatio] + 1
+  );
+};
+
 const LyricsCard = forwardRef(
   ({ cardInfo, lyricsData, aspectRatio = "1:1" }, ref) => {
     let { title = "", artist = "" } = cardInfo;
-    title = truncate(title, 20);
-    artist = truncate(artist);
+    title = truncateFooterLabel(title, aspectRatio);
+    artist = truncateFooterLabel(artist, aspectRatio);
 
     const [isFileDragged, setIsFileDragged] = useState(false);
     const [showDragOverlay, setShowDragOverlay] = useState(true);
@@ -129,11 +140,6 @@ const LyricsCard = forwardRef(
         });
       });
     }, [backgroundImage]);
-
-    //TODO: Handle better or remove
-    // useEffect(() => {
-    //   setLogoVarient(aspectRatio == "3:4" ? "small" : "large");
-    // }, [aspectRatio]);
 
     const toggleLogoSize = () =>
       setLogoVarient(logoVarient == "large" ? "samll" : "large");
@@ -245,7 +251,14 @@ const LyricsCard = forwardRef(
             }[cardStyling["alignment"]],
           }}
         >
-          <img className="w-10 absolute top-[-25px]" src={iconQuote} alt="" />
+          <img
+            className="w-10 absolute top-[-25px]"
+            src={iconQuote}
+            alt=""
+            style={{
+              transform: cardStyling.alignment == "right" ? "scaleX(-1)" : "",
+            }}
+          />
 
           {/* Dummy lyrics */}
           {!lyrics.some((l) => l[1]) && (

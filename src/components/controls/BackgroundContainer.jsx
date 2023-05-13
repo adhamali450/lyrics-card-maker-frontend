@@ -10,15 +10,6 @@ const BackgroundContainer = ({ src }) => {
     transformWrapperRef.current.resetTransform();
     transformWrapperRef.current.instance.wrapperComponent.style.width = "100%";
     transformWrapperRef.current.instance.wrapperComponent.style.height = "100%";
-
-    console.log("mobile logs?");
-    transformWrapperRef.current.instance.wrapperComponent.addEventListener(
-      "touchstart",
-      (e) => {
-        console.log(e.target.focus);
-        e.target.focus();
-      }
-    );
   }, [src]);
 
   return (
