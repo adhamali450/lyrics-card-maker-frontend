@@ -1,22 +1,9 @@
-import React, { useRef, useEffect, useState } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 const SongPreviewSkeleton = ({ className }) => {
-  const containerRef = useRef(null);
-  const [containerHeight, setContainerHeight] = useState(0);
-
-  useEffect(() => {
-    if (containerRef.current) {
-      const containerHeight = containerRef.current.clientHeight;
-      setContainerHeight(`calc(${containerHeight}px)`);
-    }
-  }, []);
   return (
-    <div
-      className={`${className} max-h-full overflow-hidden flex gap-3`}
-      ref={containerRef}
-    >
+    <div className={`${className} max-h-full overflow-hidden flex gap-3`}>
       <SkeletonTheme baseColor="#dedede" highlightColor="#c8c8c8">
         <Skeleton
           height="100%"

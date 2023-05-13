@@ -15,18 +15,14 @@ const ColorPicker = ({
   const btnRef = useRef(null);
   const containerRef = useRef(null);
 
-  const handleTouchMove = (e) => e.preventDefault();
   useEffect(() => {
     if (!containerRef.current) return;
 
-    containerRef.current.addEventListener("touchmove", handleTouchMove, {
-      passive: true,
-    });
+    const handleTouchMove = (e) => e.preventDefault();
+    containerRef.current.addEventListener("touchmove", handleTouchMove);
 
     return () => {
-      containerRef.current.removeEventListener("touchmove", handleTouchMove, {
-        passive: true,
-      });
+      containerRef.current.removeEventListener("touchmove", handleTouchMove);
     };
   }, [containerRef]);
 

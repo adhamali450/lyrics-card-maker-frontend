@@ -151,16 +151,16 @@ const download = (href, filename) => {
   document.body.removeChild(element);
 };
 
-export const getUpscaledImage = (url, callback) => {
+export const getUpscaledImage = async (url, callback) => {
   // Try to get the maximum resolution from Genius (It's not always 300x300)
-  for (let res of ["1000x1000", "500x500", "300x300"]) {
-    let success = false;
-
-    routes.getCORSImage(url.replace("300x300", res)).then((res) => {
+  for (let resolution of ["1000x1000", "500x500", "300x300"]) {
+    try {
+      const res = await routes.getCORSImage(url.replace("300x300", resolution));
       callback(res.data);
-    });
-
-    if (success) break;
+      break;
+    } catch (error) {
+      continue;
+    }
   }
 };
 
@@ -188,4 +188,24 @@ export const getImagePalette = (url, callback) => {
           console.log(e);
         });
     });
+};
+
+/**
+ * Triggers callback functions based on the width of a DOM element.
+ *
+ * @param {Object} ref - The ref object containing the DOM element.
+ * @param {Number} actual - The actual width of the DOM element (used instead of ref).
+ * @param {String} operator - The operator to use for comparison (>=, <, etc...).
+ * @param {Object} dict - An object with width thresholds as keys and callback functions as values.
+
+ * @returns {void}
+ */
+export const onWidth = ({ ref, actual, operator = ">=", dict } = {}) => {
+  if (ref && ref.current) actual = ref.current.offsetWidth;
+
+  Object.entries(dict).forEach(([key, value]) => {
+    if (eval(actual + operator + key)) {
+      value();
+    }
+  });
 };

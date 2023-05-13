@@ -8,11 +8,6 @@ import React, {
 
 import CardStyleContext from "@contexts/CardStyleContext";
 
-import Draggable from "react-draggable";
-import Zoomable from "@utils/Zoomable";
-
-import EditableLabel from "@controls/EditableLabel";
-
 import {
   getContrastColor,
   truncate,
@@ -20,21 +15,22 @@ import {
   getUpscaledImage,
 } from "@/utils";
 
-import styles from "./LyricsCard.module.sass";
+import routes from "@/js/api/routes";
 
 import CardLogo from "@utils/CardLogo";
+import DragOverlay from "@controls/DragOverlay";
+import FileInput from "@controls/FileInput";
+import EditableLabel from "@controls/EditableLabel";
+import BackgroundContainer from "@controls/BackgroundContainer";
 
-import routes from "@/js/api/routes";
+import styles from "./LyricsCard.module.sass";
 
 import iconTrash from "@assets/icon-trash.svg";
 import iconCamera from "@assets/icon-camera.svg";
-
-import DragOverlay from "@controls/DragOverlay";
-import FileInput from "@controls/FileInput";
 import iconQuote from "@assets/quote.svg";
 import plainBackground from "@assets/plain-background.svg";
 
-const imgStateFromUrl = (url, callback, onError = () => {}) => {
+const imgStateFromUrl = (url, type, callback, onError = () => {}) => {
   const img = new Image();
   img.src = url;
   img.onerror = (e) => {
@@ -46,6 +42,7 @@ const imgStateFromUrl = (url, callback, onError = () => {}) => {
       width: img.width,
       height: img.height,
       "aspect-ratio": img.width / img.height,
+      type: type,
     });
   };
 };
@@ -101,24 +98,17 @@ const LyricsCard = forwardRef(
 
     const { cardStyling, setCardStyling } = useContext(CardStyleContext);
 
-    const [controlledPosition, setControlledPosition] = useState({
-      x: 0,
-      y: 0,
-    });
-
     let { lang, lyrics } = lyricsData;
 
-    // Load the cover image as the background image
+    // Once a song is selected, grab the cover as background image
     useEffect(() => {
       if (cardInfo.image) {
+        if (backgroundImage && backgroundImage.type == "external") return;
+
         getUpscaledImage(cardInfo.image, (url) =>
-          imgStateFromUrl(
-            url,
-            (st) => {
-              setBackgroundImage(st);
-            },
-            (e) => {}
-          )
+          imgStateFromUrl(url, "default", (st) => {
+            setBackgroundImage(st);
+          })
         );
       } else {
         setBackgroundImage(null);
@@ -127,9 +117,6 @@ const LyricsCard = forwardRef(
 
     useEffect(() => {
       if (!backgroundImage) return;
-
-      // Reset zoom and translations
-      setControlledPosition({ x: 0, y: 0 });
 
       // Sampling colors from background image
       getImagePalette(backgroundImage["url"], (color) => {
@@ -143,16 +130,17 @@ const LyricsCard = forwardRef(
       });
     }, [backgroundImage]);
 
-    useEffect(() => {
-      setLogoVarient(aspectRatio == "3:4" ? "small" : "large");
-    }, [aspectRatio]);
+    //TODO: Handle better or remove
+    // useEffect(() => {
+    //   setLogoVarient(aspectRatio == "3:4" ? "small" : "large");
+    // }, [aspectRatio]);
 
     const toggleLogoSize = () =>
       setLogoVarient(logoVarient == "large" ? "samll" : "large");
 
     // File upload
     const fileSelectedHandler = (url) => {
-      imgStateFromUrl(url, (st) => setBackgroundImage(st));
+      imgStateFromUrl(url, "external", (st) => setBackgroundImage(st));
     };
 
     const resetCardHandler = () => {
@@ -179,7 +167,9 @@ const LyricsCard = forwardRef(
         routes
           .getCORSImage(imageUrl)
           .then((res) => {
-            imgStateFromUrl(res.data, (st) => setBackgroundImage(st));
+            imgStateFromUrl(res.data, "external", (st) =>
+              setBackgroundImage(st)
+            );
           })
           //TODO: Handle it visually
           .catch(() => console.error("Couldn't get this photo"));
@@ -193,19 +183,13 @@ const LyricsCard = forwardRef(
 
             reader.onload = (e) => {
               url = e.target.result;
-              imgStateFromUrl(url, (st) => setBackgroundImage(st));
+              imgStateFromUrl(url, "external", (st) => setBackgroundImage(st));
             };
           }
         }
       }
 
       setIsFileDragged(false);
-    };
-
-    // Draggable (Movable) background
-    const onControlledDrag = (e, position) => {
-      const { x, y } = position;
-      setControlledPosition({ x, y });
     };
 
     return (
@@ -227,35 +211,8 @@ const LyricsCard = forwardRef(
             setShowDragOverlay(true);
           }}
         >
-          {/* Background container */}
           {backgroundImage ? (
-            <Zoomable initialScale="1">
-              <Draggable
-                position={controlledPosition}
-                onDrag={onControlledDrag}
-              >
-                <div className="absolute w-full h-full inset-0 ">
-                  <div
-                    // onWheel={wheelHandler}
-                    className="w-full h-full"
-                    style={{
-                      backgroundPosition: "top center",
-                      // transform: `scale(${backgroundImageScale})`,
-                      backgroundSize: "cover",
-                      backgroundImage: `url(${backgroundImage["url"]})`,
-                      width:
-                        backgroundImage["aspect-ratio"] > 1
-                          ? backgroundImage["aspect-ratio"] * 100.5 + "%"
-                          : "100.5%",
-                      height:
-                        backgroundImage["aspect-ratio"] > 1
-                          ? "100.5%"
-                          : backgroundImage["aspect-ratio"] ** -1 * 100.5 + "%",
-                    }}
-                  ></div>
-                </div>
-              </Draggable>
-            </Zoomable>
+            <BackgroundContainer src={backgroundImage} />
           ) : (
             <div
               className={styles["plain-background"]}
@@ -305,6 +262,8 @@ const LyricsCard = forwardRef(
                   backgroundColor: cardStyling["highlightColor"],
                   color: cardStyling["textColor"],
                   textAlign: cardStyling["alignment"],
+                  fontWeight: cardStyling["bold"] ? "bold" : "normal",
+                  fontStyle: cardStyling["italic"] ? "italic" : "normal",
                 }}
                 key={i}
                 text={l[0]}
@@ -378,5 +337,11 @@ const LyricsCard = forwardRef(
     );
   }
 );
+
+LyricsCard.defaultProps = {
+  cardInfo: {},
+  lyricsData: {},
+  aspectRatio: "1:1",
+};
 
 export default LyricsCard;

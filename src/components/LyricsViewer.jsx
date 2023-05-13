@@ -34,14 +34,14 @@ const LyricsViewer = ({
 
       {/* State: loading */}
       {id && status == 0 && (
-        <div className="w-full h-full flex flex-col items-center justify-center bg-white">
+        <div className="w-full h-full grid place-content-center bg-white">
           <LoadingAnimation />
         </div>
       )}
 
       {/* State: Error fetching lyrics */}
       {status == -1 && (
-        <div className="w-full h-full flex flex-col items-center justify-center bg-white text-red-800">
+        <div className="w-full h-full grid place-content-center bg-white text-red-800">
           Couldn't get lyrics. Please try again.
         </div>
       )}

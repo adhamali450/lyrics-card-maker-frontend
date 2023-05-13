@@ -41,7 +41,9 @@ const SongPreview = ({ className = "h-[120px]", song, colors }) => {
           </div>
         </Fragment>
       )}
-      {!colors && <SongPreviewSkeleton className="px-3 pt-3 pb-4 h-full" />}
+      {!colors && (
+        <SongPreviewSkeleton className="w-full px-3 pt-3 pb-4 h-full bg-[#e9e9e9]" />
+      )}
     </section>
   );
 };

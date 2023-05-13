@@ -13,6 +13,7 @@ import {
   bestContrast,
   getContrast,
   downloadBlob,
+  onWidth,
 } from "./utils";
 
 import Searchbar from "@components/searchbar/Searchbar";
@@ -115,12 +116,10 @@ function App() {
   }, [song]);
 
   const handleResultSelected = (newSong) => {
-    if (song == newSong) return;
-
     setSong(newSong);
   };
 
-  const handleSelectionChanged = (index) => {
+  const handleLyricsSelectionChanged = (index) => {
     setLyricsData((prev) => {
       const newLyrics = prev.lyrics.map((l, i) => {
         if (i == index) return [l[0], l[1] == 0 ? 1 : 0];
@@ -166,7 +165,7 @@ function App() {
         song={song}
         colors={colors}
         lyricsData={lyricsData}
-        onLyricsSelectionChanged={handleSelectionChanged}
+        onLyricsSelectionChanged={handleLyricsSelectionChanged}
       />
 
       <aside className="hidden lg:grid grid-rows-[5rem_1fr] p-5 gap-7 h-full bg-[#272838]">
@@ -176,6 +175,26 @@ function App() {
           cardClassName="aspect-square rounded-lg w-[85px] px-2"
           onSizeChanged={setCardAspectRatio}
         />
+
+        <small className="text-small text-center text-white">
+          <a
+            className="inline-block mb-1 opacity-30 hover:opacity-100 transition-opacity"
+            href="https://github.com/adhamali450"
+            target="_black"
+            rel="noopener"
+          >
+            @adhamali450
+          </a>
+          <br />
+          <a
+            className=" opacity-30 hover:opacity-100 transition-opacity"
+            href="https://github.com/Omaryassenn"
+            target="_black"
+            rel="noopener"
+          >
+            @OmarYassen
+          </a>
+        </small>
       </aside>
 
       <main className="grow grid grid-rows-[5rem_1fr] grid-cols-[1fr] lg:grid-cols-[1fr_36ch] p-5 gap-5">
@@ -230,7 +249,7 @@ function App() {
             colors={colors}
             lyricsData={lyricsData}
             lineMax={36}
-            onSelectionChanged={handleSelectionChanged}
+            onSelectionChanged={handleLyricsSelectionChanged}
           />
         </aside>
       </main>

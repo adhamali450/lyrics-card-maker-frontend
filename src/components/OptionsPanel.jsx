@@ -46,7 +46,7 @@ const OptionsPanel = ({ className, onOptionChanged }) => {
       </p>
 
       <PushdownGroup
-        className="h-7 xs:h-8 xs:row-start-1"
+        className="h-7 xs:h-8"
         values={formattingValues}
         children={[iconsFormatting.bold, iconsFormatting.italic]}
         multiple
@@ -73,7 +73,7 @@ const OptionsPanel = ({ className, onOptionChanged }) => {
       <Hr />
 
       <ColorPicker
-        className="h-7 xs:h-8 aspect-square xs:row-start-1"
+        className="h-7 xs:h-8 aspect-square"
         initialColor="#ffffff"
         icon={iconsStyling.highlight}
         title="Text highlight color"

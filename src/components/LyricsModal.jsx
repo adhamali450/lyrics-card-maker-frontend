@@ -1,9 +1,12 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useRef } from "react";
 import ModalSheet from "react-modal-sheet";
 import SongPreview from "@components/SongPreview";
 import LyricsViewer from "@components/LyricsViewer";
 import _ from "lodash";
+import { onWidth } from "@/utils";
 
+// TODO: Handle centering
+// TODO: Handle max length
 const LyricsModal = ({
   song = {},
   colors = {},
@@ -27,6 +30,20 @@ const LyricsModal = ({
       window.removeEventListener("popstate", closeOnBackButton);
     };
   }, []);
+
+  useEffect(() => {
+    onWidth({
+      actual: window.innerWidth,
+      operator: "<=",
+      dict: {
+        1150: () => {
+          if (!_.isEqual(song, {})) {
+            setIsOpen(true);
+          }
+        },
+      },
+    });
+  }, [song]);
 
   const handleClose = () => {
     setIsOpen(false);
@@ -56,7 +73,10 @@ const LyricsModal = ({
         }}
       >
         <ModalSheet.Container>
-          <ModalSheet.Header pinned className="overflow-hidden xs:rounded-t-md">
+          <ModalSheet.Header
+            pinned
+            className="overflow-hidden xs:rounded-t-md shadow-md"
+          >
             <SongPreview className="h-[120px]" song={song} colors={colors} />
           </ModalSheet.Header>
           <ModalSheet.Content className="overflow-hidden">
