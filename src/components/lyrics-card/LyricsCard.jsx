@@ -51,7 +51,7 @@ const DummyLyrics = ({ lang, cardStyling }) => {
             style={{
               backgroundColor: cardStyling["highlightColor"],
               color: cardStyling["textColor"],
-              fontWeight: cardStyling["bold"] ? "bold" : "normal",
+              fontWeight: cardStyling["bold"] ? "500" : "400",
               fontStyle: cardStyling["italic"] ? "italic" : "normal",
             }}
             text={l[0]}
@@ -71,22 +71,23 @@ const getLineMax = (aspectRatio) => {
   }[aspectRatio];
 };
 
-const truncateFooterLabel = (label, aspectRatio) => {
-  return truncate(
-    label,
-    {
-      "1:1": 25,
-      "3:4": 20,
-      "4:3": 40,
-    }[aspectRatio] + 1
-  );
+const titleLengths = {
+  "1:1": 20,
+  "3:4": 20,
+  "4:3": 40,
+};
+
+const artistLengths = {
+  "1:1": 15,
+  "3:4": 10,
+  "4:3": 20,
 };
 
 const LyricsCard = forwardRef(
   ({ cardInfo, lyricsData, aspectRatio = "1:1" }, ref) => {
     let { title = "", artist = "" } = cardInfo;
-    title = truncateFooterLabel(title, aspectRatio);
-    artist = truncateFooterLabel(artist, aspectRatio);
+    artist = truncate(artist, artistLengths[aspectRatio]);
+    title = truncate(title, titleLengths[aspectRatio]);
 
     const [isFileDragged, setIsFileDragged] = useState(false);
     const [showDragOverlay, setShowDragOverlay] = useState(true);
@@ -185,9 +186,9 @@ const LyricsCard = forwardRef(
               });
           }),
           {
-            pending: "Image is being fetched...",
+            pending: "Fetching image...",
             success: "Image fetched successfully",
-            error: "Error fetching image. Please try again",
+            error: "Failed to fetch image. Please try again.",
           }
         );
       } else {
@@ -284,7 +285,7 @@ const LyricsCard = forwardRef(
                   backgroundColor: cardStyling["highlightColor"],
                   color: cardStyling["textColor"],
                   textAlign: cardStyling["alignment"],
-                  fontWeight: cardStyling["bold"] ? "bold" : "normal",
+                  fontWeight: cardStyling["bold"] ? "500" : "400",
                   fontStyle: cardStyling["italic"] ? "italic" : "normal",
                 }}
                 key={i}

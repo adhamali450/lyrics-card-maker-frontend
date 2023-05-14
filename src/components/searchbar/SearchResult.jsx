@@ -17,7 +17,7 @@ const SearchResult = ({ className, img, songName, artistName, onClick }) => {
         />
         <div className="flex flex-col items-start text-start px-2">
           <p>{truncate(songName, 35)}</p>
-          <small className="font-semibold">{truncate(artistName, 25)}</small>
+          <small className="font-[700]">{truncate(artistName, 25)}</small>
         </div>
       </div>
     </button>

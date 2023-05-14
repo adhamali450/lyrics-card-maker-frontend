@@ -1,13 +1,6 @@
-@font-face {
-    font-family: 'Programme';
-    src: local('Programme Bold Italic'), local('Programme-BoldIta'),
-        url('Programme-BoldIta.woff2') format('woff2'),
-        url('Programme-BoldIta.woff') format('woff'),
-        url('Programme-BoldIta.ttf') format('truetype');
-    font-weight: bold;
-    font-style: italic;
-}
 
+
+/* 300 */
 @font-face {
     font-family: 'Programme';
     src: local('Programme Light Italic'), local('Programme-LightIta'),
@@ -28,23 +21,37 @@
     font-style: normal;
 }
 
+
+/* (bold) 500 (originally 700) */
 @font-face {
     font-family: 'Programme';
     src: local('Programme Bold'), local('Programme-Bold'),
         url('Programme-Bold.woff2') format('woff2'),
         url('Programme-Bold.woff') format('woff'),
         url('Programme-Bold.ttf') format('truetype');
-    font-weight: bold;
+    font-weight: 500;
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'Programme';
+    src: local('Programme Bold Italic'), local('Programme-BoldIta'),
+        url('Programme-BoldIta.woff2') format('woff2'),
+        url('Programme-BoldIta.woff') format('woff'),
+        url('Programme-BoldIta.ttf') format('truetype');
+    font-weight: 500;
+    font-style: italic;
+}
+
+
+/* (normal) 400 */
 @font-face {
     font-family: 'Programme';
     src: local('Programme'), local('Programme-Regular'),
         url('Programme-Regular.woff2') format('woff2'),
         url('Programme-Regular.woff') format('woff'),
         url('Programme-Regular.ttf') format('truetype');
-    font-weight: normal;
+    font-weight: 400;
     font-style: normal;
 }
 
@@ -54,6 +61,6 @@
         url('Programme-RegularIta.woff2') format('woff2'),
         url('Programme-RegularIta.woff') format('woff'),
         url('Programme-RegularIta.ttf') format('truetype');
-    font-weight: normal;
+    font-weight: 400;
     font-style: italic;
 }
