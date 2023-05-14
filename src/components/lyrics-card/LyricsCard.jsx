@@ -181,7 +181,8 @@ const LyricsCard = forwardRef(
                 });
                 resolve();
               })
-              .catch(() => {
+              .catch((e) => {
+                console.error(e);
                 reject();
               });
           }),
