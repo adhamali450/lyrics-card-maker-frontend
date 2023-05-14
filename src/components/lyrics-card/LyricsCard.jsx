@@ -33,7 +33,7 @@ import plainBackground from "@assets/plain-background.svg";
 const DummyLyrics = ({ lang, cardStyling }) => {
   const dummyLyrics = [
     ["Double click to edit", true],
-    ["Press enter to insert new lines", true],
+    ["Press enter when you finish", true],
     ["Or just paste some text", true],
   ];
 
