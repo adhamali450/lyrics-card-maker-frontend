@@ -4,6 +4,8 @@ import CardStyleContext from "@contexts/CardStyleContext";
 import routes from "@/js/api/routes";
 import _ from "lodash";
 import DomToImage from "dom-to-image";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import iconDownload from "@assets/icon-download.svg";
 
@@ -13,7 +15,6 @@ import {
   bestContrast,
   getContrast,
   downloadBlob,
-  onWidth,
 } from "./utils";
 
 import Searchbar from "@components/searchbar/Searchbar";
@@ -167,7 +168,6 @@ function App() {
         lyricsData={lyricsData}
         onLyricsSelectionChanged={handleLyricsSelectionChanged}
       />
-
       <aside className="hidden lg:grid grid-rows-[5rem_1fr] p-5 gap-7 h-full bg-[#272838]">
         <PageLogo className="h-[70%] self-center" />
         <SizeMenu
@@ -196,7 +196,6 @@ function App() {
           </a>
         </small>
       </aside>
-
       <main className="grow grid grid-rows-[5rem_1fr] grid-cols-[1fr] lg:grid-cols-[1fr_36ch] p-5 gap-5">
         <header className="relative lg:col-span-2 flex gap-4 sm:gap-8 items-center">
           <PageLogo
@@ -253,6 +252,17 @@ function App() {
           />
         </aside>
       </main>
+      <ToastContainer
+        position="bottom-left"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop
+        closeOnClick
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 }

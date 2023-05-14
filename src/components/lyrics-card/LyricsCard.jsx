@@ -23,6 +23,9 @@ import FileInput from "@controls/FileInput";
 import EditableLabel from "@controls/EditableLabel";
 import BackgroundContainer from "@controls/BackgroundContainer";
 
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import styles from "./LyricsCard.module.sass";
 
 import iconTrash from "@assets/icon-trash.svg";
@@ -128,6 +131,17 @@ const LyricsCard = forwardRef(
     const toggleLogoSize = () =>
       setLogoVarient(logoVarient == "large" ? "samll" : "large");
 
+    const resetCardHandler = () => {
+      setBackgroundImage(null);
+      setCardStyling((prev) => {
+        return {
+          ...prev,
+          bannerBackground: "#f7f16c",
+          bannerForeground: "#000000",
+        };
+      });
+    };
+
     const mouseEnterHandler = () => {
       if (isFileDragged) setShowDragOverlay(true);
       else setShowDragOverlay(false);
@@ -145,17 +159,6 @@ const LyricsCard = forwardRef(
       });
     };
 
-    const resetCardHandler = () => {
-      setBackgroundImage(null);
-      setCardStyling((prev) => {
-        return {
-          ...prev,
-          bannerBackground: "#f7f16c",
-          bannerForeground: "#000000",
-        };
-      });
-    };
-
     // Drag overlay
     const dragEnterLeaveHandlers = (e) => setIsFileDragged((prev) => !prev);
 
@@ -166,16 +169,27 @@ const LyricsCard = forwardRef(
       let url = "";
       if (imageUrl) {
         // handle image dragged from a browser
-        routes
-          .getCORSImage(imageUrl)
-          .then((res) => {
-            setBackgroundImage({
-              url: res.data,
-              type: "external",
-            });
-          })
-          //TODO: Handle it visually
-          .catch(() => console.error("Couldn't get this photo"));
+        toast.promise(
+          new Promise((resolve, reject) => {
+            routes
+              .getCORSImage(imageUrl)
+              .then((res) => {
+                setBackgroundImage({
+                  url: res.data,
+                  type: "external",
+                });
+                resolve();
+              })
+              .catch(() => {
+                reject();
+              });
+          }),
+          {
+            pending: "Image is being fetched...",
+            success: "Image fetched successfully",
+            error: "Error fetching image. Please try again",
+          }
+        );
       } else {
         // handle image dragged from a file explorer or operating system window
         for (const file of files) {
