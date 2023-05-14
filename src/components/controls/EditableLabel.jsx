@@ -11,7 +11,6 @@ const EditableLabel = ({
   lineMax,
 }) => {
   const inputRef = useRef([]);
-  const containerRef = useRef([]);
 
   const [tabCount, setTabCount] = useState(0);
 
@@ -28,12 +27,11 @@ const EditableLabel = ({
 
   //TODO: Is this necessary?
   useEffect(() => {
-    setInputText(text);
     setLang(getLang(text + " "));
   }, [text]);
 
-  const handleDoubleClick = (e = null) => {
-    if (e) e.preventDefault();
+  const handleDoubleClick = (e) => {
+    e.preventDefault();
 
     setIsEditing(true);
   };
@@ -82,7 +80,6 @@ const EditableLabel = ({
       onDoubleClick={handleDoubleClick}
       onTouchEnd={handleTouchEnd}
       className={`${className} inline-block`}
-      ref={containerRef}
     >
       {isEditing ? (
         <input
@@ -94,12 +91,12 @@ const EditableLabel = ({
           onChange={handleInputChange}
           onBlur={handleInputBlur}
           lang={lang}
-          onKeyDown={(e) => handleInputKeydown(e)}
+          onKeyDown={handleInputKeydown}
         />
       ) : (
         <span lang={lang}>
           <LyricsBar
-            className="first-of-type:rounded-none last-of-type:rounded-none"
+            className="first-of-type:rounded-none last-of-type:rounded-none px-1"
             line={[inputText]}
             lineMax={lineMax}
             style={style}

@@ -108,7 +108,9 @@ export const getContrast = (background, foreground, numeric = false) => {
   }
 };
 
-export const barToLines = (bar, lineMax = 36) => {
+export const barToLines = (bar, lineMax) => {
+  if (!lineMax) return [bar];
+
   const words = bar.split(" ");
   const chunks = [];
   let currentChunk = "";

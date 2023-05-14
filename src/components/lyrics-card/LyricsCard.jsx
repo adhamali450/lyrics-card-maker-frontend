@@ -144,6 +144,15 @@ const LyricsCard = forwardRef(
     const toggleLogoSize = () =>
       setLogoVarient(logoVarient == "large" ? "samll" : "large");
 
+    const mouseEnterHandler = () => {
+      if (isFileDragged) setShowDragOverlay(true);
+      else setShowDragOverlay(false);
+    };
+
+    const mouseLeaveHandler = () => {
+      setShowDragOverlay(true);
+    };
+
     // File upload
     const fileSelectedHandler = (url) => {
       imgStateFromUrl(url, "external", (st) => setBackgroundImage(st));
@@ -209,13 +218,8 @@ const LyricsCard = forwardRef(
       >
         <div
           className={`${styles["background"]}`}
-          onMouseEnter={() => {
-            if (isFileDragged) setShowDragOverlay(true);
-            else setShowDragOverlay(false);
-          }}
-          onMouseLeave={() => {
-            setShowDragOverlay(true);
-          }}
+          onMouseEnter={mouseEnterHandler}
+          onMouseLeave={mouseLeaveHandler}
         >
           {backgroundImage ? (
             <BackgroundContainer src={backgroundImage} />
@@ -292,7 +296,7 @@ const LyricsCard = forwardRef(
         {backgroundImage && (
           <div className="hide-when-download absolute z-[9] top-4 right-4 flex gap-3">
             <FileInput
-              className="h-[40px] sm:h-[50px] aspect-square grid place-items-center bg-gray-800 p-2 rounded-full opacity-80"
+              className="h-[40px] sm:h-[50px] aspect-square grid place-items-center bg-gray-800 p-2 rounded-full opacity-100"
               text="Upload photo"
               onFileSelected={fileSelectedHandler}
             >
@@ -304,7 +308,7 @@ const LyricsCard = forwardRef(
             </FileInput>
 
             <button
-              className="h-[40px] sm:h-[50px] aspect-square grid place-items-center bg-gray-800 p-2 rounded-full opacity-80"
+              className="h-[40px] sm:h-[50px] aspect-square grid place-items-center bg-gray-800 p-2 rounded-full opacity-100"
               onClick={resetCardHandler}
             >
               <img
