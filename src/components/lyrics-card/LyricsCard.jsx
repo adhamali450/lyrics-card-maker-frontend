@@ -30,23 +30,6 @@ import iconCamera from "@assets/icon-camera.svg";
 import iconQuote from "@assets/quote.svg";
 import plainBackground from "@assets/plain-background.svg";
 
-const imgStateFromUrl = (url, type, callback, onError = () => {}) => {
-  const img = new Image();
-  img.src = url;
-  img.onerror = (e) => {
-    onError(e);
-  };
-  img.onload = () => {
-    callback({
-      url: url,
-      width: img.width,
-      height: img.height,
-      "aspect-ratio": img.width / img.height,
-      type: type,
-    });
-  };
-};
-
 const DummyLyrics = ({ lang, cardStyling }) => {
   const dummyLyrics = [
     ["Double click to edit", true],
@@ -117,8 +100,9 @@ const LyricsCard = forwardRef(
         if (backgroundImage && backgroundImage.type == "external") return;
 
         getUpscaledImage(cardInfo.image, (url) =>
-          imgStateFromUrl(url, "default", (st) => {
-            setBackgroundImage(st);
+          setBackgroundImage({
+            url: url,
+            type: "default",
           })
         );
       } else {
@@ -155,7 +139,10 @@ const LyricsCard = forwardRef(
 
     // File upload
     const fileSelectedHandler = (url) => {
-      imgStateFromUrl(url, "external", (st) => setBackgroundImage(st));
+      setBackgroundImage({
+        url: url,
+        type: "external",
+      });
     };
 
     const resetCardHandler = () => {
@@ -182,14 +169,15 @@ const LyricsCard = forwardRef(
         routes
           .getCORSImage(imageUrl)
           .then((res) => {
-            imgStateFromUrl(res.data, "external", (st) =>
-              setBackgroundImage(st)
-            );
+            setBackgroundImage({
+              url: res.data,
+              type: "external",
+            });
           })
           //TODO: Handle it visually
           .catch(() => console.error("Couldn't get this photo"));
       } else {
-        // handle image(s) dragged from a file explorer or operating system window
+        // handle image dragged from a file explorer or operating system window
         for (const file of files) {
           // check if the dropped file is an image
           if (file.type.startsWith("image/")) {
@@ -198,7 +186,10 @@ const LyricsCard = forwardRef(
 
             reader.onload = (e) => {
               url = e.target.result;
-              imgStateFromUrl(url, "external", (st) => setBackgroundImage(st));
+              setBackgroundImage({
+                url: url,
+                type: "external",
+              });
             };
           }
         }
