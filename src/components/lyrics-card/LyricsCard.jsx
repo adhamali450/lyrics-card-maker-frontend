@@ -16,6 +16,7 @@ import {
 } from "@/utils";
 
 import routes from "@/js/api/routes";
+import usePasteImage from "@hooks/usePasteImage";
 
 import CardLogo from "@utils/CardLogo";
 import DragOverlay from "@controls/DragOverlay";
@@ -152,7 +153,7 @@ const LyricsCard = forwardRef(
       setShowDragOverlay(true);
     };
 
-    // File upload
+    // Handles image from file input
     const fileSelectedHandler = (url) => {
       setBackgroundImage({
         url: url,
@@ -168,8 +169,8 @@ const LyricsCard = forwardRef(
       const imageUrl = e.dataTransfer.getData("URL");
 
       let url = "";
+      // Handle image dragged from a browser
       if (imageUrl) {
-        // handle image dragged from a browser
         toast.promise(
           new Promise((resolve, reject) => {
             routes
@@ -192,8 +193,9 @@ const LyricsCard = forwardRef(
             error: "Failed to fetch image. Please try again.",
           }
         );
-      } else {
-        // handle image dragged from a file explorer or operating system window
+      }
+      // Handle image dragged from a file explorer or operating system window
+      else {
         for (const file of files) {
           // check if the dropped file is an image
           if (file.type.startsWith("image/")) {
@@ -213,6 +215,14 @@ const LyricsCard = forwardRef(
 
       setIsFileDragged(false);
     };
+
+    // Handles image Pasted from clipboard
+    usePasteImage((url) => {
+      setBackgroundImage({
+        url: url,
+        type: "external",
+      });
+    });
 
     return (
       <div
