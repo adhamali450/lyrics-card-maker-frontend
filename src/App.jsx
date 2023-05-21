@@ -8,6 +8,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import iconDownload from "@assets/icon-download.svg";
+import iconShare from "@assets/icon-share.svg";
 
 import {
   formatLyrics,
@@ -25,7 +26,7 @@ import SizeMenu from "@utils/SizeMenu";
 import PageLogo from "@utils/PageLogo";
 import OptionsPanel from "./components/OptionsPanel";
 import LyricsModal from "./components/LyricsModal";
-import Button from "@controls/Button";
+import ShareModal from "@components/ShareModal";
 
 const defaultLyricsData = {
   lang: "",
@@ -47,6 +48,7 @@ function App() {
     bannerBackground: "#f7f16c",
     bannerForeground: "#000000",
   });
+  const [shareModalOpen, setShareModalOpen] = useState(false);
   const [downloading, setDownloading] = useState(false);
 
   const cardRef = useRef(null);
@@ -141,13 +143,12 @@ function App() {
     if (cardRef.current == null) return;
 
     setDownloading(true);
-
-    const scale = 3;
+    const scale = 2;
     DomToImage.toBlob(cardRef.current, {
       width: cardRef.current.offsetWidth * scale,
       height: cardRef.current.offsetHeight * scale,
       style: {
-        transform: "scale(3)",
+        transform: `scale(${scale})`,
         transformOrigin: "top left",
       },
     }).then((blob) => {
@@ -210,9 +211,9 @@ function App() {
 
         <section className="row-start-2 relative">
           <CardStyleContext.Provider value={{ cardStyling, setCardStyling }}>
-            <OptionsPanel className="rounded-md mb-4 border border-gray-400 bg-[#eeeeee]" />
+            <OptionsPanel className="rounded-md mb-4 border border-gray-400 bg-gray-100" />
             <SizeMenu
-              className="lg:hidden flex items-center justify-center xs:justify-start gap-4 mb-4 px-2"
+              className="lg:hidden flex items-center justify-center sm:justify-start gap-4 mb-4 px-2"
               cardClassName="aspect-square rounded-xl w-[65px]"
               showLabel={false}
               onSizeChanged={setCardAspectRatio}
@@ -222,15 +223,13 @@ function App() {
               cardInfo={song}
               lyricsData={lyricsData}
               aspectRatio={cardAspectRatio}
+              onDownload={() => setShareModalOpen(true)}
             />
           </CardStyleContext.Provider>
 
-          <Button
-            text="Download card"
-            icon={iconDownload}
-            onClick={downloadHandler}
-            disabled={false}
-            loading={downloading}
+          <ShareModal
+            open={shareModalOpen}
+            onClosing={() => setShareModalOpen(false)}
           />
         </section>
 

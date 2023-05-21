@@ -1,5 +1,7 @@
 import routes from "@/js/api/routes";
 import { getPalette } from "color-thief-react";
+const arabicRegex = /[\u0600-\u06FF]/;
+const englishRegex = /[A-Za-z]/;
 
 export const truncate = (str, length = 35) => {
   if (str.length > length) return str.slice(0, length) + "...";
@@ -27,10 +29,29 @@ export const isImageLink = (url) => url.match(/\.(jpeg|jpg|gif|png)$/) != null;
 export const rangedRandom = (min, max) =>
   Math.floor(Math.random() * (max - min + 1)) + min;
 
-export const getLang = (str) => {
-  const arabic = /[\u0600-\u06FF]/;
+export const getLang = (lyrics) => {
+  let arabicCount = 0;
+  let englishCount = 0;
 
-  return str.split("").some((c) => arabic.test(c)) ? "ar" : "en";
+  for (let i = 0; i < lyrics.length; i++) {
+    if (arabicRegex.test(lyrics[i])) {
+      arabicCount++;
+    } else if (englishRegex.test(lyrics[i])) {
+      englishCount++;
+    }
+  }
+
+  return arabicCount > englishCount ? "ar" : "en";
+};
+
+export const containsLang = (str, lang) => {
+  if (lang === "en") {
+    return englishRegex.test(str);
+  } else if (lang === "ar") {
+    return arabicRegex.test(str);
+  } else {
+    throw new Error(`Invalid language code: ${lang}`);
+  }
 };
 
 export const shadeColor = (color, percent) => {
@@ -73,6 +94,20 @@ const hexToRgb = (hex) => {
   const g = parseInt(hex.substr(3, 2), 16);
   const b = parseInt(hex.substr(5, 2), 16);
   return [r, g, b];
+};
+
+export const rgbToHex = (r, g, b, a) => {
+  const red = r.toString(16).padStart(2, "0");
+  const green = g.toString(16).padStart(2, "0");
+  const blue = b.toString(16).padStart(2, "0");
+  const alpha = Math.round(a * 255)
+    .toString(16)
+    .padStart(2, "0");
+
+  // Combine the hex codes into a single string
+  const hex = `#${red}${green}${blue}${alpha}`;
+
+  return hex;
 };
 
 // Calculate the relative luminance of a color using the formula from WCAG
@@ -210,4 +245,38 @@ export const onWidth = ({ ref, actual, operator = ">=", dict } = {}) => {
       value();
     }
   });
+};
+
+export const getMaxCharacters = (container) => {
+  // 1- Create a temporary span element (reference)
+  const tempSpan = document.createElement("span");
+
+  tempSpan.innerText = "A"; // Use a representative character
+  tempSpan.classList.add("fallback-editiable-label");
+  tempSpan.style.position = "absolute";
+  tempSpan.style.visibility = "hidden";
+  document.body.appendChild(tempSpan);
+
+  // 2- Calculate the maximum number of characters that can fit in the container
+  const charWidth = tempSpan.getBoundingClientRect().width;
+  const containerWidth = container.getBoundingClientRect().width;
+
+  const widths = {
+    "1:1": containerWidth,
+    "3:4": containerWidth * (3 / 4),
+    "4:3": containerWidth * (4 / 3),
+  };
+
+  // 3- Remove the temporary span element
+  document.body.removeChild(tempSpan);
+
+  return Object.keys(widths).reduce((result, ratio) => {
+    result[ratio] = Math.floor((widths[ratio] / charWidth) * 1.2);
+    return result;
+  }, {});
+};
+
+// TODO
+export const formatCredits = (credit, lang) => {
+  return credit;
 };

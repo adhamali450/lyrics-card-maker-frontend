@@ -1,22 +1,28 @@
 import React, { useState, useRef, useEffect } from "react";
-import LyricsBar from "@components/LyricsBar";
+import LyricsBar from "@controls/LyricsBar";
+import WrappingSpan from "@controls/WrappingSpan";
 
 import { getLang } from "@/utils";
 
+//TODO: Input the same size as the text
 const EditableLabel = ({
   text,
   onTextChanged,
   className = "",
   style = {},
+  childrenStyle = {},
   lineMax,
 }) => {
   const inputRef = useRef([]);
+  const containerRef = useRef(null);
 
   const [tabCount, setTabCount] = useState(0);
 
   const [isEditing, setIsEditing] = useState(false);
 
   const [inputText, setInputText] = useState(text);
+
+  const [spanSize, setSpanSize] = useState({});
 
   const [lang, setLang] = useState(getLang(text));
 
@@ -33,6 +39,11 @@ const EditableLabel = ({
   const handleDoubleClick = (e) => {
     e.preventDefault();
 
+    // set input size to be the same as the label
+    setSpanSize({
+      width: getComputedStyle(containerRef.current).width,
+      height: getComputedStyle(containerRef.current).height,
+    });
     setIsEditing(true);
   };
 
@@ -77,32 +88,40 @@ const EditableLabel = ({
 
   return (
     <div
+      className={`${className} inline-block`}
       onDoubleClick={handleDoubleClick}
       onTouchEnd={handleTouchEnd}
-      className={`${className} inline-block`}
+      style={style}
+      ref={containerRef}
     >
       {isEditing ? (
-        <input
+        <textarea
           ref={inputRef}
           className="text-black"
           type="text"
           value={inputText}
-          style={style}
+          style={{
+            ...childrenStyle,
+            width: spanSize.width,
+            height: spanSize.height,
+            resize: "none",
+          }}
           onChange={handleInputChange}
           onBlur={handleInputBlur}
           lang={lang}
           onKeyDown={handleInputKeydown}
         />
       ) : (
-        <span lang={lang}>
-          <LyricsBar
-            className="first-of-type:rounded-none last-of-type:rounded-none px-1"
+        <span lang={lang} className="leading-[0]">
+          {/* <LyricsBar
+            className="first-of-type:rounded-none last-of-type:rounded-none"
             line={[inputText]}
             lineMax={lineMax}
-            style={style}
+            style={childrenStyle}
             rounded={false}
             padding={false}
-          />
+          /> */}
+          <WrappingSpan style={childrenStyle}>{inputText}</WrappingSpan>
         </span>
       )}
     </div>

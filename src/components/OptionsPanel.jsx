@@ -39,7 +39,7 @@ const OptionsPanel = ({ className, onOptionChanged }) => {
 
   return (
     <div
-      className={`${className} flex items-center justify-between xs:justify-start px-3 xs:px-6 py-2 gap-x-4 gap-y-1 flex-wrap`}
+      className={`${className} flex items-center justify-between xs:justify-start px-3 xs:px-6 py-2 gap-x-4 gap-y-1`}
     >
       <p className="hidden sm:inline uppercase text-[#272838] font-bold tracking-tight">
         Style
@@ -60,12 +60,8 @@ const OptionsPanel = ({ className, onOptionChanged }) => {
 
       <PushdownGroup
         className="h-7 xs:h-8 xs:row-start-2"
-        values={["left", "center", "right"]}
-        children={[
-          iconsAlignent.left,
-          iconsAlignent.center,
-          iconsAlignent.right,
-        ]}
+        values={["left", "right"]}
+        children={[iconsAlignent.left, iconsAlignent.right]}
         initialIndex={cardStyling.alignment == "left" ? 0 : 2}
         selectedItemChanged={(value) => updateStyle("alignment", value)}
       />

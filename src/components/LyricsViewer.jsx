@@ -1,6 +1,6 @@
 import React from "react";
 import LoadingAnimation from "@utils/LoadingAnimation";
-import LyricsBar from "@components/LyricsBar";
+import LyricsBar from "@controls/LyricsBar";
 import iconLyrics from "@assets/icon-lyrics.svg";
 
 const truthy = (arr) => {

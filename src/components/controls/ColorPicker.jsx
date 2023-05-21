@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 import { SketchPicker } from "react-color";
 import Popup from "@utils/Popup";
 
+import { rgbToHex } from "@/utils";
+
 const ColorPicker = ({
   className = "",
   initialColor = "#ff00f0",
@@ -27,9 +29,10 @@ const ColorPicker = ({
   }, [containerRef]);
 
   const colorChangeHandler = (c) => {
-    if (onChange) onChange(c.hex);
+    const hex = rgbToHex(c.rgb.r, c.rgb.g, c.rgb.b, c.rgb.a);
+    if (onChange) onChange(hex);
 
-    setColor(c.hex);
+    setColor(hex);
   };
 
   const colorChangeCompletedHandler = (c) => {
@@ -60,6 +63,7 @@ const ColorPicker = ({
         <SketchPicker
           color={color}
           onChange={(c) => colorChangeHandler(c)}
+          disableAlpha={false}
           onChangeComplete={(c) => colorChangeCompletedHandler(c)}
         />
       </Popup>

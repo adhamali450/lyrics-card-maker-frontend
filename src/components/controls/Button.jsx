@@ -1,18 +1,21 @@
 const Button = ({
+  className = "",
   onClick = () => {},
   loading = false,
   disabled = false,
   text,
+  children,
   icon,
 }) => {
   return (
+    // bg-gradient-to-br from-[#fa5149] via-[#b252a2] to-[#4b92d7]
     <button
       type="button"
-      className="flex justify-center items-center gap-2 mt-3 md:mt-0 mb-[80px] md:mb-0 md:absolute md:bottom-0 md:right-0 w-full md:w-auto bg-[#272838] hover:bg-[#393a4b] text-[#e0eafb] px-4 py-3 rounded-md disabled:opacity-40 disabled:cursor-not-allowed"
+      className={`${className} rounded-full bg-[#272838] aspect-square p-1 disabled:opacity-40 disabled:cursor-not-allowed`}
       onClick={onClick}
       disabled={disabled}
     >
-      {(loading && (
+      {/* {(loading && (
         <svg
           aria-hidden="true"
           role="status"
@@ -31,7 +34,10 @@ const Button = ({
           />
         </svg>
       )) || <img className="inline-block w-5" src={icon} alt="" />}
-      {text || "Specifiy a text"}
+      {text || "Specifiy a text"} */}
+      <div className="w-full h-full grid place-content-center rounded-full p-2">
+        {children}
+      </div>
     </button>
   );
 };

@@ -40,8 +40,10 @@ const Searchbar = ({ className, onResultSelected }) => {
   const search = (query) => {
     if (!query || query == "") return;
 
+    console.time("search");
     setCurrentlyTyping(false);
     routes.search(query).then((res) => {
+      console.timeEnd("search");
       setResult(res.data);
     });
   };

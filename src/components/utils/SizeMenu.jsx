@@ -14,7 +14,7 @@ const SizeMenu = ({
       {[
         ["1:1", "Facebook"],
         ["3:4", "Instagram"],
-        ["4:3", "Twitter"],
+        ["3:2", "Twitter"],
       ].map(([ratio, title], index) => (
         <button
           className={cardClassName}

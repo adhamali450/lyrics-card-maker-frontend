@@ -3,7 +3,13 @@ import { Fragment } from "react";
 import iconBrokenImage from "@assets/broken-image.png";
 import SongPreviewSkeleton from "@skeletons/SongPreviewSkeleton";
 
-import { getLang, truncate, isImageLink, getPreviewGradient } from "@/utils";
+import {
+  getLang,
+  containsLang,
+  truncate,
+  isImageLink,
+  getPreviewGradient,
+} from "@/utils";
 
 const SongPreview = ({ className = "h-[120px]", song, colors }) => {
   const { title, artist, image } = song;
@@ -12,11 +18,11 @@ const SongPreview = ({ className = "h-[120px]", song, colors }) => {
     <section
       className={`${className} relative flex items-center w-full gap-1 shadow-md `}
       style={{
-        direction: getLang(title) == "ar" ? "rtl" : "ltr",
-        textAlign: getLang(title) == "ar" ? "right" : "left",
+        direction: containsLang(title, "ar") ? "rtl" : "ltr",
+        textAlign: containsLang(title, "ar") ? "right" : "left",
         background: getPreviewGradient(
           colors && colors["background_color"],
-          getLang(title) == "ar" ? "rtl" : "ltr"
+          containsLang(title, "ar") ? "rtl" : "ltr"
         ),
         color: colors && colors["text_color"],
       }}
