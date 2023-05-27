@@ -1,28 +1,23 @@
-import React from "react";
+import React, { Fragment } from "react";
 import styles from "@components/lyrics-card/LyricsCard.module.sass";
 
 // TODO: Border radius is not working
-const WrappingSpan = ({
-  className = "",
-  children,
-  borderRadius = 0,
-  alignment = "left",
-  style = {},
-}) => {
+const WrappingSpan = ({ className = "", children, style = {} }) => {
   return (
-    <span className="inline bg-transparent leading-none">
-      <span
-        className={`${className} ${styles["wrapping-span"]} leading-none`}
-        style={{
-          ...style,
-          boxDecorationBreak: "clone",
-          WebkitBoxDecorationBreak: "clone",
-          textAlign: alignment ? alignment : "left",
-        }}
-      >
-        {children}
+    <Fragment>
+      <span className="inline bg-transparent">
+        <span
+          className={`${className} ${styles["wrapping-span"]}`}
+          style={{
+            ...style,
+            boxDecorationBreak: "clone",
+            WebkitBoxDecorationBreak: "clone",
+          }}
+        >
+          {children}
+        </span>
       </span>
-    </span>
+    </Fragment>
   );
 };
 

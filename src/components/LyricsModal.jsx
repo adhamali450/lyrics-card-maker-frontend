@@ -3,7 +3,7 @@ import ModalSheet from "react-modal-sheet";
 import SongPreview from "@components/SongPreview";
 import LyricsViewer from "@components/LyricsViewer";
 import _ from "lodash";
-import { onWidth } from "@/utils";
+import { onWidth } from "@utils";
 
 const LyricsModal = ({
   song = {},

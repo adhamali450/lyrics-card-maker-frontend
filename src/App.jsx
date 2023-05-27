@@ -22,10 +22,10 @@ import Searchbar from "@components/searchbar/Searchbar";
 import SongPreview from "@components/SongPreview";
 import LyricsViewer from "@components/LyricsViewer";
 import LyricsCard from "@components/lyrics-card/LyricsCard";
-import SizeMenu from "@utils/SizeMenu";
-import PageLogo from "@utils/PageLogo";
-import OptionsPanel from "./components/OptionsPanel";
-import LyricsModal from "./components/LyricsModal";
+import SizeMenu from "@compUtils/SizeMenu";
+import PageLogo from "@compUtils/PageLogo";
+import OptionsPanel from "@components/OptionsPanel";
+import LyricsModal from "@components/LyricsModal";
 import ShareModal from "@components/ShareModal";
 
 const defaultLyricsData = {
@@ -118,9 +118,7 @@ function App() {
       });
   }, [song]);
 
-  const handleResultSelected = (newSong) => {
-    setSong(newSong);
-  };
+  const handleResultSelected = (newSong) => setSong(newSong);
 
   const handleLyricsSelectionChanged = (index) => {
     setLyricsData((prev) => {
@@ -152,15 +150,22 @@ function App() {
         transformOrigin: "top left",
       },
     }).then((blob) => {
-      downloadBlob(blob, "lyrics-card.png");
+      const img = new File([blob], `lyrics-card-${song.id}.png`);
+      // routes.upload(img).then((res) => {
+      //   console.log(res.data);
+      //   setDownloading(false);
+      // });
+      downloadBlob(blob, `lyrics-card-${song.id ? song.id : "empty"}.png`);
       setDownloading(false);
     });
+
+    // setShareModalOpen(false);
   };
 
   return (
     <div
       className={`${
-        downloading && "downloading "
+        downloading && "downloading"
       } relative container max-w-[1920px] max-h-[1080px] mx-auto flex h-[100vh]`}
     >
       <LyricsModal
@@ -169,7 +174,7 @@ function App() {
         lyricsData={lyricsData}
         onLyricsSelectionChanged={handleLyricsSelectionChanged}
       />
-      <aside className="hidden lg:grid grid-rows-[5rem_1fr] p-5 gap-7 h-full bg-[#272838]">
+      <aside className="hidden 2xl:grid grid-rows-[5rem_1fr] p-5 gap-7 h-full bg-[#272838]">
         <PageLogo className="h-[70%] self-center" />
         <SizeMenu
           className="flex items-center flex-col gap-4"
@@ -197,10 +202,11 @@ function App() {
           </a>
         </small>
       </aside>
+
       <main className="grow grid grid-rows-[5rem_1fr] grid-cols-[1fr] lg:grid-cols-[1fr_36ch] p-5 gap-5">
         <header className="relative lg:col-span-2 flex gap-4 sm:gap-8 items-center">
           <PageLogo
-            className="block lg:hidden h-[60%] sm:h-[70%] self-center"
+            className="block xl:hidden h-[60%] sm:h-[70%] self-center"
             geniusColor="#272838"
           />
           <Searchbar
@@ -211,10 +217,10 @@ function App() {
 
         <section className="row-start-2 relative">
           <CardStyleContext.Provider value={{ cardStyling, setCardStyling }}>
-            <OptionsPanel className="rounded-md mb-4 border border-gray-400 bg-gray-100" />
+            <OptionsPanel className="rounded-md mb-4 shadow-md" />
             <SizeMenu
-              className="lg:hidden flex items-center justify-center sm:justify-start gap-4 mb-4 px-2"
-              cardClassName="aspect-square rounded-xl w-[65px]"
+              className="2xl:hidden flex items-center justify-center sm:justify-start gap-4 mb-4 px-2"
+              cardClassName="aspect-square w-[65px] md:w-[80px]"
               showLabel={false}
               onSizeChanged={setCardAspectRatio}
             />
@@ -223,14 +229,15 @@ function App() {
               cardInfo={song}
               lyricsData={lyricsData}
               aspectRatio={cardAspectRatio}
-              onDownload={() => setShareModalOpen(true)}
+              onDownload={downloadHandler}
             />
           </CardStyleContext.Provider>
 
-          <ShareModal
+          {/* <ShareModal
             open={shareModalOpen}
             onClosing={() => setShareModalOpen(false)}
-          />
+            downloadHandler={downloadHandler}
+          /> */}
         </section>
 
         <aside className="row-start-2 col-start-2 hidden lg:grid grid-rows-[120px_1fr] border border-gray-400 rounded-md overflow-auto">

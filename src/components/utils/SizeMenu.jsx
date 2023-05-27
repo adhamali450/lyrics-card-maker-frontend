@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import CardSymbol from "@utils/CardSymbol";
+import CardSymbol from "@compUtils/CardSymbol";
 
 const SizeMenu = ({
   className = "",

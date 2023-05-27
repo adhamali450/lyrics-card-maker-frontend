@@ -1,26 +1,25 @@
 import React, { useState, useRef, useEffect, Fragment } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
-import Badge from "@utils/Badge";
+import Badge from "@compUtils/Badge";
 
 const BackgroundContainer = ({ src }) => {
-  const [tapped, setTapped] = useState(false);
-
   const [intractions, setIntractions] = useState({
     zoomed: false,
     moved: false,
   });
+  const [isMouseDown, setIsMouseDown] = useState(false);
+  const [isTransforming, setIsTransforming] = useState(false);
 
   const [imageCoverage, setImageCoverage] = useState(false);
 
   const transformWrapperRef = useRef(null);
 
+  if (isTransforming) document.body.classList.add("background-moving");
+  else document.body.classList.remove("background-moving");
+
   useEffect(() => {
     if (!transformWrapperRef.current) return;
-
-    transformWrapperRef.current.resetTransform();
-    transformWrapperRef.current.instance.wrapperComponent.style.width = "100%";
-    transformWrapperRef.current.instance.wrapperComponent.style.height = "100%";
 
     const observeResize = () => {
       const parentElement =
@@ -35,10 +34,14 @@ const BackgroundContainer = ({ src }) => {
       };
     };
 
+    transformWrapperRef.current.resetTransform();
+    transformWrapperRef.current.instance.wrapperComponent.style.width = "100%";
+    transformWrapperRef.current.instance.wrapperComponent.style.height = "100%";
+
     observeResize();
 
     updateImageCoverage();
-  }, [src]);
+  }, [src, transformWrapperRef.current]);
 
   // Calculate image coverage when zoom or pan occurs
   const updateImageCoverage = () => {
@@ -56,6 +59,8 @@ const BackgroundContainer = ({ src }) => {
       ) {
         setImageCoverage(true);
       } else {
+        console.log("outside");
+
         setImageCoverage(false);
       }
     }
@@ -71,18 +76,31 @@ const BackgroundContainer = ({ src }) => {
       });
     }
 
+    // TODO: Manage IsTrasforming for scaling
     updateImageCoverage();
   };
 
   return (
-    <div className="w-full h-full touch-manipulation">
-      <div className="hide-when-download absolute z-50 top-[10px] left-[10px] pointer-events-none w-full flex flex-col items-start gap-[2px] msm:gap-1">
-        <Badge varient="default" text="click and drag to move the image" />
-        <Badge varient="default" text="Zoom the image to scale it" />
+    <div
+      className="w-full h-full touch-manipulation"
+      onPointerDown={() => setIsMouseDown(true)}
+      onPointerMove={() => {
+        if (isMouseDown && !isTransforming) setIsTransforming(true);
+      }}
+      onPointerUp={() => {
+        setIsMouseDown(false);
+        setIsTransforming(false);
+      }}
+      onPointerOut={() => {
+        setIsMouseDown(false);
+        setIsTransforming(false);
+      }}
+    >
+      <div className="card-overlay absolute z-50 top-[10px] left-[10px] pointer-events-none w-full flex flex-col items-start gap-[2px] msm:gap-1">
+        <Badge>click and drag to move the image</Badge>
+        <Badge>Zoom the image to scale it</Badge>
 
-        {!imageCoverage && (
-          <Badge varient="red" text="Image is out of bounds" />
-        )}
+        {!imageCoverage && <Badge varient="red">Image is out of bounds</Badge>}
       </div>
 
       <TransformWrapper

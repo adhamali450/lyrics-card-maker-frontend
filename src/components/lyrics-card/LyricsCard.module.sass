@@ -1,23 +1,20 @@
 @import '../../assets/fonts/stylesheet.css'
-
-@function fluid($minViewport, $minSize, $maxViewport, $maxSize)
-    $slope: calc(($maxSize - $minSize) / ($maxViewport - $minViewport))
-    $intercept: $minSize - $slope * $minViewport
-    $minFontSize: calc($minSize / 16)
-    $maxFontSize: calc($maxSize / 16)
-    $minViewportWidth: calc($minViewport / 16)
-    $maxViewportWidth: calc($maxViewport / 16)
-    @return unquote("clamp(#{$minFontSize}rem, #{calc($intercept / 16)}rem + #{$slope * 100}vw, #{$maxFontSize}rem)")
+@import '../../_mixins'
 
 .card
     position: relative
     display: grid
 
     line-height: 1.25
-
-    font-family: 'Programme', sans-serif
-    :lang(ar)
-        font-family: 'Inter', sans-serif
+    *
+        &:lang(en)
+            font-family: 'Programme', sans-serif
+        &:lang(ar)
+            // TODO: Test
+            unicode-bidi: embed
+            direction: rtl
+            font-family: sans-serif
+            // line-height: 1.6
 
     @media screen and (min-width: 500px)
         &[data-aspect-ratio='1:1'],
@@ -116,8 +113,6 @@
         align-items: center
 
         text-transform: uppercase
-        .info
-            line-height: 1.3
         .logo
             justify-self: flex-end
             height: 30%
@@ -166,8 +161,7 @@
             .editable-label
                 font-size: fluid(320, 8.5, 500, 16)
                 .wrapping-span
-                    padding: 0.25rem
-                    padding: fluid(300, 2, 500, 2)
+                    padding: 2px
         footer
             .editable-label
                 font-size: 15px
@@ -178,7 +172,7 @@
             align-items: flex-start
             gap: 0.3125rem
             gap: clamp(0.3125rem, -0.910rem + 6.111vw, 1rem)
-            padding: 1rem 1rem 0
+            padding: 0 1.5rem 0
         .quote
             @apply w-5 msm:w-8
         .lyrics-container

@@ -1,0 +1,8 @@
+@function fluid($minViewport, $minSize, $maxViewport, $maxSize)
+    $slope: calc(($maxSize - $minSize) / ($maxViewport - $minViewport))
+    $intercept: $minSize - $slope * $minViewport
+    $minFontSize: calc($minSize / 16)
+    $maxFontSize: calc($maxSize / 16)
+    $minViewportWidth: calc($minViewport / 16)
+    $maxViewportWidth: calc($maxViewport / 16)
+    @return unquote("clamp(#{$minFontSize}rem, #{calc($intercept / 16)}rem + #{$slope * 100}vw, #{$maxFontSize}rem)")

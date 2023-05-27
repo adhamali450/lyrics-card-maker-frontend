@@ -9,7 +9,7 @@ import {
   truncate,
   isImageLink,
   getPreviewGradient,
-} from "@/utils";
+} from "@utils";
 
 const SongPreview = ({ className = "h-[120px]", song, colors }) => {
   const { title, artist, image } = song;

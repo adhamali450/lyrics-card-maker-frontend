@@ -1,7 +1,11 @@
-import React from "react";
-import LoadingAnimation from "@utils/LoadingAnimation";
+import React, { useState, useRef, useEffect, Fragment } from "react";
+
 import LyricsBar from "@controls/LyricsBar";
+import LoadingAnimation from "@compUtils/LoadingAnimation";
+
 import iconLyrics from "@assets/icon-lyrics.svg";
+
+import { getMaxCharacters } from "@utils";
 
 const truthy = (arr) => {
   return arr?.length > 0;
@@ -16,14 +20,27 @@ const LyricsViewer = ({
   lineMax = 36,
   style = {},
 }) => {
+  const [maxCharacters, setMaxCharacters] = useState(36);
   let { lang, lyrics, selectionCompleted, status } = lyricsData;
+  const lyricsContainerRef = useRef(null);
+
+  useEffect(() => {
+    if (!lyricsContainerRef.current) return;
+    setMaxCharacters(
+      getMaxCharacters(lyricsContainerRef.current, "fl-lyrics-viewer-bars")
+    );
+  }, [lyricsContainerRef]);
 
   const handleLineClick = (index) => {
     onSelectionChanged(index);
   };
 
   return (
-    <div className={className} style={style}>
+    <div
+      className={`${className} fl-lyrics-viewer-bars`}
+      style={style}
+      ref={lyricsContainerRef}
+    >
       {/* State: idle */}
       {!id && (
         <div className="w-full h-full flex flex-col items-center justify-center gap-3">
@@ -69,9 +86,8 @@ const LyricsViewer = ({
                 }}
               >
                 <LyricsBar
-                  className="fl-lyrics-viewer-bars"
                   line={line}
-                  lineMax={lineMax}
+                  lineMax={maxCharacters["1:1"] * 0.9}
                   style={{
                     backgroundColor:
                       lyrics[i][1] && colors

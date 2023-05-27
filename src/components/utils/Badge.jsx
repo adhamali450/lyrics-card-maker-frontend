@@ -1,6 +1,6 @@
 import React from "react";
 
-const Badge = ({ classname = "", varient = "default", text = "badge" }) => {
+const Badge = ({ classname = "", varient = "default", children }) => {
   const varients = {
     default: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
     dark: "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300",
@@ -21,7 +21,7 @@ const Badge = ({ classname = "", varient = "default", text = "badge" }) => {
     <span
       className={`${classname} ${varients[varient]} text-xs font-medium mr-2 px-2.5 py-0.5 rounded`}
     >
-      {text}
+      {children}
     </span>
   );
 };

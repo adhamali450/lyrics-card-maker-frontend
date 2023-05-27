@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { SketchPicker } from "react-color";
-import Popup from "@utils/Popup";
+import Popup from "@compUtils/Popup";
 
-import { rgbToHex } from "@/utils";
+import { rgbToHex } from "@utils";
 
 const ColorPicker = ({
   className = "",
@@ -24,7 +24,8 @@ const ColorPicker = ({
     containerRef.current.addEventListener("touchmove", handleTouchMove);
 
     return () => {
-      containerRef.current.removeEventListener("touchmove", handleTouchMove);
+      if (containerRef.current)
+        containerRef.current.removeEventListener("touchmove", handleTouchMove);
     };
   }, [containerRef]);
 

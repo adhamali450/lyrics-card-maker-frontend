@@ -1,5 +1,6 @@
 import React from "react";
 import iconUploadToCloud from "@assets/icon-upload-to-cloud.png";
+// import iconUploadToCloud from "@assets/upload-image.svg";
 import FileInput from "@controls/FileInput";
 
 const DragOverlay = ({
@@ -36,7 +37,7 @@ const DragOverlay = ({
       >
         {!target && (
           <div
-            className="hide-when-download flex flex-col items-center justify-start m-2 xs:m-10 p-[10px] xs:p-[40px] rounded-lg border-2 border-dashed"
+            className="card-overlay flex flex-col items-center justify-start m-2 xs:m-10 p-[10px] xs:p-[40px] rounded-lg border-2 border-dashed"
             style={{
               transition: "all 0.15s ease-out",
               borderColor: isFileDragged ? "#0c89f0" : "#aaaaaa",
@@ -47,12 +48,27 @@ const DragOverlay = ({
             }}
           >
             <div className="flex flex-row xs:flex-col items-center justify-center xs:justify-start gap-3 xs:gap-0">
-              <img
-                className="w-[45px] xs:w-[70px] h-[45px] xs:h-[70px]"
+              {/* <img
+                className="w-[45px] xs:w-[70px] aspect-auto"
                 src={iconUploadToCloud}
                 alt="upload"
-              />
-              <h2 className="mt-1 text-base xs:text-lg font-medium text">
+              /> */}
+              <svg
+                aria-hidden="true"
+                class="w-10 h-10 mb-3 text-gray-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                ></path>
+              </svg>
+              <h2 className="text-base xs:text-lg">
                 <span className="hidden xs:inline-block">
                   Drag and drop a photo
                 </span>

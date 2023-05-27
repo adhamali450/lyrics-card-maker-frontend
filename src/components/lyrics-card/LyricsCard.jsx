@@ -14,13 +14,13 @@ import {
   getImagePalette,
   getUpscaledImage,
   getMaxCharacters,
-} from "@/utils";
+} from "@utils";
 import _ from "lodash";
 
 import routes from "@/js/api/routes";
 import usePasteImage from "@hooks/usePasteImage";
 
-import CardLogo from "@utils/CardLogo";
+import CardLogo from "@compUtils/CardLogo";
 import DragOverlay from "@controls/DragOverlay";
 import FileInput from "@controls/FileInput";
 import EditableLabel from "@controls/EditableLabel";
@@ -48,11 +48,13 @@ const LyricsCard = forwardRef(
     const [logoVarient, setLogoVarient] = useState("large");
     const [backgroundImage, setBackgroundImage] = useState(null);
     const [lineMaxes, setLineMaxes] = useState({});
+    const [footerText, setFooterText] = useState("");
 
     const { cardStyling, setCardStyling } = useContext(CardStyleContext);
 
     let { lang, lyrics } = lyricsData;
 
+    // TODO: Maybe won't be needed
     // Line max
     const lyricsContainerRef = useRef(null);
     useEffect(() => {
@@ -62,8 +64,14 @@ const LyricsCard = forwardRef(
       setLineMaxes(getMaxCharacters(main));
     }, [lyricsContainerRef]);
 
-    // Once a song is selected, grab the cover as background image
+    // Once a song is selected:
+    // 1. Format the artist name and song title
+    // 2. Grab the cover as background image
     useEffect(() => {
+      setFooterText(
+        `${formatCredits(artist, "en")}, "${formatCredits(title, "en")}"`
+      );
+
       if (cardInfo.image) {
         if (backgroundImage && backgroundImage.type == "external") return;
 
@@ -210,7 +218,10 @@ const LyricsCard = forwardRef(
           onMouseLeave={mouseLeaveHandler}
         >
           {backgroundImage ? (
-            <BackgroundContainer src={backgroundImage} />
+            <BackgroundContainer
+              src={backgroundImage}
+              onTransform={() => console.log("transform")}
+            />
           ) : (
             <div
               className={styles["plain-background"]}
@@ -235,7 +246,7 @@ const LyricsCard = forwardRef(
 
         {/* Secondary panel: Upload/Remove photo buttons */}
         {backgroundImage && (
-          <div className="hide-when-download absolute z-[9] top-4 right-4 flex gap-3">
+          <div className="card-overlay absolute z-[9] top-4 right-4 flex gap-3">
             <FileInput
               className="h-[40px] sm:h-[50px] aspect-square grid place-items-center bg-gray-800 p-2 rounded-full opacity-100"
               text="Upload photo"
@@ -297,13 +308,11 @@ const LyricsCard = forwardRef(
             <footer className={`${styles["aux-footer"]}`}>
               {artist && title && (
                 <EditableLabel
-                  text={`${formatCredits(artist, "en")}, "${formatCredits(
-                    title,
-                    "en"
-                  )}"`}
+                  text={footerText}
                   childrenStyle={{
                     color: "white",
                   }}
+                  onChange={setFooterText}
                 />
               )}
             </footer>
@@ -321,10 +330,8 @@ const LyricsCard = forwardRef(
             {artist && title && (
               <EditableLabel
                 className={`${styles["editable-label"]}`}
-                text={`${formatCredits(artist, "en")}, "${formatCredits(
-                  title,
-                  "en"
-                )}"`}
+                text={footerText}
+                onChange={setFooterText}
               />
             )}
           </div>
