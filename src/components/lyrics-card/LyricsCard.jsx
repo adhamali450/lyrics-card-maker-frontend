@@ -47,22 +47,11 @@ const LyricsCard = forwardRef(
     const [showDragOverlay, setShowDragOverlay] = useState(true);
     const [logoVarient, setLogoVarient] = useState("large");
     const [backgroundImage, setBackgroundImage] = useState(null);
-    const [lineMaxes, setLineMaxes] = useState({});
     const [footerText, setFooterText] = useState("");
 
     const { cardStyling, setCardStyling } = useContext(CardStyleContext);
 
     let { lang, lyrics } = lyricsData;
-
-    // TODO: Maybe won't be needed
-    // Line max
-    const lyricsContainerRef = useRef(null);
-    useEffect(() => {
-      if (!lyricsContainerRef.current) return;
-
-      const main = lyricsContainerRef.current;
-      setLineMaxes(getMaxCharacters(main));
-    }, [lyricsContainerRef]);
 
     // Once a song is selected:
     // 1. Format the artist name and song title
@@ -201,7 +190,6 @@ const LyricsCard = forwardRef(
 
     return (
       <div
-        // w-full h-auto msm:w-auto msm:h-[500px]
         className={`${styles["card"]}`}
         ref={ref}
         data-aspect-ratio={aspectRatio}
@@ -218,10 +206,7 @@ const LyricsCard = forwardRef(
           onMouseLeave={mouseLeaveHandler}
         >
           {backgroundImage ? (
-            <BackgroundContainer
-              src={backgroundImage}
-              onTransform={() => console.log("transform")}
-            />
+            <BackgroundContainer src={backgroundImage} />
           ) : (
             <div
               className={styles["plain-background"]}
@@ -277,15 +262,12 @@ const LyricsCard = forwardRef(
 
           {/* Lyrics Container*/}
           <div className={`w-full`}>
-            <div
-              className={`${styles["lyrics-container"]} w-full`}
-              ref={lyricsContainerRef}
-            >
+            <div className={`${styles["lyrics-container"]} w-full`}>
               {(lyrics.some((l) => l[1]) ? lyrics : dummyLyrics).map((l, i) => {
                 if (!l[1]) return;
                 return (
-                  //TODO: clean up this mess and the dead code
                   <EditableLabel
+                    key={i}
                     className={`${styles["editable-label"]} pointer-events-auto`}
                     childrenStyle={{
                       backgroundColor: cardStyling["highlightColor"],
@@ -294,11 +276,7 @@ const LyricsCard = forwardRef(
                       fontWeight: cardStyling["bold"] ? "500" : "400",
                       fontStyle: cardStyling["italic"] ? "italic" : "normal",
                     }}
-                    key={i}
                     text={l[0]}
-                    lang={lang}
-                    onTextChanged={(e) => {}}
-                    lineMax={lineMaxes[aspectRatio]}
                   />
                 );
               })}

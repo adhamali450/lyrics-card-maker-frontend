@@ -152,7 +152,6 @@ function App() {
     }).then((blob) => {
       const img = new File([blob], `lyrics-card-${song.id}.png`);
       // routes.upload(img).then((res) => {
-      //   console.log(res.data);
       //   setDownloading(false);
       // });
       downloadBlob(blob, `lyrics-card-${song.id ? song.id : "empty"}.png`);
@@ -206,7 +205,7 @@ function App() {
       <main className="grow grid grid-rows-[5rem_1fr] grid-cols-[1fr] lg:grid-cols-[1fr_36ch] p-5 gap-5">
         <header className="relative lg:col-span-2 flex gap-4 sm:gap-8 items-center">
           <PageLogo
-            className="block xl:hidden h-[60%] sm:h-[70%] self-center"
+            className="block 2xl:hidden h-[60%] sm:h-[70%] self-center"
             geniusColor="#272838"
           />
           <Searchbar

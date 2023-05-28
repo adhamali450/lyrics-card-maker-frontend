@@ -13,12 +13,8 @@ export const upload = async (image) => {
   const formData = new FormData();
   formData.append("image", image);
 
-  try {
-    const res = axios.post(API_URL + "/upload", formData);
-    return res;
-  } catch (err) {
-    console.log(err);
-  }
+  const res = await axios.post(API_URL + "/upload", formData);
+  return res;
 };
 
 export const getLyrics = async (id) => {

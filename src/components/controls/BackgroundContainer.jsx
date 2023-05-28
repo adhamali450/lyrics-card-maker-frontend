@@ -56,13 +56,9 @@ const BackgroundContainer = ({ src }) => {
       if (
         imageRect.width >= wrapperRect.width &&
         imageRect.height >= wrapperRect.height
-      ) {
+      )
         setImageCoverage(true);
-      } else {
-        console.log("outside");
-
-        setImageCoverage(false);
-      }
+      else setImageCoverage(false);
     }
   };
 
