@@ -1,22 +1,27 @@
 import React, { useState, useRef, useEffect } from "react";
-import LyricsBar from "@components/LyricsBar";
+import LyricsBar from "@controls/LyricsBar";
+import WrappingSpan from "@controls/WrappingSpan";
 
-import { getLang } from "@/utils";
+import { getLang } from "@utils";
 
+//TODO: Input the same size as the text
 const EditableLabel = ({
   text,
-  onTextChanged,
+  onChange,
   className = "",
   style = {},
-  lineMax,
+  childrenStyle = {},
 }) => {
   const inputRef = useRef([]);
+  const containerRef = useRef(null);
 
   const [tabCount, setTabCount] = useState(0);
 
   const [isEditing, setIsEditing] = useState(false);
 
   const [inputText, setInputText] = useState(text);
+
+  const [spanSize, setSpanSize] = useState({});
 
   const [lang, setLang] = useState(getLang(text));
 
@@ -33,6 +38,11 @@ const EditableLabel = ({
   const handleDoubleClick = (e) => {
     e.preventDefault();
 
+    // set input size to be the same as the label
+    setSpanSize({
+      width: getComputedStyle(containerRef.current).width,
+      height: getComputedStyle(containerRef.current).height,
+    });
     setIsEditing(true);
   };
 
@@ -58,51 +68,56 @@ const EditableLabel = ({
   };
 
   const handleInputBlur = () => {
-    if (onTextChanged) onTextChanged(inputText);
+    if (onChange) onChange(inputText);
     setIsEditing(false);
   };
 
   const handleInputKeydown = (event) => {
     if (event.key === "Enter") {
-      if (onTextChanged) onTextChanged(inputText);
+      if (onChange) onChange(inputText);
       setIsEditing(false);
     }
   };
 
   useEffect(() => {
     if (isEditing) {
+      inputRef.current.setSelectionRange(inputText.length, inputText.length);
       inputRef.current.focus();
     }
   }, [isEditing]);
 
+  const alignment = childrenStyle.textAlign;
   return (
     <div
+      className={`${className} inline-block`}
       onDoubleClick={handleDoubleClick}
       onTouchEnd={handleTouchEnd}
-      className={`${className} inline-block`}
+      style={{
+        ...style,
+        textAlign: alignment ? alignment : "left",
+      }}
+      ref={containerRef}
     >
       {isEditing ? (
-        <input
+        <textarea
           ref={inputRef}
-          className="text-black"
           type="text"
           value={inputText}
-          style={style}
+          style={{
+            ...childrenStyle,
+            width: spanSize.width,
+            height: spanSize.height,
+            resize: "horizontal",
+            color: "black",
+          }}
           onChange={handleInputChange}
           onBlur={handleInputBlur}
           lang={lang}
           onKeyDown={handleInputKeydown}
         />
       ) : (
-        <span lang={lang}>
-          <LyricsBar
-            className="first-of-type:rounded-none last-of-type:rounded-none px-1"
-            line={[inputText]}
-            lineMax={lineMax}
-            style={style}
-            rounded={false}
-            padding={false}
-          />
+        <span lang={lang} className="leading-[0]">
+          <WrappingSpan style={childrenStyle}>{inputText}</WrappingSpan>
         </span>
       )}
     </div>

@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import Popup from "@utils/Popup";
+import Popup from "@compUtils/Popup";
 
 const PopupButton = ({ className = "", children, icon, title }) => {
   const btnRef = useRef(null);

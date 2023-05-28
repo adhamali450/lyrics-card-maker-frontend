@@ -3,10 +3,10 @@ import routes from "@/js/api/routes";
 import _ from "lodash";
 
 import SearchResult from "./SearchResult";
-import LoadingAnimation from "@utils/LoadingAnimation";
-import Popup from "@utils/Popup";
+import LoadingAnimation from "@compUtils/LoadingAnimation";
+import Popup from "@compUtils/Popup";
 
-import { getUpscaledImage } from "@/utils";
+import { getUpscaledImage } from "@utils";
 
 const Searchbar = ({ className, onResultSelected }) => {
   const [query, setQuery] = useState("");
@@ -40,8 +40,10 @@ const Searchbar = ({ className, onResultSelected }) => {
   const search = (query) => {
     if (!query || query == "") return;
 
+    console.time("search");
     setCurrentlyTyping(false);
     routes.search(query).then((res) => {
+      console.timeEnd("search");
       setResult(res.data);
     });
   };
@@ -82,7 +84,7 @@ const Searchbar = ({ className, onResultSelected }) => {
         </div>
         <input
           type="search"
-          className="block w-full p-3 pl-10 sm:p-4 sm:pl-10 text-gray-900 border-2 border--200 rounded-lg bg-gray-50 focus:ring-[#c0c0c0] focus:border-[#dadada] outline-none shadow-md"
+          className="block w-full p-3 pl-10 sm:p-4 sm:pl-10 text-gray-900 border-2 border-gray-200 rounded-lg bg-white focus:ring-[#c0c0c0] focus:border-[#dadada] outline-none shadow-sm"
           placeholder="Search for any song"
           aria-label="Search"
           value={query}

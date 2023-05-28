@@ -2,8 +2,8 @@
 @import "tailwindcss/components"
 @import "tailwindcss/utilities"
 
-// TODO: remove unnecessary font sizes
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap')
+@import './_mixins'
 
 :root
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif
@@ -54,24 +54,19 @@ button
     outline: none !important
 
 .fl-lyrics-viewer-bars
-  font-size: 0.8125rem
-  font-size: clamp(0.8125rem, 0.7125rem + 0.4vw, 1rem)
-
-.fl-b
-  font-size: 0.875rem
-  font-size: clamp
-.fl-card-lyrics
-  font-size: 0.875rem
-  font-size: clamp(0.875rem, 0.349rem + 2.105vw, 1.125rem)
-
-.fl-card-footer
-  font-size: 0.75rem
-  font-size: clamp(0.75rem, 0.224rem + 2.105vw, 1rem)
+  font-size: fluid(320, 13, 500, 16)
 
 @layer base
   img
     @apply inline-block
 
+.card-overlay
+  transition: opacity 0.15s ease-in-out
+
 .downloading
-  .hide-when-download
+  .card-overlay
     display: none
+
+.background-moving
+  .card-overlay
+    opacity: 0.25

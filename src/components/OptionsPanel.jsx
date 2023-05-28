@@ -1,7 +1,9 @@
-import React, { useContext } from "react";
+import React, { useContext, lazy } from "react";
 import CardStyleContext from "@contexts/CardStyleContext";
 import PushdownGroup from "@controls/PushdownGroup";
-import ColorPicker from "@components/controls/ColorPicker";
+
+// import ColorPicker from "@components/controls/ColorPicker";
+const ColorPicker = lazy(() => import("@components/controls/ColorPicker"));
 
 import {
   iconsAlignent,
@@ -20,7 +22,7 @@ const OptionsPanel = ({ className, onOptionChanged }) => {
 
   /**
    * Marks an option as active or inactive from an array of options.
-   */
+   **/
   const updateStyleFromArray = (src, active) => {
     const newCardStyle = { ...cardStyling };
     src.forEach((el) =>
@@ -39,9 +41,9 @@ const OptionsPanel = ({ className, onOptionChanged }) => {
 
   return (
     <div
-      className={`${className} flex items-center justify-between xs:justify-start px-3 xs:px-6 py-2 gap-x-4 gap-y-1 flex-wrap`}
+      className={`${className} flex items-center justify-between xs:justify-start px-3 xs:px-6 py-2 gap-x-4 gap-y-1`}
     >
-      <p className="hidden sm:inline uppercase text-[#272838] font-bold tracking-tight">
+      <p className="hidden sm:inline uppercase text-[#272838] font-medium">
         Style
       </p>
 
@@ -55,23 +57,15 @@ const OptionsPanel = ({ className, onOptionChanged }) => {
           updateStyleFromArray(formattingValues, value)
         }
       />
-
       <Hr />
-
       <PushdownGroup
         className="h-7 xs:h-8 xs:row-start-2"
-        values={["left", "center", "right"]}
-        children={[
-          iconsAlignent.left,
-          iconsAlignent.center,
-          iconsAlignent.right,
-        ]}
+        values={["left", "right"]}
+        children={[iconsAlignent.left, iconsAlignent.right]}
         initialIndex={cardStyling.alignment == "left" ? 0 : 2}
         selectedItemChanged={(value) => updateStyle("alignment", value)}
       />
-
       <Hr />
-
       <ColorPicker
         className="h-7 xs:h-8 aspect-square"
         initialColor="#ffffff"
@@ -79,9 +73,7 @@ const OptionsPanel = ({ className, onOptionChanged }) => {
         title="Text highlight color"
         onChangeCompleted={(c) => updateStyle("highlightColor", c)}
       />
-
       <Hr />
-
       <ColorPicker
         className="h-7 xs:h-8 aspect-square xs:row-start-2"
         initialColor={"#f7f16c"}

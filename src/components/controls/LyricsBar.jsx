@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
-import { barToLines } from "@/utils";
+import { barToLines } from "@utils";
 
+// TODO: Legacy component. Should be replaced with WrappingSpan
 const LyricsBar = ({
   className = "",
   line,

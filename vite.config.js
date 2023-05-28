@@ -8,6 +8,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
+      "@utils": fileURLToPath(new URL("./src/utils", import.meta.url)),
       "@assets": fileURLToPath(new URL("./src/assets", import.meta.url)),
       "@components": fileURLToPath(
         new URL("./src/components", import.meta.url)
@@ -20,7 +21,7 @@ export default defineConfig({
       "@skeletons": fileURLToPath(
         new URL("./src/components/utils/skeletons", import.meta.url)
       ),
-      "@utils": fileURLToPath(
+      "@compUtils": fileURLToPath(
         new URL("./src/components/utils", import.meta.url)
       ),
     },

@@ -1,13 +1,57 @@
 @import '../../assets/fonts/stylesheet.css'
+@import '../../_mixins'
 
 .card
     position: relative
     display: grid
-    grid-template-rows: 1fr 15%
 
-    font-family: 'Programme', sans-serif
-    :lang(ar)
-        font-family: 'Inter', sans-serif
+    line-height: 1.25
+    *
+        &:lang(en)
+            font-family: 'Programme', sans-serif
+        &:lang(ar)
+            unicode-bidi: embed
+            direction: rtl
+            font-family: sans-serif
+
+    @media screen and (min-width: 500px)
+        &[data-aspect-ratio='1:1'],
+        &[data-aspect-ratio='3:4'],
+        &[data-aspect-ratio='3:2']
+            width: auto
+            height: 500px
+            &:before
+                content: ''
+                display: block
+        // TODO: Figure out how to not hardcode this
+        &[data-aspect-ratio='1:1']::before
+            padding-right: calc(500px * 1)
+            padding-bottom: 0
+        &[data-aspect-ratio='3:4']::before
+            padding-right: calc(500px * 3/4)
+            padding-bottom: 0
+        &[data-aspect-ratio='3:2']::before
+            padding-right: calc(500px * 3/2)
+            padding-bottom: 0
+    @media screen and (max-width: 500px)
+        &[data-aspect-ratio='1:1']
+            width: 100%
+            height: auto
+            &::before
+                padding-right: 0
+                padding-bottom: calc(100% * 1)
+        &[data-aspect-ratio='3:4']
+            width: calc( 100% * 3/4 )
+            height: auto
+            &::before
+                padding-right: 0
+                padding-bottom: calc(100% * 4/3)
+        &[data-aspect-ratio='3:2']
+            width: calc( 100% )
+            height: auto
+            &::before
+                padding-right: 0
+                padding-bottom: calc(100% * 2/3)
 
     .background, .shade
         position: absolute
@@ -35,66 +79,134 @@
 
     .shade
         grid-row: 1/2
-
-        background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%)
-
+        background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%)
         z-index: 3
-
         pointer-events: none
-
-    .pushdown
-        position: relative
-        flex-grow: 1
-        z-index: -5
-
-    .lyrics
-        grid-row: 1/2
-
-        align-self: flex-end
-
-        display: flex
-        flex-direction: column
-        align-items: flex-start
-
-        gap: 5px
-        padding: 1rem
-
-        .bar
-            background-color: white
-            color: black
-            width: fit-content
-            padding: 2.5px 5px
-
-            font-size: 1.5rem
 
     main
         z-index: 4
         position: relative
 
+        grid-row: 1/2
+        align-self: flex-end
+        display: flex
+        pointer-events: none
+        gap: 5px
+
+        .lyrics-container
+            display: flex
+            flex-direction: column
+            .editable-label
+                .wrapping-span
+                    padding: 0.25rem
     footer
         grid-row: 2/3
 
         width: 100%
 
-        padding: 0 2rem
+        padding: 0 1.5rem
 
         display: flex
         justify-content: space-between
         align-items: center
 
         text-transform: uppercase
-        .info
-            display: flex
-            flex-wrap: wrap
-            .artist
-                &::after
-                    content: ","
-                    margin: 0 5px 0 0
-            .song
-                &::before,
-                &::after
-                    content: "\""
-
         .logo
             justify-self: flex-end
             height: 30%
+
+    &[data-aspect-ratio='1:1'],
+    &[data-aspect-ratio='3:4']
+        grid-template-rows: 1fr 15%
+        main
+            flex-direction: column
+            padding: 1rem 1rem 1.2rem
+            .quote
+                @apply w-7 msm:w-10
+            .aux-footer
+                display: none
+        footer
+            display: flex
+            border-top-width: 2px
+            gap: 1.5rem
+
+        &[data-alignment='left']
+            main
+                align-items: flex-start
+                .lyrics-container
+                    align-items: flex-start
+                .quote
+                    transform: scaleX(1)
+        &[data-alignment='right']
+            main
+                align-items: flex-end
+                .lyrics-container
+                    align-items: flex-end
+                .quote
+                    transform: scaleX(-1)
+    &[data-aspect-ratio='1:1']
+        .lyrics-container
+            gap: fluid(320, 6, 500, 16)
+            .editable-label
+                font-size: fluid(320, 9.5, 500, 18)
+        footer
+            .editable-label
+                font-size: 15px
+                font-size: fluid(230, 7, 500, 15)
+    &[data-aspect-ratio='3:4']
+        .lyrics-container
+            gap: fluid(320, 2, 500, 10)
+            .editable-label
+                font-size: fluid(320, 8.5, 500, 16)
+                .wrapping-span
+                    padding: 2px
+        footer
+            .editable-label
+                font-size: 15px
+                font-size: fluid(230, 6, 500, 13)
+    &[data-aspect-ratio='3:2']
+        grid-template-rows: 1fr 0
+        main
+            align-items: flex-start
+            gap: 0.3125rem
+            gap: clamp(0.3125rem, -0.910rem + 6.111vw, 1rem)
+            padding: 0 1.5rem 0
+        .quote
+            @apply w-5 msm:w-8
+        .lyrics-container
+            gap: 8px
+            gap: fluid(320, 0, 500, 14.4)
+            .editable-label
+                font-size: fluid(320, 8, 500, 22)
+                .wrapping-span
+                    padding: 0.25rem
+                    padding: fluid(300, 0, 500, 4)
+
+        .aux-footer
+            display: block
+            pointer-events: auto
+            padding: 1rem 0 2rem
+            padding: fluid(320, 8, 500, 32) 0 fluid(320, 12, 500, 48)
+
+            font-size: 18px
+            font-size: fluid(320, 5, 500, 18)
+        footer
+            display: none
+        &[data-alignment='left']
+            main
+                flex-direction: row
+                justify-content: flex-start
+                .lyrics-container
+                    align-items: flex-start
+                .aux-footer
+                    text-align: left
+        &[data-alignment='right']
+            main
+                flex-direction: row-reverse
+                justify-content: flex-end
+                .quote
+                    transform: scaleX(-1)
+                .lyrics-container
+                    align-items: flex-end
+                .aux-footer
+                    text-align: right
