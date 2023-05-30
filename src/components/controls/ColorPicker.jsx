@@ -28,6 +28,7 @@ const ColorPicker = ({
   }, [containerRef]);
 
   const colorChangeHandler = (c) => {
+    setColor(c);
     if (onChange) onChange(c);
   };
 

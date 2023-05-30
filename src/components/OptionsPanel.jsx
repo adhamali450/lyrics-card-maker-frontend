@@ -2,7 +2,6 @@ import React, { useContext, lazy } from "react";
 import CardStyleContext from "@contexts/CardStyleContext";
 import PushdownGroup from "@controls/PushdownGroup";
 
-// import ColorPicker from "@components/controls/ColorPicker";
 const ColorPicker = lazy(() => import("@components/controls/ColorPicker"));
 
 import {
