@@ -168,16 +168,14 @@
         grid-template-rows: 1fr 0
         main
             align-items: flex-start
-            gap: 0.3125rem
-            gap: clamp(0.3125rem, -0.910rem + 6.111vw, 1rem)
-            padding: 0 1.5rem 0
+            gap: fluid(320, 0, 500, 16)
+            padding: 0 fluid(320, 5, 500, 24) 0
         .quote
             @apply w-5 msm:w-8
         .lyrics-container
-            gap: 8px
             gap: fluid(320, 0, 500, 14.4)
             .editable-label
-                font-size: fluid(320, 8, 500, 22)
+                font-size: fluid(320, 6, 500, 22)
                 .wrapping-span
                     padding: 0.25rem
                     padding: fluid(300, 0, 500, 4)
@@ -185,8 +183,7 @@
         .aux-footer
             display: block
             pointer-events: auto
-            padding: 1rem 0 2rem
-            padding: fluid(320, 8, 500, 32) 0 fluid(320, 12, 500, 48)
+            padding: fluid(320, 4, 500, 32) 0 fluid(320, 6, 500, 48)
 
             font-size: 18px
             font-size: fluid(320, 5, 500, 18)

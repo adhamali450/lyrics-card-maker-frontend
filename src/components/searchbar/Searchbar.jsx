@@ -1,12 +1,11 @@
 import React, { Fragment, useEffect, useState, useRef } from "react";
 import routes from "@/js/api/routes";
-import _ from "lodash";
 
 import SearchResult from "./SearchResult";
 import LoadingAnimation from "@compUtils/LoadingAnimation";
 import Popup from "@compUtils/Popup";
 
-import { getUpscaledImage } from "@utils";
+import { objectEmpty } from "@utils";
 
 const Searchbar = ({ className, onResultSelected }) => {
   const [query, setQuery] = useState("");
@@ -94,7 +93,7 @@ const Searchbar = ({ className, onResultSelected }) => {
       </div>
 
       {/* Results container */}
-      {query && _.isEqual(selectedSong, {}) && (
+      {query && objectEmpty(selectedSong) && (
         <Popup
           className="-translate-x-1/2 left-1/2 sm:translate-x-0 sm:left-0 mt-3 sm:ml-3 min-w-[90%] sm:min-w-[350px]"
           triggerRef={inputRef}
@@ -108,14 +107,12 @@ const Searchbar = ({ className, onResultSelected }) => {
             }}
           >
             {/* Loading animation */}
-            {(currentlyTyping || _.isEqual(result, undefined)) && (
-              <LoadingAnimation />
-            )}
+            {(currentlyTyping || !result) && <LoadingAnimation />}
 
             {/* Search Results */}
             {!currentlyTyping && (
               <Fragment>
-                {_.isEqual(result, []) ? (
+                {result && !result.length ? (
                   <div className="grid place-content-center py-4">
                     No results
                   </div>

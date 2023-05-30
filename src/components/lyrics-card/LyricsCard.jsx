@@ -3,7 +3,8 @@ import React, {
   useEffect,
   useContext,
   forwardRef,
-  useRef,
+  lazy,
+  Suspense,
 } from "react";
 
 import CardStyleContext from "@contexts/CardStyleContext";
@@ -13,9 +14,7 @@ import {
   formatCredits,
   getImagePalette,
   getUpscaledImage,
-  getMaxCharacters,
 } from "@utils";
-import _ from "lodash";
 
 import routes from "@/js/api/routes";
 import usePasteImage from "@hooks/usePasteImage";
@@ -24,9 +23,11 @@ import CardLogo from "@compUtils/CardLogo";
 import DragOverlay from "@controls/DragOverlay";
 import FileInput from "@controls/FileInput";
 import EditableLabel from "@controls/EditableLabel";
-import BackgroundContainer from "@controls/BackgroundContainer";
+
+const BackgroundContainer = lazy(() => import("@controls/BackgroundContainer"));
 
 import { toast } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
 
 import styles from "@components/lyrics-card/LyricsCard.module.sass";
@@ -206,7 +207,9 @@ const LyricsCard = forwardRef(
           onMouseLeave={mouseLeaveHandler}
         >
           {backgroundImage ? (
-            <BackgroundContainer src={backgroundImage} />
+            <Suspense>
+              <BackgroundContainer src={backgroundImage} />
+            </Suspense>
           ) : (
             <div
               className={styles["plain-background"]}

@@ -62,3 +62,7 @@ export const onWidth = ({ ref, actual, operator = ">=", dict } = {}) => {
     }
   });
 };
+
+export const objectEmpty = (obj) => {
+  return Object.keys(obj).length === 0 && obj.constructor === Object;
+};
