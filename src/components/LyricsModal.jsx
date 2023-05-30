@@ -2,8 +2,7 @@ import React, { Fragment, useState, useEffect } from "react";
 import ModalSheet from "react-modal-sheet";
 import SongPreview from "@components/SongPreview";
 import LyricsViewer from "@components/LyricsViewer";
-import _ from "lodash";
-import { onWidth } from "@utils";
+import { onWidth, objectEmpty } from "@utils";
 
 const LyricsModal = ({
   song = {},
@@ -35,7 +34,7 @@ const LyricsModal = ({
       operator: "<=",
       dict: {
         1150: () => {
-          if (!_.isEqual(song, {})) {
+          if (!objectEmpty(song)) {
             setIsOpen(true);
           }
         },
@@ -53,7 +52,7 @@ const LyricsModal = ({
 
   return (
     <Fragment>
-      {!_.isEqual(song, {}) && (
+      {!objectEmpty(song) && (
         <button
           className="block lg:hidden fixed w-full xs:w-[80%] h-[70px] -translate-x-1/2 left-1/2 bottom-0 z-50 overflow-hidden xs:rounded-t-md bg-white xs:border xs:border-b-0 xs:border-gray-400 "
           onClick={handleOpen}

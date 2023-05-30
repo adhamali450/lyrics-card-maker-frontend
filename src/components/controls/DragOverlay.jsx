@@ -1,6 +1,4 @@
 import React from "react";
-import iconUploadToCloud from "@assets/icon-upload-to-cloud.png";
-// import iconUploadToCloud from "@assets/upload-image.svg";
 import FileInput from "@controls/FileInput";
 
 const DragOverlay = ({
@@ -48,11 +46,6 @@ const DragOverlay = ({
             }}
           >
             <div className="flex flex-row xs:flex-col items-center justify-center xs:justify-start gap-3 xs:gap-0">
-              {/* <img
-                className="w-[45px] xs:w-[70px] aspect-auto"
-                src={iconUploadToCloud}
-                alt="upload"
-              /> */}
               <svg
                 aria-hidden="true"
                 className="w-10 h-10 mb-3 text-gray-500"

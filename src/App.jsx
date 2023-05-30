@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import CardStyleContext from "@contexts/CardStyleContext";
 
 import routes from "@/js/api/routes";
-import _ from "lodash";
+
+import { objectEmpty } from "@utils";
 import DomToImage from "dom-to-image";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -19,13 +20,13 @@ import {
 } from "./utils";
 
 import Searchbar from "@components/searchbar/Searchbar";
-import SongPreview from "@components/SongPreview";
+const SongPreview = lazy(() => import("@components/SongPreview"));
 import LyricsViewer from "@components/LyricsViewer";
 import LyricsCard from "@components/lyrics-card/LyricsCard";
 import SizeMenu from "@compUtils/SizeMenu";
 import PageLogo from "@compUtils/PageLogo";
 import OptionsPanel from "@components/OptionsPanel";
-import LyricsModal from "@components/LyricsModal";
+const LyricsModal = lazy(() => import("@components/LyricsModal"));
 import ShareModal from "@components/ShareModal";
 
 const defaultLyricsData = {
@@ -73,7 +74,7 @@ function App() {
 
   // Whenever a song is selected, fetch lyrics and colors
   useEffect(() => {
-    if (_.isEqual(song, {})) return;
+    if (objectEmpty(song)) return;
 
     setLyricsData(defaultLyricsData);
     setColors(null);
@@ -167,12 +168,14 @@ function App() {
         downloading && "downloading"
       } relative container max-w-[1920px] max-h-[1080px] mx-auto flex h-[100vh]`}
     >
-      <LyricsModal
-        song={song}
-        colors={colors}
-        lyricsData={lyricsData}
-        onLyricsSelectionChanged={handleLyricsSelectionChanged}
-      />
+      <Suspense>
+        <LyricsModal
+          song={song}
+          colors={colors}
+          lyricsData={lyricsData}
+          onLyricsSelectionChanged={handleLyricsSelectionChanged}
+        />
+      </Suspense>
       <aside className="hidden 2xl:grid grid-rows-[5rem_1fr] p-5 gap-7 h-full bg-[#272838]">
         <PageLogo className="h-[70%] self-center" />
         <SizeMenu
@@ -240,14 +243,20 @@ function App() {
         </section>
 
         <aside className="row-start-2 col-start-2 hidden lg:grid grid-rows-[120px_1fr] border border-gray-400 rounded-md overflow-auto">
-          {!_.isEqual(song, {}) && (
-            <SongPreview className="row-start-1" song={song} colors={colors} />
+          {!objectEmpty(song) && (
+            <Suspense>
+              <SongPreview
+                className="row-start-1"
+                song={song}
+                colors={colors}
+              />
+            </Suspense>
           )}
 
           <LyricsViewer
             className="grow"
             style={{
-              gridRow: !_.isEqual(song, {}) ? "2/3" : "1/3",
+              gridRow: !objectEmpty(song) ? "2/3" : "1/3",
             }}
             id={id}
             colors={colors}
@@ -257,17 +266,19 @@ function App() {
           />
         </aside>
       </main>
-      <ToastContainer
-        position="bottom-left"
-        autoClose={5000}
-        hideProgressBar
-        newestOnTop
-        closeOnClick
-        pauseOnFocusLoss={false}
-        draggable
-        pauseOnHover
-        theme="light"
-      />
+      <Suspense>
+        <ToastContainer
+          position="bottom-left"
+          autoClose={5000}
+          hideProgressBar
+          newestOnTop
+          closeOnClick
+          pauseOnFocusLoss={false}
+          draggable
+          pauseOnHover
+          theme="light"
+        />
+      </Suspense>
     </div>
   );
 }
