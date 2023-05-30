@@ -71,7 +71,7 @@ const OptionsPanel = ({ className, onOptionChanged }) => {
         initialColor="#ffffff"
         icon={iconsStyling.highlight}
         title="Text highlight color"
-        onChangeCompleted={(c) => updateStyle("highlightColor", c)}
+        onChange={(c) => updateStyle("highlightColor", c)}
       />
       <Hr />
       <ColorPicker
@@ -79,7 +79,7 @@ const OptionsPanel = ({ className, onOptionChanged }) => {
         initialColor={"#f7f16c"}
         icon={iconsStyling.fill}
         title="Card banner color"
-        onChangeCompleted={(c) => updateStyle("bannerBackground", c)}
+        onChange={(c) => updateStyle("bannerBackground", c)}
       />
     </div>
   );

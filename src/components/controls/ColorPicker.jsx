@@ -1,14 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
-import { SketchPicker } from "react-color";
-import Popup from "@compUtils/Popup";
+import { HexColorPicker } from "react-colorful";
 
-import { rgbToHex } from "@utils";
+import Popup from "@compUtils/Popup";
 
 const ColorPicker = ({
   className = "",
   initialColor = "#ff00f0",
   onChange,
-  onChangeCompleted,
   icon,
   title = "Color Picker",
 }) => {
@@ -30,14 +28,7 @@ const ColorPicker = ({
   }, [containerRef]);
 
   const colorChangeHandler = (c) => {
-    const hex = rgbToHex(c.rgb.r, c.rgb.g, c.rgb.b, c.rgb.a);
-    if (onChange) onChange(hex);
-
-    setColor(hex);
-  };
-
-  const colorChangeCompletedHandler = (c) => {
-    if (onChangeCompleted) onChangeCompleted(c.hex);
+    if (onChange) onChange(c);
   };
 
   return (
@@ -61,12 +52,7 @@ const ColorPicker = ({
         className="absolute -translate-x-1/2 left-1/2 top-[80px] sm:top-[150%] z-50"
         triggerRef={btnRef}
       >
-        <SketchPicker
-          color={color}
-          onChange={(c) => colorChangeHandler(c)}
-          disableAlpha={false}
-          onChangeComplete={(c) => colorChangeCompletedHandler(c)}
-        />
+        <HexColorPicker color={color} onChange={colorChangeHandler} />
       </Popup>
     </div>
   );
