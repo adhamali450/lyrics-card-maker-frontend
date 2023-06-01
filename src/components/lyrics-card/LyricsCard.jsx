@@ -23,13 +23,13 @@ import CardLogo from "@compUtils/CardLogo";
 import DragOverlay from "@controls/DragOverlay";
 import FileInput from "@controls/FileInput";
 import EditableLabel from "@controls/EditableLabel";
+import DownloadingOverlay from "@compUtils/DownloadingOverlay";
 
 const BackgroundContainer = lazy(() => import("@controls/BackgroundContainer"));
 
 import { toast } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
-
 import styles from "@components/lyrics-card/LyricsCard.module.sass";
 
 import iconDownload from "@assets/icon-download.svg";
@@ -52,7 +52,7 @@ const LyricsCard = forwardRef(
 
     const { cardStyling, setCardStyling } = useContext(CardStyleContext);
 
-    let { lang, lyrics } = lyricsData;
+    let { lyrics } = lyricsData;
 
     // Once a song is selected:
     // 1. Format the artist name and song title
@@ -201,6 +201,8 @@ const LyricsCard = forwardRef(
           "--aspect-ratio": aspectRatio,
         }}
       >
+        <DownloadingOverlay className="show-when-download opacity-75 bg-gray-300" />
+
         <div
           className={`${styles["background"]}`}
           onMouseEnter={mouseEnterHandler}
@@ -229,9 +231,7 @@ const LyricsCard = forwardRef(
             onDrop={dropHandler}
           />
         </div>
-
         {backgroundImage && <div className={styles["shade"]}></div>}
-
         {/* Secondary panel: Upload/Remove photo buttons */}
         {backgroundImage && (
           <div className="card-overlay absolute z-[9] top-4 right-4 flex gap-3">
@@ -259,7 +259,6 @@ const LyricsCard = forwardRef(
             </button>
           </div>
         )}
-
         <main>
           <img className={`${styles["quote"]}`} src={iconQuote} alt="" />
 
@@ -299,7 +298,6 @@ const LyricsCard = forwardRef(
             </footer>
           </div>
         </main>
-
         <footer
           style={{
             backgroundColor: cardStyling["bannerBackground"],
