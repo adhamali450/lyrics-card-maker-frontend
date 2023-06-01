@@ -2,7 +2,10 @@ import React, { Fragment, useState, useEffect } from "react";
 import ModalSheet from "react-modal-sheet";
 import SongPreview from "@components/SongPreview";
 import LyricsViewer from "@components/LyricsViewer";
-import { onWidth, objectEmpty } from "@utils";
+
+import useOnBackButton from "@hooks/useOnBackButton";
+
+import { objectEmpty } from "@utils";
 
 const LyricsModal = ({
   song = {},
@@ -15,31 +18,14 @@ const LyricsModal = ({
   const [isOpen, setIsOpen] = useState(false);
 
   // Close modal on back button
-  useEffect(() => {
-    const closeOnBackButton = () => {
-      setIsOpen(false);
-    };
-
-    window.history.pushState(null, null, null);
-    window.addEventListener("popstate", closeOnBackButton);
-
-    return () => {
-      window.removeEventListener("popstate", closeOnBackButton);
-    };
-  }, []);
+  useOnBackButton(() => {
+    setIsOpen(false);
+  });
 
   useEffect(() => {
-    onWidth({
-      actual: window.innerWidth,
-      operator: "<=",
-      dict: {
-        1150: () => {
-          if (!objectEmpty(song)) {
-            setIsOpen(true);
-          }
-        },
-      },
-    });
+    if (!objectEmpty(song)) {
+      setIsOpen(true);
+    }
   }, [song]);
 
   const handleClose = () => {
@@ -54,7 +40,7 @@ const LyricsModal = ({
     <Fragment>
       {!objectEmpty(song) && (
         <button
-          className="block lg:hidden fixed w-full xs:w-[80%] h-[70px] -translate-x-1/2 left-1/2 bottom-0 z-50 overflow-hidden xs:rounded-t-md bg-white xs:border xs:border-b-0 xs:border-gray-400 "
+          className="block fixed w-full xs:w-[80%] h-[70px] -translate-x-1/2 left-1/2 bottom-0 z-50 overflow-hidden xs:rounded-t-md bg-white xs:border xs:border-b-0 xs:border-gray-400 "
           onClick={handleOpen}
         >
           <SongPreview className="h-full text-sm" song={song} colors={colors} />
@@ -79,7 +65,7 @@ const LyricsModal = ({
           </ModalSheet.Header>
           <ModalSheet.Content className="overflow-hidden">
             <LyricsViewer
-              className="overflow-auto"
+              className="overflow-auto h-full"
               id={id}
               colors={colors}
               lyricsData={lyricsData}

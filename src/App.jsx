@@ -8,6 +8,7 @@ import DomToImage from "dom-to-image";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { useWindowSize } from "@uidotdev/usehooks";
 
 // import iconDownload from "@assets/icon-download.svg";
 // import iconShare from "@assets/icon-share.svg";
@@ -171,13 +172,16 @@ function App() {
         } relative container max-w-[1920px] max-h-[1080px] mx-auto flex h-[100vh]`}
       >
         <Suspense>
-          <LyricsModal
-            song={song}
-            colors={colors}
-            lyricsData={lyricsData}
-            onLyricsSelectionChanged={handleLyricsSelectionChanged}
-          />
+          {useWindowSize().width <= 1150 && (
+            <LyricsModal
+              song={song}
+              colors={colors}
+              lyricsData={lyricsData}
+              onLyricsSelectionChanged={handleLyricsSelectionChanged}
+            />
+          )}
         </Suspense>
+
         <aside className="hidden 2xl:grid grid-rows-[5rem_1fr] p-5 gap-7 h-full bg-[#272838]">
           <PageLogo className="h-[70%] self-center" />
           <SizeMenu

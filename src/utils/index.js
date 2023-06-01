@@ -43,26 +43,6 @@ export const downloadBlob = (blob, filename) => {
   download(url, filename);
 };
 
-/**
- * Triggers callback functions based on the width of a DOM element.
- *
- * @param {Object} ref - The ref object containing the DOM element.
- * @param {Number} actual - The actual width of the DOM element (used instead of ref).
- * @param {String} operator - The operator to use for comparison (>=, <, etc...).
- * @param {Object} dict - An object with width thresholds as keys and callback functions as values.
-
- * @returns {void}
- */
-export const onWidth = ({ ref, actual, operator = ">=", dict } = {}) => {
-  if (ref && ref.current) actual = ref.current.offsetWidth;
-
-  Object.entries(dict).forEach(([key, value]) => {
-    if (eval(actual + operator + key)) {
-      value();
-    }
-  });
-};
-
 export const objectEmpty = (obj) => {
   return Object.keys(obj).length === 0 && obj.constructor === Object;
 };
