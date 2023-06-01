@@ -1,13 +1,11 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, Fragment } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 import Badge from "@compUtils/Badge";
 
 const BackgroundContainer = ({ src }) => {
-  const [intractions, setIntractions] = useState({
-    zoomed: false,
-    moved: false,
-  });
+  const [image, setImage] = useState(null);
+  const [tapped, setTapped] = useState(false);
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [isTransforming, setIsTransforming] = useState(false);
 
@@ -15,15 +13,27 @@ const BackgroundContainer = ({ src }) => {
 
   const transformWrapperRef = useRef(null);
 
+  useEffect(() => {
+    if (src) {
+      setImage(src.url);
+      setTapped(false);
+    }
+  }, [src]);
+
+  const markAsTapped = () => {
+    if (!tapped) setTapped(true);
+  };
+
   if (isTransforming) document.body.classList.add("background-moving");
   else document.body.classList.remove("background-moving");
 
   useEffect(() => {
     if (!transformWrapperRef.current) return;
 
+    const wrapper = transformWrapperRef.current.instance.wrapperComponent;
+
     const observeResize = () => {
-      const parentElement =
-        transformWrapperRef.current.instance.wrapperComponent.parentNode;
+      const parentElement = wrapper.parentNode;
       const resizeObserver = new ResizeObserver(() => {
         updateImageCoverage();
       });
@@ -35,9 +45,10 @@ const BackgroundContainer = ({ src }) => {
     };
 
     transformWrapperRef.current.resetTransform();
-    transformWrapperRef.current.instance.wrapperComponent.style.width = "100%";
-    transformWrapperRef.current.instance.wrapperComponent.style.height = "100%";
+    wrapper.style.width = "100%";
+    wrapper.style.height = "100%";
 
+    wrapper.addEventListener("pointerdown", markAsTapped);
     observeResize();
 
     updateImageCoverage();
@@ -63,14 +74,7 @@ const BackgroundContainer = ({ src }) => {
   };
 
   const scaleHandler = () => {
-    if (!intractions.zoomed) {
-      setIntractions((prev) => {
-        return {
-          ...prev,
-          zoomed: true,
-        };
-      });
-    }
+    markAsTapped();
 
     // TODO: Manage IsTrasforming for scaling
     updateImageCoverage();
@@ -93,10 +97,17 @@ const BackgroundContainer = ({ src }) => {
       }}
     >
       <div className="card-overlay absolute z-50 top-[10px] left-[10px] pointer-events-none w-full flex flex-col items-start gap-[2px] msm:gap-1">
-        <Badge>click and drag to move the image</Badge>
-        <Badge>Zoom the image to scale it</Badge>
+        {!tapped && <Badge varient="yellow">Tap to edit background</Badge>}
 
-        {!imageCoverage && <Badge varient="red">Image is out of bounds</Badge>}
+        {tapped && (
+          <Fragment>
+            <Badge>click and drag to move the image</Badge>
+
+            {(imageCoverage && <Badge>Zoom the image to scale it</Badge>) || (
+              <Badge varient="red">Image is out of bounds</Badge>
+            )}
+          </Fragment>
+        )}
       </div>
 
       <TransformWrapper
@@ -107,11 +118,11 @@ const BackgroundContainer = ({ src }) => {
         onPan={scaleHandler}
       >
         <TransformComponent>
-          <img src={src["url"]} alt="card background image" />
+          <img src={image} alt="card background image" />
         </TransformComponent>
       </TransformWrapper>
     </div>
   );
 };
 
-export default React.memo(BackgroundContainer);
+export default BackgroundContainer;

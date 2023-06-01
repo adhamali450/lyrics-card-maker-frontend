@@ -5,7 +5,7 @@ import Popup from "@compUtils/Popup";
 
 const ColorPicker = ({
   className = "",
-  initialColor = "#ff00f0",
+  initialColor = "#ff00ff",
   onChange,
   icon,
   title = "Color Picker",

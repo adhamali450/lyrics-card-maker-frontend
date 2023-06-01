@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import LyricsBar from "@controls/LyricsBar";
 import WrappingSpan from "@controls/WrappingSpan";
 
 import { getLang } from "@utils";

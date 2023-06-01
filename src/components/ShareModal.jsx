@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Sheet from "react-modal-sheet";
 import {
   shareToFacebook,
