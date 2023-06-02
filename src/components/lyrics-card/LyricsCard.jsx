@@ -201,7 +201,7 @@ const LyricsCard = forwardRef(
           "--aspect-ratio": aspectRatio,
         }}
       >
-        <DownloadingOverlay className="show-when-download opacity-75 bg-gray-300" />
+        {/* <DownloadingOverlay className="show-when-download opacity-75 bg-gray-300" /> */}
 
         <div
           className={`${styles["background"]}`}
