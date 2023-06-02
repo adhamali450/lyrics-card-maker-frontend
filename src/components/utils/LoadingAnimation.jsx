@@ -1,15 +1,26 @@
-import React from "react";
 import styles from "./LoadingAnimation.module.sass";
 
-const LoadingAnimation = ({ className }) => {
+const LoadingAnimation = ({ className, size = 28 }) => {
   return (
-    <div
-      className={`${className} justify-self-center self-center ${styles["lds-ellipsis"]}`}
-    >
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
+    <div className={`${className}`}>
+      <svg
+        className={styles["spinner"]}
+        viewBox="0 0 50 50"
+        style={{
+          width: `${size}px`,
+          height: `${size}px`,
+          margin: `-${size / 2}px 0 0 -${size / 2}px`,
+        }}
+      >
+        <circle
+          className={styles["path"]}
+          cx="25"
+          cy="25"
+          r="20"
+          fill="none"
+          strokeWidth="5"
+        ></circle>
+      </svg>
     </div>
   );
 };

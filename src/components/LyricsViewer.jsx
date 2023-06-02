@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, Fragment } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 import LyricsBar from "@controls/LyricsBar";
 import LoadingAnimation from "@compUtils/LoadingAnimation";
@@ -17,7 +17,6 @@ const LyricsViewer = ({
   lyricsData,
   colors,
   onSelectionChanged,
-  lineMax = 36,
   style = {},
 }) => {
   const [maxCharacters, setMaxCharacters] = useState(36);
@@ -37,7 +36,7 @@ const LyricsViewer = ({
 
   return (
     <div
-      className={`${className} fl-lyrics-viewer-bars`}
+      className={`${className} fl-lyrics-viewer-bars relative`}
       style={style}
       ref={lyricsContainerRef}
     >

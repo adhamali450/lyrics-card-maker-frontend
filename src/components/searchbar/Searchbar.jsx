@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState, useRef } from "react";
+import { Fragment, useState, useRef } from "react";
 import routes from "@/js/api/routes";
 
 import SearchResult from "./SearchResult";
@@ -7,44 +7,45 @@ import Popup from "@compUtils/Popup";
 
 import { objectEmpty } from "@utils";
 
-const Searchbar = ({ className, onResultSelected }) => {
-  const [query, setQuery] = useState("");
-  const [debouncedQuery, setDebouncedQuery] = useState("");
-  const [currentlyTyping, setCurrentlyTyping] = useState(false);
+import { useDebounce } from "use-debounce";
+import { useQuery } from "react-query";
 
-  const [result, setResult] = useState(undefined);
+import iconNoResults from "@assets/icon-no-results.svg";
+
+const search = async (q) => {
+  if (!q) return;
+
+  console.time("search");
+  const res = await routes.search(q);
+  console.timeEnd("search");
+
+  return res.data;
+};
+
+const Searchbar = ({ className, onResultSelected }) => {
+  const [currentlyTyping, setCurrentlyTyping] = useState(false);
+  const [query, setQuery] = useState("");
+  const debouncedQuery = useDebounce(query, 1500);
+
+  const { data, isLoading, isError, error, isFetching } = useQuery(
+    ["search", debouncedQuery],
+    () => {
+      setCurrentlyTyping(false);
+      return search(debouncedQuery[0]);
+    },
+    {
+      enabled: !!debouncedQuery,
+      keepPreviousData: true,
+    }
+  );
   const [selectedSong, setSelectedSong] = useState({});
 
   const inputRef = useRef(null);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedQuery(query);
-      setResult(undefined);
-    }, 1500);
-
-    return () => clearTimeout(timer);
-  }, [query]);
-
-  useEffect(() => {
-    search(debouncedQuery);
-  }, [debouncedQuery]);
-
   const handleInputChange = (e) => {
-    setCurrentlyTyping(true);
+    if (!currentlyTyping) setCurrentlyTyping(true);
     setSelectedSong({});
     setQuery(e.target.value);
-  };
-
-  const search = (query) => {
-    if (!query || query == "") return;
-
-    console.time("search");
-    setCurrentlyTyping(false);
-    routes.search(query).then((res) => {
-      console.timeEnd("search");
-      setResult(res.data);
-    });
   };
 
   const handleResultSelected = (song) => {
@@ -102,22 +103,42 @@ const Searchbar = ({ className, onResultSelected }) => {
           <div
             className="border-2 flex flex-col gap-1 bg-white"
             style={{
+              minHeight: "100px",
               height: "max-content",
               alignItems: "stretch",
             }}
           >
             {/* Loading animation */}
-            {(currentlyTyping || !result) && <LoadingAnimation />}
+            {(isLoading || isFetching || currentlyTyping) && (
+              <LoadingAnimation
+                className="absolute w-full h-full inset-0 bg-white opacity-70"
+                size={30}
+              />
+            )}
+
+            {/* Error */}
+            {isError && <div>Error: {error.message}</div>}
 
             {/* Search Results */}
-            {!currentlyTyping && (
+            {data && (
               <Fragment>
-                {result && !result.length ? (
-                  <div className="grid place-content-center py-4">
+                {data && !data.length ? (
+                  <div
+                    className="flex items-center justify-center gap-2"
+                    style={{
+                      minHeight: "100px",
+                    }}
+                  >
+                    <img
+                      width={28}
+                      height={28}
+                      className="w-7 h-7"
+                      src={iconNoResults}
+                    />
                     No results
                   </div>
                 ) : (
-                  result?.map((item, idx) => {
+                  data?.map((item, idx) => {
                     return (
                       <SearchResult
                         key={idx}

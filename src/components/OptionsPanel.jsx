@@ -1,8 +1,7 @@
-import React, { useContext, lazy } from "react";
+import React, { useContext, lazy, Suspense } from "react";
 import CardStyleContext from "@contexts/CardStyleContext";
 import PushdownGroup from "@controls/PushdownGroup";
 
-// import ColorPicker from "@components/controls/ColorPicker";
 const ColorPicker = lazy(() => import("@components/controls/ColorPicker"));
 
 import {
@@ -66,21 +65,27 @@ const OptionsPanel = ({ className, onOptionChanged }) => {
         selectedItemChanged={(value) => updateStyle("alignment", value)}
       />
       <Hr />
-      <ColorPicker
-        className="h-7 xs:h-8 aspect-square"
-        initialColor="#ffffff"
-        icon={iconsStyling.highlight}
-        title="Text highlight color"
-        onChange={(c) => updateStyle("highlightColor", c)}
-      />
+
+      <Suspense>
+        <ColorPicker
+          className="h-7 xs:h-8 aspect-square"
+          initialColor="#ffffff"
+          icon={iconsStyling.highlight}
+          title="Text highlight color"
+          onChange={(c) => updateStyle("highlightColor", c)}
+        />
+      </Suspense>
       <Hr />
-      <ColorPicker
-        className="h-7 xs:h-8 aspect-square xs:row-start-2"
-        initialColor={"#f7f16c"}
-        icon={iconsStyling.fill}
-        title="Card banner color"
-        onChange={(c) => updateStyle("bannerBackground", c)}
-      />
+
+      <Suspense>
+        <ColorPicker
+          className="h-7 xs:h-8 aspect-square xs:row-start-2"
+          initialColor={"#f7f16c"}
+          icon={iconsStyling.fill}
+          title="Card banner color"
+          onChange={(c) => updateStyle("bannerBackground", c)}
+        />
+      </Suspense>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import BrokenImg from "@assets/broken-image.png";
-import { truncate, isImageLink } from "../../utils";
+import { truncate, isImageLink } from "@utils";
 
 const SearchResult = ({ className, img, songName, artistName, onClick }) => {
   return (

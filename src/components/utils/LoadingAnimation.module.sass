@@ -1,51 +1,28 @@
-.lds-ellipsis
-    position: relative
-    display: inline-block
-    width: 80px
-    height: 80px
-    transform: scale(0.6)
-    & div
-        position: absolute
-        top: 33px
-        width: 13px
-        height: 13px
-        border-radius: 50%
-        background: #bebebe
-        animation-timing-function: cubic-bezier(0, 1, 1, 0)
+.spinner
+    animation: rotate 2s linear infinite
+    z-index: 2
+    position: absolute
+    top: 50%
+    left: 50%
 
-    & div:nth-child(1)
-        left: 8px
-        animation: lds-ellipsis1 0.6s infinite
+    .path
+        stroke: #272838
+        stroke-linecap: round
+        animation: dash 1.5s ease-in-out infinite
 
-    & div:nth-child(2)
-        left: 8px
-        animation: lds-ellipsis2 0.6s infinite
+@keyframes rotate
+    100%
+        transform: rotate(360deg)
 
-    & div:nth-child(3)
-        left: 32px
-        animation: lds-ellipsis2 0.6s infinite
-
-    & div:nth-child(4)
-        left: 56px
-        animation: lds-ellipsis3 0.6s infinite
-
-@keyframes lds-ellipsis1
+@keyframes dash
     0%
-        transform: scale(0)
+        stroke-dasharray: 1, 150
+        stroke-dashoffset: 0
+
+    50%
+        stroke-dasharray: 90, 150
+        stroke-dashoffset: -35
 
     100%
-        transform: scale(1)
-
-@keyframes lds-ellipsis3
-    0%
-        transform: scale(1)
-
-    100%
-        transform: scale(0)
-
-@keyframes lds-ellipsis2
-    0%
-        transform: translate(0, 0)
-
-    100%
-        transform: translate(24px, 0)
+        stroke-dasharray: 90, 150
+        stroke-dashoffset: -124

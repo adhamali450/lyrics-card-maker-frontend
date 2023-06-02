@@ -35,7 +35,7 @@ const DragOverlay = ({
       >
         {!target && (
           <div
-            className="card-overlay flex flex-col items-center justify-start m-2 xs:m-10 p-[10px] xs:p-[40px] rounded-lg border-2 border-dashed"
+            className="card-overlay flex flex-col items-center justify-start m-2 xs:m-10 p-[20px] xs:p-[40px] rounded-lg border-2 border-dashed"
             style={{
               transition: "all 0.15s ease-out",
               borderColor: isFileDragged ? "#0c89f0" : "#aaaaaa",
@@ -45,7 +45,7 @@ const DragOverlay = ({
               pointerEvents: isFileDragged ? "none" : "auto",
             }}
           >
-            <div className="flex flex-row xs:flex-col items-center justify-center xs:justify-start gap-3 xs:gap-0">
+            <div className="flex flex-col items-center justify-center xs:justify-start gap-0">
               <svg
                 aria-hidden="true"
                 className="w-10 h-10 mb-3 text-gray-500"
@@ -70,7 +70,7 @@ const DragOverlay = ({
                 </span>
               </h2>
             </div>
-            <div className="mt-2 xs:mt-5 flex justify-center items-center gap-3">
+            <div className="mt-3 flex justify-center items-center gap-3">
               <small className="hidden xs:inline-block text-sm">or</small>
 
               <FileInput
