@@ -260,7 +260,9 @@ const LyricsCard = forwardRef(
           </div>
         )}
         <main>
-          <img className={`${styles["quote"]}`} src={iconQuote} alt="" />
+          {aspectRatio == "3:2" && (
+            <img className={`${styles["quote"]}`} src={iconQuote} alt="" />
+          )}
 
           {/* Lyrics Container*/}
           <div className={`w-full`}>
