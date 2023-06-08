@@ -277,7 +277,7 @@ const LyricsCard = forwardRef(
                       backgroundColor: cardStyling["highlightColor"],
                       color: cardStyling["textColor"],
                       textAlign: cardStyling["alignment"],
-                      fontWeight: cardStyling["bold"] ? "500" : "400",
+                      fontWeight: cardStyling["bold"] ? "600" : "500",
                       fontStyle: cardStyling["italic"] ? "italic" : "normal",
                     }}
                     text={l[0]}
