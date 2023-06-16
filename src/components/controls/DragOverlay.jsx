@@ -1,4 +1,3 @@
-import React from "react";
 import FileInput from "@controls/FileInput";
 
 const DragOverlay = ({
@@ -74,7 +73,7 @@ const DragOverlay = ({
               <small className="hidden xs:inline-block text-sm">or</small>
 
               <FileInput
-                className="shadow-sm shadow-[#bdc1c5] border-[1.5px] rounded-[4px] px-3 py-[2px] border-[#969ca2] bg-gray-300"
+                className="shadow-md shadow-[#bdc1c5] border-[1px] rounded-[4px] px-3 py-[2px] border-[#969ca2] bg-gray-300 text-sm"
                 text="Choose photo"
                 onFileSelected={onTargetSelected}
               />

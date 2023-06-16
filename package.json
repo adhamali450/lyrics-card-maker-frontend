@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@radix-ui/react-icons": "^1.3.0",
+    "@radix-ui/react-toggle-group": "^1.0.4",
     "@uidotdev/usehooks": "^2.0.1",
     "axios": "^1.3.4",
     "color-thief-react": "^2.1.0",

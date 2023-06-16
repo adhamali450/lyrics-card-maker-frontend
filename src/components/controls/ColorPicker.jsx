@@ -37,7 +37,7 @@ const ColorPicker = ({
       <button
         type="button"
         ref={btnRef}
-        className={`max-w-full max-h-full relative p-[2px] rounded-[4px] border border-transparent transition-all overflow-hidden hover:bg-[#cccccc]`}
+        className={`max-w-full max-h-full relative p-[2px] rounded-[4px] border border-transparent transition-all overflow-hidden hover:bg-[#dddddd]`}
         title={title}
       >
         <img className="w-full h-full" src={icon} alt={title} />
