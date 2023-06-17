@@ -29,6 +29,7 @@ import SizeMenu from "@compUtils/SizeMenu";
 import PageLogo from "@compUtils/PageLogo";
 import OptionsPanel from "@components/OptionsPanel";
 const LyricsModal = lazy(() => import("@components/LyricsModal"));
+import DownloadingOverlay from "@compUtils/DownloadingOverlay";
 // import ShareModal from "@components/ShareModal";
 
 const defaultLyricsData = {
@@ -223,7 +224,7 @@ function App() {
             />
           </header>
 
-          <section className="row-start-2 relative">
+          <section className="row-start-2">
             <CardStyleContext.Provider value={{ cardStyling, setCardStyling }}>
               <OptionsPanel className="rounded-md mb-4 shadow-md" />
               <SizeMenu
@@ -232,13 +233,21 @@ function App() {
                 showLabel={false}
                 onSizeChanged={setCardAspectRatio}
               />
-              <LyricsCard
-                ref={cardRef}
-                cardInfo={song}
-                lyricsData={lyricsData}
-                aspectRatio={cardAspectRatio}
-                onDownload={downloadHandler}
-              />
+
+              <div className="relative">
+                <LyricsCard
+                  ref={cardRef}
+                  cardInfo={song}
+                  lyricsData={lyricsData}
+                  aspectRatio={cardAspectRatio}
+                  onDownload={downloadHandler}
+                />
+                <DownloadingOverlay
+                  className="opacity-75 bg-gray-300 card-size show-when-download"
+                  ratio={cardAspectRatio}
+                  style={{ aspectRatio: cardAspectRatio.replace(":", "/") }}
+                />
+              </div>
             </CardStyleContext.Provider>
 
             {/* <ShareModal

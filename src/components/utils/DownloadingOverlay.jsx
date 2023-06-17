@@ -1,9 +1,11 @@
 import LoadingAnimation from "@compUtils/LoadingAnimation";
 
-const DownloadingOverlay = ({ className }) => {
+const DownloadingOverlay = ({ className, style, ratio }) => {
   return (
     <div
-      className={`${className} absolute w-full h-full inset-0 z-[5] flex flex-col items-center justify-center`}
+      className={`${className} absolute inset-0 z-[9] flex flex-col items-center justify-center`}
+      style={style}
+      data-aspect-ratio={ratio}
     >
       <LoadingAnimation />
     </div>
