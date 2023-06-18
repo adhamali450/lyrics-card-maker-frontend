@@ -1,0 +1,13 @@
+@font-face {
+	src: url('SF-Arabic.woff2') format('woff2-variations');
+	font-family: 'SF Arabic';
+	font-weight: 500;
+	font-style: normal;
+}
+
+@font-face {
+	src: url('SF-Arabic.woff2') format('woff2-variations');
+	font-family: 'SF Arabic';
+	font-weight: 600;
+	font-style: normal;
+}

@@ -6,7 +6,7 @@
 @import './_mixins'
 
 :root
-  font-family: -apple-system, Inter, system-ui, Avenir, Helvetica, Arial, sans-serif
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif
   font-weight: 400
 *
   box-sizing: border-box
@@ -44,6 +44,47 @@ body
 ::-moz-scrollbar-thumb:hover
   background-color: #a7a7a7
 
+.card-size
+
+  @media screen and (min-width: 500px)
+    &[data-aspect-ratio='1:1'],
+    &[data-aspect-ratio='3:4'],
+    &[data-aspect-ratio='3:2']
+      width: auto
+      height: 500px
+      &:before
+        content: ''
+        display: block
+        // TODO: Figure out how to not hardcode this
+        &[data-aspect-ratio='1:1']::before
+          padding-right: calc(500px * 1)
+          padding-bottom: 0
+        &[data-aspect-ratio='3:4']::before
+          padding-right: calc(500px * 3/4)
+          padding-bottom: 0
+        &[data-aspect-ratio='3:2']::before
+          padding-right: calc(500px * 3/2)
+          padding-bottom: 0
+  @media screen and (max-width: 500px)
+    &[data-aspect-ratio='1:1']
+      width: 100%
+      height: auto
+      &::before
+        padding-right: 0
+        padding-bottom: calc(100% * 1)
+    &[data-aspect-ratio='3:4']
+      width: calc( 100% * 3/4 )
+      height: auto
+      &::before
+        padding-right: 0
+        padding-bottom: calc(100% * 4/3)
+    &[data-aspect-ratio='3:2']
+      width: calc( 100% )
+      height: auto
+      &::before
+        padding-right: 0
+        padding-bottom: calc(100% * 2/3)
+
 button
   &:active
     -webkit-tap-highlight-color: rgba(0,0,0,0) !important
@@ -75,3 +116,9 @@ button
 .background-moving
   .card-overlay
     opacity: 0.25
+
+.toggle-group
+  @apply h-7 xs:h-8 rounded-md overflow-hidden border border-gray-300
+
+.toogle-group__item__icon
+  @apply w-7 xs:w-8 h-7 xs:h-8 p-[2px]

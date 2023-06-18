@@ -4,14 +4,20 @@ import iconBrokenImage from "@assets/broken-image.png";
 import SongPreviewSkeleton from "@skeletons/SongPreviewSkeleton";
 
 import {
-  getLang,
   containsLang,
   truncate,
   isImageLink,
   getPreviewGradient,
 } from "@utils";
 
-const SongPreview = ({ className = "h-[120px]", song, colors }) => {
+const SongPreview = ({
+  className = "h-[120px]",
+  song,
+  colors = {
+    background_color: "#e9e9e9",
+    text_color: "#000000",
+  },
+}) => {
   const { title, artist, image } = song;
 
   return (

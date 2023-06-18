@@ -96,12 +96,12 @@ const Searchbar = ({ className, onResultSelected }) => {
       {/* Results container */}
       {query && objectEmpty(selectedSong) && (
         <Popup
-          className="-translate-x-1/2 left-1/2 sm:translate-x-0 sm:left-0 mt-3 sm:ml-3 min-w-[90%] sm:min-w-[350px]"
+          className="-translate-x-1/2 left-1/2 sm:translate-x-0 sm:left-0 mt-3 sm:ml-3 min-w-[90%] sm:min-w-[350px] border-2 border-gray-300 "
           triggerRef={inputRef}
           triggerType="keyup"
         >
           <div
-            className="border-2 flex flex-col gap-1 bg-white"
+            className="flex flex-col gap-1 bg-white"
             style={{
               minHeight: "100px",
               height: "max-content",

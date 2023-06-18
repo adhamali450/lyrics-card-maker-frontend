@@ -1,5 +1,6 @@
 import React, { Fragment, useState, useEffect } from "react";
-import ModalSheet from "react-modal-sheet";
+import { SwipeableDrawer } from "@mui/material";
+import { Global } from "@emotion/react";
 import SongPreview from "@components/SongPreview";
 import LyricsViewer from "@components/LyricsViewer";
 
@@ -36,6 +37,9 @@ const LyricsModal = ({
     setIsOpen(true);
   };
 
+  const iOS =
+    typeof navigator !== "undefined" &&
+    /iPad|iPhone|iPod/.test(navigator.userAgent);
   return (
     <Fragment>
       {!objectEmpty(song) && (
@@ -46,39 +50,40 @@ const LyricsModal = ({
           <SongPreview className="h-full text-sm" song={song} colors={colors} />
         </button>
       )}
-      <ModalSheet
-        className="w-full xs:w-[80%]"
-        isOpen={isOpen}
-        onClose={handleClose}
-        snapPoints={[0.6]}
-        style={{
-          margin: "auto",
+      <Global
+        styles={{
+          ".MuiDrawer-root > .MuiPaper-root": {
+            height: `calc(60vh - ${56}px)`,
+            overflow: "visible",
+          },
         }}
+      />
+      <SwipeableDrawer
+        anchor="bottom"
+        open={isOpen}
+        onClose={handleClose}
+        onOpen={() => {}}
+        sx={{
+          ".MuiDrawer-root > .MuiPaper-root": {
+            height: `50vh`,
+            overflow: "visible",
+          },
+        }}
+        variant="temporary"
+        disableBackdropTransition={!iOS}
+        disableDiscovery={iOS}
+        allowSwipeInChildren={true}
       >
-        <ModalSheet.Container>
-          <ModalSheet.Header
-            pinned
-            className="overflow-hidden xs:rounded-t-md shadow-md"
-            onClick={handleClose}
-          >
-            <SongPreview className="h-[120px]" song={song} colors={colors} />
-          </ModalSheet.Header>
-          <ModalSheet.Content className="overflow-hidden">
-            <LyricsViewer
-              className="overflow-auto h-full"
-              id={id}
-              colors={colors}
-              lyricsData={lyricsData}
-              lineMax={80}
-              onSelectionChanged={onLyricsSelectionChanged}
-            />
-          </ModalSheet.Content>
-        </ModalSheet.Container>
-        <ModalSheet.Backdrop
-          className="focus:outline-none focus-within:outline-none"
-          onClick={handleClose}
+        <SongPreview className="h-[120px]" song={song} colors={colors} />
+        <LyricsViewer
+          className="overflow-auto h-full"
+          id={id}
+          colors={colors}
+          lyricsData={lyricsData}
+          lineMax={80}
+          onSelectionChanged={onLyricsSelectionChanged}
         />
-      </ModalSheet>
+      </SwipeableDrawer>
     </Fragment>
   );
 };

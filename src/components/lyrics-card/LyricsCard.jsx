@@ -191,7 +191,7 @@ const LyricsCard = forwardRef(
 
     return (
       <div
-        className={`${styles["card"]}`}
+        className={`${styles["card"]} card-size`}
         ref={ref}
         data-aspect-ratio={aspectRatio}
         data-alignment={cardStyling.alignment}
@@ -201,8 +201,6 @@ const LyricsCard = forwardRef(
           "--aspect-ratio": aspectRatio,
         }}
       >
-        {/* <DownloadingOverlay className="show-when-download opacity-75 bg-gray-300" /> */}
-
         <div
           className={`${styles["background"]}`}
           onMouseEnter={mouseEnterHandler}
@@ -260,7 +258,9 @@ const LyricsCard = forwardRef(
           </div>
         )}
         <main>
-          <img className={`${styles["quote"]}`} src={iconQuote} alt="" />
+          {aspectRatio == "3:2" && (
+            <img className={`${styles["quote"]}`} src={iconQuote} alt="" />
+          )}
 
           {/* Lyrics Container*/}
           <div className={`w-full`}>
@@ -275,7 +275,7 @@ const LyricsCard = forwardRef(
                       backgroundColor: cardStyling["highlightColor"],
                       color: cardStyling["textColor"],
                       textAlign: cardStyling["alignment"],
-                      fontWeight: cardStyling["bold"] ? "500" : "400",
+                      fontWeight: cardStyling["bold"] ? "600" : "500",
                       fontStyle: cardStyling["italic"] ? "italic" : "normal",
                     }}
                     text={l[0]}

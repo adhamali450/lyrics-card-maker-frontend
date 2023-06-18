@@ -1,6 +1,12 @@
-import React, { useContext, lazy, Suspense } from "react";
+import { useContext, lazy, Suspense } from "react";
 import CardStyleContext from "@contexts/CardStyleContext";
-import PushdownGroup from "@controls/PushdownGroup";
+import * as ToggleGroup from "@radix-ui/react-toggle-group";
+import {
+  FontBoldIcon,
+  FontItalicIcon,
+  TextAlignRightIcon,
+  TextAlignLeftIcon,
+} from "@radix-ui/react-icons";
 
 const ColorPicker = lazy(() => import("@components/controls/ColorPicker"));
 
@@ -19,6 +25,12 @@ const OptionsPanel = ({ className, onOptionChanged }) => {
 
   const formattingValues = ["bold", "italic"];
 
+  const pushdownIconStyle = (key, value) => {
+    return {
+      transition: "all 0.15s ease",
+      backgroundColor: cardStyling[key] == value ? "#dddddd" : "transparent",
+    };
+  };
   /**
    * Marks an option as active or inactive from an array of options.
    **/
@@ -33,6 +45,7 @@ const OptionsPanel = ({ className, onOptionChanged }) => {
   };
 
   const updateStyle = (key, value) => {
+    if (cardStyling[key] == value) return;
     const newCardStyle = { ...cardStyling };
     newCardStyle[key] = value;
     setCardStyling(newCardStyle);
@@ -42,28 +55,53 @@ const OptionsPanel = ({ className, onOptionChanged }) => {
     <div
       className={`${className} flex items-center justify-between xs:justify-start px-3 xs:px-6 py-2 gap-x-4 gap-y-1`}
     >
-      <p className="hidden sm:inline uppercase text-[#272838] font-medium">
+      <p className="hidden sm:inline uppercase text-sm text-[#272838] font-medium">
         Style
       </p>
 
-      <PushdownGroup
-        className="h-7 xs:h-8"
-        values={formattingValues}
-        children={[iconsFormatting.bold, iconsFormatting.italic]}
-        multiple
-        initialIndex={-1}
-        selectedItemChanged={(value) =>
-          updateStyleFromArray(formattingValues, value)
-        }
-      />
+      <ToggleGroup.Root
+        className="toggle-group"
+        type="multiple"
+        onValueChange={(value) => updateStyleFromArray(formattingValues, value)}
+      >
+        <ToggleGroup.Item value="bold">
+          <FontBoldIcon
+            className="toogle-group__item__icon"
+            style={pushdownIconStyle("bold", true)}
+          />
+        </ToggleGroup.Item>
+        <ToggleGroup.Item value="italic">
+          <FontItalicIcon
+            className="toogle-group__item__icon"
+            style={pushdownIconStyle("italic", true)}
+          />
+        </ToggleGroup.Item>
+      </ToggleGroup.Root>
+
       <Hr />
-      <PushdownGroup
-        className="h-7 xs:h-8 xs:row-start-2"
-        values={["left", "right"]}
-        children={[iconsAlignent.left, iconsAlignent.right]}
-        initialIndex={cardStyling.alignment == "left" ? 0 : 2}
-        selectedItemChanged={(value) => updateStyle("alignment", value)}
-      />
+
+      <ToggleGroup.Root
+        className="toggle-group"
+        type="single"
+        defaultValue="left"
+        onValueChange={(value) => {
+          if (!value) return;
+          updateStyle("alignment", value);
+        }}
+      >
+        <ToggleGroup.Item value="left">
+          <TextAlignLeftIcon
+            className={`toogle-group__item__icon`}
+            style={pushdownIconStyle("alignment", "left")}
+          />
+        </ToggleGroup.Item>
+        <ToggleGroup.Item value="right">
+          <TextAlignRightIcon
+            className={`toogle-group__item__icon`}
+            style={pushdownIconStyle("alignment", "right")}
+          />
+        </ToggleGroup.Item>
+      </ToggleGroup.Root>
       <Hr />
 
       <Suspense>
