@@ -101,7 +101,7 @@ const Searchbar = ({ className, onResultSelected }) => {
           triggerType="keyup"
         >
           <div
-            className="border-2 flex flex-col gap-1 bg-white"
+            className="border-2 border-gray-400 flex flex-col gap-1 bg-white"
             style={{
               minHeight: "100px",
               height: "max-content",

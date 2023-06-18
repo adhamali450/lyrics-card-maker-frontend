@@ -28,7 +28,8 @@ import LyricsCard from "@components/lyrics-card/LyricsCard";
 import SizeMenu from "@compUtils/SizeMenu";
 import PageLogo from "@compUtils/PageLogo";
 import OptionsPanel from "@components/OptionsPanel";
-const LyricsModal = lazy(() => import("@components/LyricsModal"));
+// const LyricsModal = lazy(() => import("@components/LyricsModal"));
+const LyricsModalNew = lazy(() => import("@components/LyricsModalNew"));
 import DownloadingOverlay from "@compUtils/DownloadingOverlay";
 // import ShareModal from "@components/ShareModal";
 
@@ -174,7 +175,7 @@ function App() {
       >
         <Suspense>
           {useWindowSize().width <= 1150 && (
-            <LyricsModal
+            <LyricsModalNew
               song={song}
               colors={colors}
               lyricsData={lyricsData}
