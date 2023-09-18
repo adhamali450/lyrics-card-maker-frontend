@@ -10,23 +10,37 @@ export default defineConfig({
     VitePWA({
       manifest: {
         name: "Genius Lyrics Card Maker",
-        short_name: "Genius Cards",
+        short_name: "Lyrics Cards",
         lang: "en-US",
         description:
           "Search for any song and create a personalized Genius lyrics cards to share with your friends.",
         icons: [
-          {
-            src: "/favicon-512x512.png",
-            sizes: "512x212",
-            type: "image/png",
-            purpose: "any maskable",
-          },
-          {
-            src: "/favicon-192x192.png",
-            sizes: "192x192",
-            type: "image/png",
-            purpose: "any maskable",
-          },
+          [
+            {
+              src: "/manifest-icon-192.maskable.png",
+              sizes: "192x192",
+              type: "image/png",
+              purpose: "any",
+            },
+            {
+              src: "/manifest-icon-192.maskable.png",
+              sizes: "192x192",
+              type: "image/png",
+              purpose: "maskable",
+            },
+            {
+              src: "/manifest-icon-512.maskable.png",
+              sizes: "512x512",
+              type: "image/png",
+              purpose: "any",
+            },
+            {
+              src: "/manifest-icon-512.maskable.png",
+              sizes: "512x512",
+              type: "image/png",
+              purpose: "maskable",
+            },
+          ],
         ],
         theme_color: "#f7f16c",
         background_color: "#272838",
