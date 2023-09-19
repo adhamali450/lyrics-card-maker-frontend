@@ -1,56 +1,10 @@
 import react from "@vitejs/plugin-react";
-import { VitePWA } from "vite-plugin-pwa";
 import { fileURLToPath, URL } from "url";
 import { defineConfig } from "vite";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    react(),
-    VitePWA({
-      manifest: {
-        name: "Genius Lyrics Card Maker",
-        short_name: "Lyrics Cards",
-        lang: "en-US",
-        description:
-          "Search for any song and create a personalized Genius lyrics cards to share with your friends.",
-        icons: [
-          [
-            {
-              src: "/manifest-icon-192.maskable.png",
-              sizes: "192x192",
-              type: "image/png",
-              purpose: "any",
-            },
-            {
-              src: "/manifest-icon-192.maskable.png",
-              sizes: "192x192",
-              type: "image/png",
-              purpose: "maskable",
-            },
-            {
-              src: "/manifest-icon-512.maskable.png",
-              sizes: "512x512",
-              type: "image/png",
-              purpose: "any",
-            },
-            {
-              src: "/manifest-icon-512.maskable.png",
-              sizes: "512x512",
-              type: "image/png",
-              purpose: "maskable",
-            },
-          ],
-        ],
-        theme_color: "#f7f16c",
-        background_color: "#272838",
-        display: "standalone",
-        scope: "/",
-        start_url: "/",
-        orientation: "portrait",
-      },
-    }),
-  ],
+  plugins: [react()],
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
