@@ -42,7 +42,7 @@ const LyricsCard = forwardRef(
     { cardInfo, lyricsData, aspectRatio = "1:1", onDownload = () => {} },
     ref
   ) => {
-    let { title = "Song Title", artist = "Artist Name" } = cardInfo;
+    let { title = "", artist = "" } = cardInfo;
 
     const [isFileDragged, setIsFileDragged] = useState(false);
     const [showDragOverlay, setShowDragOverlay] = useState(true);
@@ -286,13 +286,15 @@ const LyricsCard = forwardRef(
 
             {/* Aux footer */}
             <footer className={`${styles["aux-footer"]}`}>
-              <EditableLabel
-                text={footerText}
-                childrenStyle={{
-                  color: "white",
-                }}
-                onChange={setFooterText}
-              />
+              {artist && title && (
+                <EditableLabel
+                  text={footerText}
+                  childrenStyle={{
+                    color: "white",
+                  }}
+                  onChange={setFooterText}
+                />
+              )}
             </footer>
           </div>
         </main>
@@ -304,11 +306,13 @@ const LyricsCard = forwardRef(
           }}
         >
           <div className={styles["info"]}>
-            <EditableLabel
-              className={`${styles["editable-label"]}`}
-              text={footerText}
-              onChange={setFooterText}
-            />
+            {artist && title && (
+              <EditableLabel
+                className={`${styles["editable-label"]}`}
+                text={footerText}
+                onChange={setFooterText}
+              />
+            )}
           </div>
 
           <button className={styles["logo"]} onClick={toggleLogoSize}>
