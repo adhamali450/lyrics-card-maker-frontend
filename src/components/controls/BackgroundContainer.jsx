@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, Fragment } from "react";
+import { useState, useRef, useEffect, Fragment } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 import Badge from "@compUtils/Badge";
@@ -56,6 +56,8 @@ const BackgroundContainer = ({ src }) => {
 
   // Calculate image coverage when zoom or pan occurs
   const updateImageCoverage = () => {
+    if (!transformWrapperRef.current) return;
+
     const wrapperElement =
       transformWrapperRef.current.instance.wrapperComponent;
     const imageElement = wrapperElement.querySelector("img");
@@ -116,6 +118,8 @@ const BackgroundContainer = ({ src }) => {
         centerZoomedOut
         onZoom={scaleHandler}
         onPan={scaleHandler}
+        onPinchingStart={markAsTapped}
+        onPanningStart={markAsTapped}
       >
         <TransformComponent>
           <img src={image} alt="card background image" />

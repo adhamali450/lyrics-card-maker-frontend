@@ -6,7 +6,6 @@ import routes from "@/js/api/routes";
 import { objectEmpty } from "@utils";
 import toast, { Toaster } from "react-hot-toast";
 
-import "react-toastify/dist/ReactToastify.css";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { useWindowSize } from "@uidotdev/usehooks";
 
@@ -86,7 +85,7 @@ function App() {
     setColors(null);
 
     // lyrics
-    routes
+    const lyricsPromise = routes
       .getLyrics(id)
       .then((res) => {
         const lang = getLang(res.data);
@@ -107,7 +106,7 @@ function App() {
       });
 
     //colors
-    routes
+    const colorsPromise = routes
       .getColors(image)
       .then((res) => {
         let { background_color, text_color } = res.data;
@@ -123,6 +122,12 @@ function App() {
       .catch(() => {
         console.error("Couldn't extract colors from image");
       });
+
+    toast.promise(Promise.all([lyricsPromise, colorsPromise]), {
+      loading: "Loading song...",
+      success: <p>Song loaded!</p>,
+      error: <p>Could load song. Please try again</p>,
+    });
   }, [song]);
 
   const handleResultSelected = (newSong) => setSong(newSong);

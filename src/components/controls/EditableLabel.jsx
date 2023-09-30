@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import WrappingSpan from "@controls/WrappingSpan";
+import useDoubleClick from "@hooks/useDoubleClick";
+import { useLongPress } from "@uidotdev/usehooks";
 
 import { getLang } from "@utils";
 
-//TODO: Input the same size as the text
 const EditableLabel = ({
   text,
   onChange,
@@ -14,22 +15,16 @@ const EditableLabel = ({
   const inputRef = useRef([]);
   const containerRef = useRef(null);
 
-  const [tabCount, setTabCount] = useState(0);
-
   const [isEditing, setIsEditing] = useState(false);
 
   const [inputText, setInputText] = useState(text);
 
-  const [spanSize, setSpanSize] = useState({});
-
   const [lang, setLang] = useState(getLang(text));
 
-  //TODO: Is this necessary?
   useEffect(() => {
     setInputText(text);
   }, [text]);
 
-  //TODO: Is this necessary?
   useEffect(() => {
     setLang(getLang(text + " "));
   }, [text]);
@@ -37,29 +32,13 @@ const EditableLabel = ({
   const handleDoubleClick = (e) => {
     e.preventDefault();
 
-    // set input size to be the same as the label
-    setSpanSize({
-      width: getComputedStyle(containerRef.current).width,
-      height: getComputedStyle(containerRef.current).height,
-    });
     setIsEditing(true);
   };
+  useDoubleClick(containerRef, handleDoubleClick);
 
-  const handleTouchEnd = (e) => {
-    if (e.touches.length > 1) {
-      // If the user taps with two fingers, it's not a double-tap
-      return;
-    }
-    if (tabCount === 1) {
-      // If the user has already tapped once, reset the count
-      setTabCount(0);
-      // Handle the double-tap event
-      handleDoubleClick(e);
-    } else {
-      // If this is the first tap, increment the count
-      setTabCount(1);
-    }
-  };
+  const longPressAttrs = useLongPress(handleDoubleClick, {
+    threshold: 400,
+  });
 
   const handleInputChange = (event) => {
     setLang(getLang(event.target.value));
@@ -80,7 +59,7 @@ const EditableLabel = ({
 
   useEffect(() => {
     if (isEditing) {
-      inputRef.current.setSelectionRange(inputText.length, inputText.length);
+      inputRef.current.setSelectionRange(0, inputText.length);
       inputRef.current.focus();
     }
   }, [isEditing]);
@@ -89,24 +68,24 @@ const EditableLabel = ({
   return (
     <div
       className={`${className} inline-block`}
-      onDoubleClick={handleDoubleClick}
-      onTouchEnd={handleTouchEnd}
       style={{
         ...style,
         textAlign: alignment ? alignment : "left",
       }}
       ref={containerRef}
+      {...longPressAttrs}
     >
       {isEditing ? (
         <textarea
           ref={inputRef}
           type="text"
           value={inputText}
+          rows={1}
+          cols={inputText.length + 1}
           style={{
             ...childrenStyle,
-            width: spanSize.width,
-            height: spanSize.height,
-            resize: "horizontal",
+            padding: "4px",
+            resize: "none",
             color: "black",
           }}
           onChange={handleInputChange}
