@@ -46,7 +46,9 @@ export default defineConfig({
         scope: "/",
         start_url: "/",
         orientation: "portrait",
-        id: "2",
+      },
+      workbox: {
+        skipWaiting: true,
       },
     }),
   ],

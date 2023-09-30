@@ -60,13 +60,22 @@ const LyricsCard = forwardRef(
     const [lyrics, setLyrics] = useState(
       lyricsData["lyrics"].some((l) => l[1])
         ? lyricsData["lyrics"]
-        : dummyLyrics
+        : dummyLyrics.map((l) => [...l])
     );
+
+    useEffect(() => {
+      setLyrics(
+        lyricsData["lyrics"].some((l) => l[1])
+          ? lyricsData["lyrics"]
+          : dummyLyrics.map((l) => [...l])
+      );
+    }, [lyricsData["lyrics"]]);
+
     useEffect(() => {
       // When all lines are empty, reset to dummy lyrics
       if (lyrics.some((l) => l[1])) return;
 
-      setLyrics(dummyLyrics.map((l) => [l[0], true]));
+      setLyrics(dummyLyrics);
     }, [lyrics]);
 
     // Once a song is selected:
