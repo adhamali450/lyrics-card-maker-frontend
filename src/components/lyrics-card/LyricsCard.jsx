@@ -1,4 +1,4 @@
-import React, {
+import {
   useState,
   useEffect,
   useContext,
@@ -35,6 +35,13 @@ import iconCamera from "@assets/icon-camera.svg";
 import iconQuote from "@assets/quote.svg";
 import plainBackground from "@assets/plain-background.svg";
 
+const dummyLyrics = [
+  ["Search for a song and choose lyrics", true],
+  ["Double tap or hold to edit", true],
+  ["Press enter when you finish", true],
+  ["Or just paste some text", true],
+];
+
 const LyricsCard = forwardRef(
   (
     { cardInfo, lyricsData, aspectRatio = "1:1", onDownload = () => {} },
@@ -50,7 +57,17 @@ const LyricsCard = forwardRef(
 
     const { cardStyling, setCardStyling } = useContext(CardStyleContext);
 
-    let { lyrics } = lyricsData;
+    const [lyrics, setLyrics] = useState(
+      lyricsData["lyrics"].some((l) => l[1])
+        ? lyricsData["lyrics"]
+        : dummyLyrics
+    );
+    useEffect(() => {
+      // When all lines are empty, reset to dummy lyrics
+      if (lyrics.some((l) => l[1])) return;
+
+      setLyrics(dummyLyrics.map((l) => [l[0], true]));
+    }, [lyrics]);
 
     // Once a song is selected:
     // 1. Format the artist name and song title
@@ -171,11 +188,17 @@ const LyricsCard = forwardRef(
       });
     });
 
-    const dummyLyrics = [
-      ["Double tap to edit", true],
-      ["Press enter when you finish", true],
-      ["Or just paste some text", true],
-    ];
+    const lyricsEditedHandler = (editedIndex, newLine) => {
+      if (newLine == lyrics[editedIndex][0]) return; // Line not changed
+
+      if (newLine == "") {
+        lyrics[editedIndex][1] = false;
+        setLyrics([...lyrics]);
+      } else {
+        lyrics[editedIndex][0] = newLine;
+        setLyrics([...lyrics]);
+      }
+    };
 
     return (
       <div
@@ -253,7 +276,7 @@ const LyricsCard = forwardRef(
           {/* Lyrics Container*/}
           <div className={`w-full`}>
             <div className={`${styles["lyrics-container"]} w-full`}>
-              {(lyrics.some((l) => l[1]) ? lyrics : dummyLyrics).map((l, i) => {
+              {lyrics.map((l, i) => {
                 if (!l[1]) return;
                 return (
                   <EditableLabel
@@ -267,6 +290,7 @@ const LyricsCard = forwardRef(
                       fontStyle: cardStyling["italic"] ? "italic" : "normal",
                     }}
                     text={l[0]}
+                    onChange={(newLine) => lyricsEditedHandler(i, newLine)}
                   />
                 );
               })}

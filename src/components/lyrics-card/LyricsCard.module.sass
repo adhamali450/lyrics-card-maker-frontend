@@ -106,7 +106,7 @@
                     transform: scaleX(-1)
     &[data-aspect-ratio='1:1']
         .lyrics-container
-            gap: fluid(320, 9, 500, 12)
+            gap: fluid(320, 11, 500, 12)
             .editable-label
                 font-size: fluid(320, 10.5, 500, 18)
         footer
@@ -133,7 +133,7 @@
         .quote
             @apply w-5 msm:w-8
         .lyrics-container
-            gap: fluid(320, 0, 500, 14.4)
+            gap: fluid(320, 1, 500, 14.4)
             .editable-label
                 font-size: fluid(320, 6, 500, 22)
                 .wrapping-span
@@ -167,3 +167,7 @@
                     align-items: flex-end
                 .aux-footer
                     text-align: right
+
+@media screen and (max-width: 500px)
+    .card .plain-background
+        background-size: 10px
