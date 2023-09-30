@@ -21,7 +21,7 @@ Downloads a file by creating a temporary link element and triggering a download.
 @param {string} filename - The desired filename of the downloaded file.
 @returns {void}
 */
-const download = (href, filename) => {
+export const download = (href, filename) => {
   const element = document.createElement("a");
   element.href = href;
   element.setAttribute("download", filename);

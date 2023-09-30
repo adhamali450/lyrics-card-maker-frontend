@@ -5,7 +5,8 @@ import routes from "@/js/api/routes";
 
 import { objectEmpty } from "@utils";
 import DomToImage from "dom-to-image";
-import { ToastContainer } from "react-toastify";
+import toast, { Toaster } from "react-hot-toast";
+
 import "react-toastify/dist/ReactToastify.css";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { useWindowSize } from "@uidotdev/usehooks";
@@ -19,6 +20,7 @@ import {
   bestContrast,
   getContrast,
   downloadBlob,
+  download,
 } from "./utils";
 
 import Searchbar from "@components/searchbar/Searchbar";
@@ -38,6 +40,9 @@ const defaultLyricsData = {
   selectionCompleted: false,
   status: 0,
 };
+
+import * as htmlToImage from "html-to-image";
+import { toJpeg } from "html-to-image";
 
 function App() {
   const [song, setSong] = useState({});
@@ -146,21 +151,30 @@ function App() {
 
     setDownloading(true);
     const scale = 2;
-    DomToImage.toBlob(cardRef.current, {
-      width: cardRef.current.offsetWidth * scale,
-      height: cardRef.current.offsetHeight * scale,
-      style: {
-        transform: `scale(${scale})`,
-        transformOrigin: "top left",
-      },
-    }).then((blob) => {
-      const img = new File([blob], `lyrics-card-${song.id}.png`);
-      // routes.upload(img).then((res) => {
-      //   setDownloading(false);
-      // });
-      downloadBlob(blob, `lyrics-card-${song.id ? song.id : "empty"}.png`);
-      setDownloading(false);
-    });
+
+    // Saving the card
+    const promise = htmlToImage
+      .toJpeg(cardRef.current, {
+        width: cardRef.current.offsetWidth * scale,
+        height: cardRef.current.offsetHeight * scale,
+        style: {
+          transform: `scale(${scale})`,
+          transformOrigin: "top left",
+        },
+      })
+      .then((base64) => {
+        download(base64, `lyrics-card-${id}.png`);
+      });
+
+    // Showing a confirmation toast
+    toast
+      .promise(promise, {
+        loading: "Saving...",
+        success: <p>Card saved!</p>,
+        error: <p>Could not save. Please try again</p>,
+      })
+      .then(() => setDownloading(false))
+      .catch(() => setDownloading(false));
 
     // setShareModalOpen(false);
   };
@@ -280,7 +294,7 @@ function App() {
             />
           </aside>
         </main>
-        <Suspense>
+        {/* <Suspense>
           <ToastContainer
             position="bottom-left"
             autoClose={5000}
@@ -292,7 +306,8 @@ function App() {
             pauseOnHover
             theme="light"
           />
-        </Suspense>
+        </Suspense> */}
+        <Toaster position="bottom-center" reverseOrder={false} />
       </div>
     </QueryClientProvider>
   );

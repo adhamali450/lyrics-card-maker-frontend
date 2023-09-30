@@ -23,13 +23,11 @@ import CardLogo from "@compUtils/CardLogo";
 import DragOverlay from "@controls/DragOverlay";
 import FileInput from "@controls/FileInput";
 import EditableLabel from "@controls/EditableLabel";
-import DownloadingOverlay from "@compUtils/DownloadingOverlay";
 
 const BackgroundContainer = lazy(() => import("@controls/BackgroundContainer"));
 
-import { toast } from "react-toastify";
+import toast, { Toaster } from "react-hot-toast";
 
-import "react-toastify/dist/ReactToastify.css";
 import styles from "@components/lyrics-card/LyricsCard.module.sass";
 
 import iconDownload from "@assets/icon-download.svg";
@@ -130,28 +128,18 @@ const LyricsCard = forwardRef(
       let url = "";
       // Handle image dragged from a browser
       if (imageUrl) {
-        toast.promise(
-          new Promise((resolve, reject) => {
-            routes
-              .getCORSImage(imageUrl)
-              .then((res) => {
-                setBackgroundImage({
-                  url: res.data,
-                  type: "external",
-                });
-                resolve();
-              })
-              .catch((e) => {
-                console.error(e);
-                reject();
-              });
-          }),
-          {
-            pending: "Fetching image...",
-            success: "Image fetched successfully",
-            error: "Failed to fetch image. Please try again.",
-          }
-        );
+        const promise = routes.getCORSImage(imageUrl).then((res) => {
+          setBackgroundImage({
+            url: res.data,
+            type: "external",
+          });
+        });
+
+        toast.promise(promise, {
+          loading: "Fetching image...",
+          success: <p>Image fetched successfully!</p>,
+          error: <p>Failed to fetch image. Please try again.</p>,
+        });
       }
       // Handle image dragged from a file explorer or operating system window
       else {
@@ -318,6 +306,8 @@ const LyricsCard = forwardRef(
             />
           </button>
         </footer>
+
+        <Toaster position="bottom-center" reverseOrder={false} />
       </div>
     );
   }
