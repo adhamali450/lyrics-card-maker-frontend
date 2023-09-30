@@ -46,6 +46,7 @@ export default defineConfig({
         scope: "/",
         start_url: "/",
         orientation: "portrait",
+        version: "2",
       },
     }),
   ],
