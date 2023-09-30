@@ -10,17 +10,13 @@ import {
 
 const ColorPicker = lazy(() => import("@components/controls/ColorPicker"));
 
-import {
-  iconsAlignent,
-  iconsFormatting,
-  iconsStyling,
-} from "@assets/options-panel";
+import { iconsStyling } from "@assets/options-panel";
 
 const Hr = () => {
   return <hr className="inline-block bg-gray-300 w-[1px] h-[25px]" />;
 };
 
-const OptionsPanel = ({ className, onOptionChanged }) => {
+const OptionsPanel = ({ className }) => {
   const { cardStyling, setCardStyling } = useContext(CardStyleContext);
 
   const formattingValues = ["bold", "italic"];
@@ -107,7 +103,7 @@ const OptionsPanel = ({ className, onOptionChanged }) => {
       <Suspense>
         <ColorPicker
           className="h-7 xs:h-8 aspect-square"
-          initialColor="#ffffff"
+          initialColor={cardStyling.highlightColor}
           icon={iconsStyling.highlight}
           title="Text highlight color"
           onChange={(c) => updateStyle("highlightColor", c)}
@@ -118,7 +114,7 @@ const OptionsPanel = ({ className, onOptionChanged }) => {
       <Suspense>
         <ColorPicker
           className="h-7 xs:h-8 aspect-square xs:row-start-2"
-          initialColor={"#f7f16c"}
+          initialColor={cardStyling.bannerBackground}
           icon={iconsStyling.fill}
           title="Card banner color"
           onChange={(c) => updateStyle("bannerBackground", c)}

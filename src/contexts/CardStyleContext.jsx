@@ -1,5 +1,5 @@
 import { createContext } from "react";
 
-const CardStyleContext = createContext({});
+const CardStyleContext = createContext();
 
 export default CardStyleContext;

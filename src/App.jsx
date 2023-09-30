@@ -4,7 +4,6 @@ import CardStyleContext from "@contexts/CardStyleContext";
 import routes from "@/js/api/routes";
 
 import { objectEmpty } from "@utils";
-import DomToImage from "dom-to-image";
 import toast, { Toaster } from "react-hot-toast";
 
 import "react-toastify/dist/ReactToastify.css";
@@ -19,12 +18,14 @@ import {
   getLang,
   bestContrast,
   getContrast,
-  downloadBlob,
   download,
 } from "./utils";
 
+import * as htmlToImage from "html-to-image";
+
 import Searchbar from "@components/searchbar/Searchbar";
 const SongPreview = lazy(() => import("@components/SongPreview"));
+import SidePanel from "@components/SidePanel";
 import LyricsViewer from "@components/LyricsViewer";
 import LyricsCard from "@components/lyrics-card/LyricsCard";
 import SizeMenu from "@compUtils/SizeMenu";
@@ -40,9 +41,6 @@ const defaultLyricsData = {
   selectionCompleted: false,
   status: 0,
 };
-
-import * as htmlToImage from "html-to-image";
-import { toJpeg } from "html-to-image";
 
 function App() {
   const [song, setSong] = useState({});
@@ -163,7 +161,7 @@ function App() {
         },
       })
       .then((base64) => {
-        download(base64, `lyrics-card-${id}.png`);
+        download(base64, `lyrics-card-${id}.jpeg`);
       });
 
     // Showing a confirmation toast
@@ -197,34 +195,7 @@ function App() {
           )}
         </Suspense>
 
-        <aside className="hidden 2xl:grid grid-rows-[5rem_1fr] p-5 gap-7 h-full bg-[#272838]">
-          <PageLogo className="h-[70%] self-center" />
-          <SizeMenu
-            className="flex items-center flex-col gap-4"
-            cardClassName="aspect-square rounded-lg w-[85px] px-2"
-            onSizeChanged={setCardAspectRatio}
-          />
-
-          <small className="text-small text-center text-white">
-            <a
-              className="inline-block mb-1 opacity-30 hover:opacity-100 transition-opacity"
-              href="https://github.com/adhamali450"
-              target="_black"
-              rel="noopener"
-            >
-              @adhamali450
-            </a>
-            <br />
-            <a
-              className=" opacity-30 hover:opacity-100 transition-opacity"
-              href="https://github.com/Omaryassenn"
-              target="_black"
-              rel="noopener"
-            >
-              @OmarYassen
-            </a>
-          </small>
-        </aside>
+        <SidePanel onSizeChanged={setCardAspectRatio} />
 
         <main className="grow grid grid-rows-[5rem_1fr] grid-cols-[1fr] lg:grid-cols-[1fr_36ch] p-5 gap-5">
           <header className="relative lg:col-span-2 flex gap-4 sm:gap-8 items-center">
@@ -294,19 +265,6 @@ function App() {
             />
           </aside>
         </main>
-        {/* <Suspense>
-          <ToastContainer
-            position="bottom-left"
-            autoClose={5000}
-            hideProgressBar
-            newestOnTop
-            closeOnClick
-            pauseOnFocusLoss={false}
-            draggable
-            pauseOnHover
-            theme="light"
-          />
-        </Suspense> */}
         <Toaster position="bottom-center" reverseOrder={false} />
       </div>
     </QueryClientProvider>
