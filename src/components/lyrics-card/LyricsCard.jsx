@@ -196,6 +196,12 @@ const LyricsCard = forwardRef(
       }
     };
 
+    const addLineClickedHandler = () => {
+      const newLyrics = [...lyrics];
+      newLyrics.push(["Sample line", true]);
+      setLyrics(newLyrics);
+    };
+
     return (
       <div
         className={`${styles["card"]} card-size`}
@@ -290,6 +296,14 @@ const LyricsCard = forwardRef(
                   />
                 );
               })}
+              {lyrics.filter((l) => l[1]).length < 4 && (
+                <button
+                  className="px-2 hide-when-download text-sm border bg-[#f7f16c] border-[#272838] pointer-events-auto"
+                  onClick={addLineClickedHandler}
+                >
+                  + Add line
+                </button>
+              )}
             </div>
 
             {/* Aux footer */}

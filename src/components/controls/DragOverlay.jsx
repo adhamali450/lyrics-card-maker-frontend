@@ -1,4 +1,5 @@
 import FileInput from "@controls/FileInput";
+import imageThumbnail from "@assets/image-thumbnail.svg";
 
 const DragOverlay = ({
   visible,
@@ -45,38 +46,24 @@ const DragOverlay = ({
             }}
           >
             <div className="flex flex-col items-center justify-center xs:justify-start gap-0">
-              <svg
-                aria-hidden="true"
-                className="w-10 h-10 mb-3 text-gray-500"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                ></path>
-              </svg>
+              <img
+                src={imageThumbnail}
+                className="w-[64px] h-[64px] mb-3 drop-shadow"
+              />
               <h2 className="text-base xs:text-lg">
                 <span className="hidden xs:inline-block">
-                  Drag and drop a photo
+                  Drop your image here or
                 </span>
                 <span className="inline-block xs:hidden">
                   Upload a Photo from device
                 </span>
+                &nbsp;
+                <FileInput
+                  className="text-[#2a90ff] font-semibold underline"
+                  text=" Upload"
+                  onFileSelected={onTargetSelected}
+                />
               </h2>
-            </div>
-            <div className="mt-3 flex justify-center items-center gap-3">
-              <small className="hidden xs:inline-block text-sm">or</small>
-
-              <FileInput
-                className="shadow-md shadow-[#bdc1c5] border-[1px] rounded-[4px] px-3 py-[2px] border-[#969ca2] bg-gray-300 text-sm"
-                text="Choose photo"
-                onFileSelected={onTargetSelected}
-              />
             </div>
           </div>
         )}
