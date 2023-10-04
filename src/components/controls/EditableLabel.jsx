@@ -23,9 +23,6 @@ const EditableLabel = ({
 
   useEffect(() => {
     setInputText(text);
-  }, [text]);
-
-  useEffect(() => {
     setLang(getLang(text + " "));
   }, [text]);
 
@@ -51,9 +48,10 @@ const EditableLabel = ({
   };
 
   const handleInputKeydown = (event) => {
-    if (event.key === "Enter") {
-      if (onChange) onChange(inputText);
+    if (event.key === "Enter" || event.keyCode === 13) {
+      event.preventDefault();
       setIsEditing(false);
+      if (onChange) onChange(inputText);
     }
   };
 
@@ -65,6 +63,7 @@ const EditableLabel = ({
   }, [isEditing]);
 
   const alignment = childrenStyle.textAlign;
+
   return (
     <div
       className={`${className} inline-block`}
@@ -80,8 +79,8 @@ const EditableLabel = ({
           ref={inputRef}
           type="text"
           value={inputText}
-          rows={1}
-          cols={inputText.length + 1}
+          rows={Math.ceil((inputText.length + 1) / 55)}
+          cols={Math.min(inputText.length + 1, 55)}
           style={{
             ...childrenStyle,
             padding: "4px",

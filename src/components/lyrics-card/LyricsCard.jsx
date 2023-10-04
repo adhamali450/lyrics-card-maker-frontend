@@ -9,17 +9,12 @@ import {
 
 import CardStyleContext from "@contexts/CardStyleContext";
 
-import {
-  getContrastColor,
-  formatCredits,
-  getImagePalette,
-  getUpscaledImage,
-} from "@utils";
+import { getContrastColor, getImagePalette, getUpscaledImage } from "@utils";
 
 import routes from "@/js/api/routes";
 import usePasteImage from "@hooks/usePasteImage";
 
-import CardLogo from "@compUtils/CardLogo";
+import CardFooter from "@components/lyrics-card/CardFooter";
 import DragOverlay from "@controls/DragOverlay";
 import FileInput from "@controls/FileInput";
 import EditableLabel from "@controls/EditableLabel";
@@ -42,6 +37,8 @@ const dummyLyrics = [
   ["Or just paste some text", true],
 ];
 
+const copyLyrics = (lyrics) => lyrics.map((inner) => [...inner]);
+
 const LyricsCard = forwardRef(
   (
     { cardInfo, lyricsData, aspectRatio = "1:1", onDownload = () => {} },
@@ -51,41 +48,35 @@ const LyricsCard = forwardRef(
 
     const [isFileDragged, setIsFileDragged] = useState(false);
     const [showDragOverlay, setShowDragOverlay] = useState(true);
-    const [logoVarient, setLogoVarient] = useState("large");
     const [backgroundImage, setBackgroundImage] = useState(null);
-    const [footerText, setFooterText] = useState("");
 
     const { cardStyling, setCardStyling } = useContext(CardStyleContext);
 
+    // const { lyrics } = lyricsData;
+
     const [lyrics, setLyrics] = useState(
-      lyricsData["lyrics"].some((l) => l[1])
-        ? lyricsData["lyrics"]
-        : dummyLyrics.map((l) => [...l])
+      lyricsData.lyrics.some((l) => l[1])
+        ? copyLyrics(lyricsData.lyrics)
+        : copyLyrics(dummyLyrics)
     );
 
     useEffect(() => {
-      setLyrics(
-        lyricsData["lyrics"].some((l) => l[1])
-          ? lyricsData["lyrics"]
-          : dummyLyrics.map((l) => [...l])
-      );
-    }, [lyricsData["lyrics"]]);
+      // When the last line is removed, bring the dummy lyrics back
+      if (lyrics.every((l) => !l[1])) setLyrics(copyLyrics(dummyLyrics));
+    }, [lyrics]);
 
     useEffect(() => {
-      // When all lines are empty, reset to dummy lyrics
-      if (lyrics.some((l) => l[1])) return;
-
-      setLyrics(dummyLyrics);
-    }, [lyrics]);
+      setLyrics(
+        lyricsData.lyrics.some((l) => l[1])
+          ? copyLyrics(lyricsData.lyrics)
+          : copyLyrics(dummyLyrics)
+      );
+    }, [lyricsData]);
 
     // Once a song is selected:
     // 1. Format the artist name and song title
     // 2. Grab the cover as background image
     useEffect(() => {
-      setFooterText(
-        `${formatCredits(artist, "en")}, "${formatCredits(title, "en")}"`
-      );
-
       if (cardInfo.image) {
         if (backgroundImage && backgroundImage.type == "external") return;
 
@@ -123,9 +114,6 @@ const LyricsCard = forwardRef(
         });
       });
     }, [backgroundImage]);
-
-    const toggleLogoSize = () =>
-      setLogoVarient(logoVarient == "large" ? "samll" : "large");
 
     const mouseEnterHandler = () => {
       if (isFileDragged) setShowDragOverlay(true);
@@ -199,7 +187,6 @@ const LyricsCard = forwardRef(
 
     const lyricsEditedHandler = (editedIndex, newLine) => {
       if (newLine == lyrics[editedIndex][0]) return; // Line not changed
-
       if (newLine == "") {
         lyrics[editedIndex][1] = false;
         setLyrics([...lyrics]);
@@ -217,8 +204,8 @@ const LyricsCard = forwardRef(
         data-alignment={cardStyling.alignment}
         style={{
           aspectRatio: aspectRatio.replace(":", "/"),
-          transition: "all 0.15s ease-out",
           "--aspect-ratio": aspectRatio,
+          transition: "all 0.15s ease-out",
         }}
       >
         <div
@@ -306,39 +293,22 @@ const LyricsCard = forwardRef(
             </div>
 
             {/* Aux footer */}
-            <footer className={`${styles["aux-footer"]}`}>
-              <EditableLabel
-                text={footerText}
-                childrenStyle={{
-                  color: "white",
-                }}
-                onChange={setFooterText}
-              />
-            </footer>
+            <CardFooter
+              className={`${styles["aux-footer"]}`}
+              aspectRatio={aspectRatio}
+              title={title}
+              artist={artist}
+              misc={{ "data-aspect-ratio": aspectRatio }}
+            />
           </div>
         </main>
-        <footer
-          style={{
-            backgroundColor: cardStyling["bannerBackground"],
-            color: cardStyling["bannerForeground"],
-            borderColor: cardStyling["bannerForeground"],
-          }}
-        >
-          <div className={styles["info"]}>
-            <EditableLabel
-              className={`${styles["editable-label"]}`}
-              text={footerText}
-              onChange={setFooterText}
-            />
-          </div>
-
-          <button className={styles["logo"]} onClick={toggleLogoSize}>
-            <CardLogo
-              varient={logoVarient}
-              color={cardStyling["bannerForeground"]}
-            />
-          </button>
-        </footer>
+        <CardFooter
+          className={`${styles["main-footer"]}`}
+          aspectRatio={aspectRatio}
+          title={title}
+          artist={artist}
+          misc={{ "data-aspect-ratio": aspectRatio }}
+        />
 
         <Toaster position="bottom-center" reverseOrder={false} />
       </div>

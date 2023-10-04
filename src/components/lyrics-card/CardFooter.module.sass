@@ -1,0 +1,32 @@
+@import '../../_mixins'
+
+.card-footer
+    width: 100%
+    text-transform: uppercase
+    &[data-aspect-ratio='1:1'],
+    &[data-aspect-ratio='3:4']
+        padding: 0 1.5rem
+        grid-row: 2/3
+        display: flex
+        justify-content: space-between
+        align-items: center
+        border-top-width: 2px
+        gap: 1.5rem
+        .logo
+            justify-self: flex-end
+            height: 30%
+    &[data-aspect-ratio='1:1']
+        .credits
+            font-size: 15px
+            font-size: fluid(230, 7, 500, 15)
+    &[data-aspect-ratio='3:4']
+        .credits
+            font-size: 15px
+            font-size: fluid(230, 6, 500, 13)
+    &[data-aspect-ratio='3:2']
+        display: block
+        pointer-events: auto
+        padding: fluid(320, 4, 500, 32) 0 fluid(320, 6, 500, 48)
+
+        font-size: 18px
+        font-size: fluid(320, 5, 500, 18)
