@@ -15,6 +15,10 @@ const EditableLabel = ({
   const inputRef = useRef([]);
   const containerRef = useRef(null);
 
+  const [containerSize, setContainerSize] = useState({
+    width: "auto",
+    height: "auto",
+  });
   const [isEditing, setIsEditing] = useState(false);
 
   const [inputText, setInputText] = useState(text);
@@ -43,20 +47,40 @@ const EditableLabel = ({
   };
 
   const handleInputBlur = () => {
-    if (onChange) onChange(inputText);
     setIsEditing(false);
+
+    if (onChange) {
+      const computedStyles = window.getComputedStyle(containerRef.current);
+      setContainerSize({
+        width: computedStyles.width,
+        height: computedStyles.height,
+      });
+      onChange(inputText);
+    }
   };
 
   const handleInputKeydown = (event) => {
     if (event.key === "Enter" || event.keyCode === 13) {
       event.preventDefault();
       setIsEditing(false);
-      if (onChange) onChange(inputText);
+      if (onChange) {
+        const computedStyles = window.getComputedStyle(containerRef.current);
+        setContainerSize({
+          width: computedStyles.width,
+          height: computedStyles.height,
+        });
+        onChange(inputText);
+      }
     }
   };
 
   useEffect(() => {
     if (isEditing) {
+      setContainerSize({
+        width: "auto",
+        height: "auto",
+      });
+
       inputRef.current.setSelectionRange(0, inputText.length);
       inputRef.current.focus();
     }
@@ -69,6 +93,8 @@ const EditableLabel = ({
       className={`${className} inline-block`}
       style={{
         ...style,
+        width: containerSize.width,
+        // height: containerSize.height,
         textAlign: alignment ? alignment : "left",
       }}
       ref={containerRef}
