@@ -73,7 +73,7 @@ const LyricsCard = forwardRef(
           transition: "all 0.15s ease-out",
         }}
       >
-        <CardImage cardInfo={cardInfo} onDownload={onDownload} />
+        <CardImage cardInfo={cardInfo} onDownload={onSave} />
 
         <main>
           {aspectRatio == "3:2" && (
