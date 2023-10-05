@@ -50,7 +50,7 @@ const DragOverlay = ({
                 src={imageThumbnail}
                 className="w-[64px] h-[64px] mb-3 drop-shadow"
               />
-              <h2 className="text-base xs:text-lg">
+              <h2 className="text-base xs:text-lg text-center">
                 <span className="hidden xs:inline-block">
                   Drop your image here or
                 </span>

@@ -162,8 +162,9 @@ function App() {
         height: cardRef.current.offsetHeight * scale,
         style: {
           transform: `scale(${scale})`,
-          transformOrigin: "top left",
+          transformOrigin: "center",
         },
+        skipAutoScale: true,
       })
       .then((base64) => {
         download(base64, `lyrics-card-${id}.jpeg`);
