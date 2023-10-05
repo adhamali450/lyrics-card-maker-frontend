@@ -1,11 +1,13 @@
-import download from "@assets/share/download.svg";
-import facebook from "@assets/share/facebook.svg";
-import messenger from "@assets/share/messenger.svg";
-import whatsapp from "@assets/share/whatsapp.svg";
-import twitter from "@assets/share/twitter.svg";
+import download from "./download.svg";
+import copyToClipboard from "./copy-to-clipboard.svg";
+import facebook from "./facebook.svg";
+import messenger from "./messenger.svg";
+import whatsapp from "./whatsapp.svg";
+import twitter from "./twitter.svg";
 
 const shareIcons = {
   download,
+  copyToClipboard,
   facebook,
   messenger,
   whatsapp,

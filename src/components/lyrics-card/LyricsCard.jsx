@@ -40,10 +40,7 @@ const dummyLyrics = [
 const copyLyrics = (lyrics) => lyrics.map((inner) => [...inner]);
 
 const LyricsCard = forwardRef(
-  (
-    { cardInfo, lyricsData, aspectRatio = "1:1", onDownload = () => {} },
-    ref
-  ) => {
+  ({ cardInfo, lyricsData, aspectRatio = "1:1", onSave = () => {} }, ref) => {
     let { title = "Song Title", artist = "Artist Name" } = cardInfo;
 
     const [isFileDragged, setIsFileDragged] = useState(false);
@@ -254,7 +251,7 @@ const LyricsCard = forwardRef(
             {/* TODO: Download and share */}
             <button
               className="h-[40px] sm:h-[50px] aspect-square grid place-items-center bg-gray-800 p-2 rounded-full opacity-100"
-              onClick={onDownload}
+              onClick={onSave}
             >
               <img
                 className="w-full h-full"
