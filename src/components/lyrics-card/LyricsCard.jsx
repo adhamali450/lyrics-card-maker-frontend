@@ -20,10 +20,7 @@ const dummyLyrics = [
 const copyLyrics = (lyrics) => lyrics.map((inner) => [...inner]);
 
 const LyricsCard = forwardRef(
-  (
-    { cardInfo, lyricsData, aspectRatio = "1:1", onDownload = () => {} },
-    ref
-  ) => {
+  ({ cardInfo, lyricsData, aspectRatio = "1:1", onSave = () => {} }, ref) => {
     let { title = "Song Title", artist = "Artist Name" } = cardInfo;
 
     const { cardStyling } = useContext(CardStyleContext);

@@ -9,9 +9,6 @@ import toast, { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { useWindowSize } from "@uidotdev/usehooks";
 
-// import iconDownload from "@assets/icon-download.svg";
-// import iconShare from "@assets/icon-share.svg";
-
 import {
   formatLyrics,
   getLang,
@@ -19,8 +16,6 @@ import {
   getContrast,
   download,
 } from "./utils";
-
-import * as htmlToImage from "html-to-image";
 
 import Searchbar from "@components/searchbar/Searchbar";
 const SongPreview = lazy(() => import("@components/SongPreview"));
@@ -32,7 +27,10 @@ import PageLogo from "@compUtils/PageLogo";
 import OptionsPanel from "@components/OptionsPanel";
 const LyricsModal = lazy(() => import("@components/LyricsModal"));
 import DownloadingOverlay from "@compUtils/DownloadingOverlay";
-// import ShareModal from "@components/ShareModal";
+import ShareModal from "@components/ShareModal";
+
+import useCardToImage from "@/hooks/useCardToImage";
+import useCopyImageToClipboard from "@/hooks/useCopyImageToClipboard";
 
 const defaultLyricsData = {
   lang: "",
@@ -76,6 +74,8 @@ function App() {
   const [lyricsData, setLyricsData] = useState(defaultLyricsData);
 
   const { id, image } = song;
+
+  const copyToClipboard = useCopyImageToClipboard();
 
   // Whenever a song is selected, fetch lyrics and colors
   useEffect(() => {
@@ -150,25 +150,11 @@ function App() {
   };
 
   const downloadHandler = () => {
-    if (cardRef.current == null) return;
-
     setDownloading(true);
-    const scale = 2;
 
-    // Saving the card
-    const promise = htmlToImage
-      .toJpeg(cardRef.current, {
-        width: cardRef.current.offsetWidth * scale,
-        height: cardRef.current.offsetHeight * scale,
-        style: {
-          transform: `scale(${scale})`,
-          transformOrigin: "center",
-        },
-        skipAutoScale: true,
-      })
-      .then((base64) => {
-        download(base64, `lyrics-card-${id}.jpeg`);
-      });
+    const promise = useCardToImage(cardRef, 2).then((base64) =>
+      download(base64, `lyrics-card-${id ? id : "untitled"}.jpeg`)
+    );
 
     // Showing a confirmation toast
     toast
@@ -179,8 +165,27 @@ function App() {
       })
       .then(() => setDownloading(false))
       .catch(() => setDownloading(false));
+    setShareModalOpen(false);
+  };
 
-    // setShareModalOpen(false);
+  const copyToClipboardHandler = () => {
+    setDownloading(true);
+
+    const promise = useCardToImage(cardRef, 2, 0.7).then((base64) =>
+      copyToClipboard(base64)
+    );
+
+    toast
+      .promise(promise, {
+        loading: "Copying...",
+        success: <p>Copied to clipboard!</p>,
+        error: <p>Could not copy. Please try again</p>,
+      })
+      .then(() => setDownloading(false))
+      .catch((e) => {
+        setDownloading(false);
+        console.error(e);
+      });
   };
 
   return (
@@ -231,7 +236,7 @@ function App() {
                   cardInfo={song}
                   lyricsData={lyricsData}
                   aspectRatio={cardAspectRatio}
-                  onDownload={downloadHandler}
+                  onSave={() => setShareModalOpen(true)}
                 />
                 <DownloadingOverlay
                   className="opacity-75 bg-gray-300 card-size show-when-download"
@@ -241,11 +246,12 @@ function App() {
               </div>
             </CardStyleContext.Provider>
 
-            {/* <ShareModal
-            open={shareModalOpen}
-            onClosing={() => setShareModalOpen(false)}
-            downloadHandler={downloadHandler}
-          /> */}
+            <ShareModal
+              open={shareModalOpen}
+              onClosing={() => setShareModalOpen(false)}
+              downloadHandler={downloadHandler}
+              copyHandler={copyToClipboardHandler}
+            />
           </section>
 
           <aside className="row-start-2 col-start-2 hidden lg:grid grid-rows-[120px_1fr] border border-gray-400 rounded-md overflow-auto">

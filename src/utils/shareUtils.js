@@ -49,11 +49,3 @@ export const shareToTwitter = (url, text) => {
   )}&text=${encodeURIComponent(text)}`;
   window.open(twUrl, "_blank");
 };
-
-// Function to share a URL on Instagram
-export const shareToInstagram = (url) => {
-  const instaUrl = `https://www.instagram.com/share?url=${encodeURIComponent(
-    url
-  )}`;
-  window.open(instaUrl, "_blank");
-};
