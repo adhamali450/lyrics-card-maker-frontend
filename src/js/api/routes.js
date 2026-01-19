@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// TODO: Remove when fixing the vite.config.js proxy issue
-const API_URL = "https://genius-unofficial-api.vercel.app/api";
+const API_URL =
+"https://api-lyrics-cards-930503911440.europe-west1.run.app/api";
 
 export const getCORSImage = async (url) => {
   const res = await axios.get(API_URL + "/cors?url=" + encodeURIComponent(url));
