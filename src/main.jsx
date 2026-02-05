@@ -24,8 +24,6 @@ Sentry.init({
   enableLogs: true,
 });
 
-console.log("Sentry initialized with DSN:", import.meta.env.VITE_SENTRY_DSN);
-
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <App />
